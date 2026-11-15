@@ -47,7 +47,7 @@ This is the only character allowed in the interface. See the rule in [AGENTS.md]
 ## 3b. The button and chat, updated (15 Nov 2026, evening)
 
 - **The journey starts with the waiter (founder, 15 Nov).** After the entry screen, the waiter chat opens once per visit over the menu, with the same contents as always: the greeting and the six tiles (Order, Waiter, Water, Cutlery, Bill, Concern). Closing it shows the usual menu. The restaurant can switch the start to the menu instead. The tutorial adds only a tip; it never changes the chat's options.
-- **The bell lives in the chat header.** The first time the chat opens, a short tip points at it: "Tap the bell any time: water, cutlery, the bill, or someone to your table." Any tap in the chat dismisses it for good.
+- **The chat tutorial is one tip under the six tiles:** "Use any of these buttons to do what you need: order, call the waiter, ask for water, cutlery or the bill, or raise a concern." It shows the first time the chat opens and disappears after the first tap. There is no separate bell button.
 - **The pill stays quiet.** Its label tours Ask me, Water?, Call waiter and Cutlery five times in the first minute or so, then the pill rests as his face with a blink. It speaks only at real moments (a greeting, a request confirmed, food on its way). No random greetings.
 
 - **The waiter pill (replaces the round button):** a slim white glass pill, 44px tall, docked bottom right and 12px above the cart bar, never over the dishes. It holds the waiter's face in a small circle with a thin violet ring (he blinks every few seconds) and one short label that crossfades slowly: "Ask me", "Water?", "Call waiter", "Cutlery".
