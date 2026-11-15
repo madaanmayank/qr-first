@@ -287,6 +287,10 @@ Each uses the event envelope in [03-domain-model.md](03-domain-model.md) section
 
 ## 1i. After an order (15 Nov 2026)
 
+- **Add-on window:** for 5 minutes after a round is sent, the success page shows "Missed something? Add it now and it goes with this order" with a running timer and a few quick dishes. Anything sent inside the window joins the same round ("Added to your order"); after it, a new round starts.
+- **Sending from the success page:** once the guest adds dishes there, the next-round card turns into the brand colour with the count and total, and the bottom bar becomes Review and "Send N dishes" (Pay bill steps back). A dish with a sold-out problem sends the guest to the cart first.
+- **Add animation:** every add flies from the photo nearest the tapped button, wherever it is; it lands in the cart bar when that is visible, otherwise in the tapped button.
+
 - The success page points to the waiter right away: a card with Call waiter, Water, Cutlery and The bill.
 - If the guest goes back to the menu within 10 minutes of ordering, a three-step tour shows once: the waiter button, table games and ordering more. It can be skipped.
 - Table games (a short food quiz and a spin to pick who chooses dessert) sit beside Play to order, and a "Your food is on its way" card leads to them after an order.

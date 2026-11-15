@@ -1771,6 +1771,28 @@ p,.ddesc,.d,.why,.m,.nlab,.banner div{text-wrap:pretty}
 .gstp button.mn,.mstp button.mn{background:#F1F2F4;color:var(--ink2)}
 .dl .stp button.mn{background:rgba(255,255,255,.1);color:rgba(255,255,255,.85)}
 .qty.big button:not(.pl){color:var(--ink2)}
+
+/* success page: new dishes take the lead */
+.nrn.hot{background:var(--p);color:#fff;height:52px;box-shadow:0 8px 20px color-mix(in srgb,var(--p) 30%,transparent);animation:nrnin .5s cubic-bezier(.2,.8,.2,1)}
+.nrn.hot span:last-child{color:#fff}
+@keyframes nrnin{from{transform:scale(.96);opacity:.6}}
+.gp1.hot{animation:bellring 0s,okl .4s cubic-bezier(.2,.8,.2,1)}
+.miss{margin:12px 16px 0;padding:14px 0 12px 14px;border-radius:22px;background:#fff;border:1px solid var(--line)}
+.mh{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding-right:14px}
+.mh .eb{color:var(--p)}.mh b{display:block;margin-top:2px;font-size:14px;font-weight:600}
+.mt{flex:none;height:32px;padding:0 10px;border-radius:99px;background:#FFF4E5;color:#B45309;font-size:14px;font-weight:700;display:grid;place-items:center}
+.mbar{height:4px;margin:10px 14px 12px 0;border-radius:99px;background:var(--fill);overflow:hidden}
+.mbar i{display:block;height:100%;background:#F59E0B;border-radius:99px;transition:width 1s linear}
+.mrow{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-right:14px}
+.mrow::-webkit-scrollbar{display:none}
+.mcd{flex:none;width:118px;border-radius:16px;background:var(--fill);padding:6px;cursor:pointer}
+.mcd>.ph{display:block;width:100%;height:74px;border-radius:12px}
+.mcd .mcn{padding:6px 2px 0;font-size:12px}
+.mcd .mcf{padding:4px 0 0 2px}
+.mcd .p2a{background:var(--p);color:#fff}
+@media (prefers-reduced-motion:reduce){.nrn.hot,.gp1.hot{animation:none}}
+
+.ch-tip p{text-wrap:pretty}
 </style>
 </head>
 <body>
@@ -2032,7 +2054,7 @@ function journey(where){
   const taken=new Set([...sent,...cartL].map(l=>l.item));
   const picks=sel?ITEMS.filter(i=>sel.m(i)&&i.c!=='combo'&&!out(i.id)&&!taken.has(i.id)&&(!S.veg||i.veg)).slice(0,3):[];
   const track=st.map((x,k)=>`${k?`<i class="tk-l ${st[k-1].s==='done'?'on':''}"></i>`:''}<button class="tk tk-${x.s} ${sel&&x.key===sel.key?'tk-nx':''}" ${x.s==='todo'?`data-act="jgo" data-id="${x.key}"`:'disabled'}><span class="tk-n">${x.s==='done'?img(sent,x.key)+`<i class="tk-k">${I.tick}</i>`:x.s==='cart'?img(cartL,x.key):`<b class="num">${k+1}</b>`}</span><span class="tk-x">${x.label}</span></button>`).join('');
-  return `<div class="jr3 ${where}"><div class="j3h"><span class="eb">Your meal</span><b>${done} of ${st.length} courses</b><i class="j3p"><i style="width:${Math.round(done/st.length*100)}%"></i></i></div><div class="tk-r">${track}</div>${sel&&picks.length?`<div class="j2n"><b>Ready for a ${sel.label.toLowerCase()}?</b><div class="jbs">${picks.map(i=>`<div class="jbb" data-act="open" data-id="${i.id}"><div class="jbi">${ph(i.h)}${qtyOf(i.id)?`<i class="jok">${I.tick}</i>`:`<button class="jba" data-act="add" data-id="${i.id}" aria-label="Add ${i.n}">${I.plus}</button>`}</div><span class="jbn">${i.n}</span><span class="jbp num">${rs(i.p)}</span></div>`).join('')}</div></div>`:(!nx?'<div class="j2n"><b>Every course covered. Enjoy.</b></div>':'')}</div>`;
+  return `<div class="jr3 ${where}"><div class="j3h"><span class="eb">Your meal</span><b>${done} of ${st.length} courses</b><i class="j3p"><i style="width:${Math.round(done/st.length*100)}%"></i></i></div><div class="tk-r">${track}</div>${sel&&picks.length?`<div class="j2n"><b>Ready for a ${sel.label.toLowerCase()}?</b><div class="jbs">${picks.map(i=>`<div class="jbb" data-act="open" data-id="${i.id}"><div class="jbi">${ph(i.h)}${qtyOf(i.id)?`<i class="jok">${I.tick}</i>`:`<button class="jba" data-act="add" data-id="${i.id}" aria-label="Add ${i.n}">${I.plus}</button>`}</div><span class="jbn">${i.n}</span><span class="jbp num">${rs(i.p)}</span></div>`).join('')}</div></div>`:(!nx?(st.every(x=>x.s==='done')?'<div class="j2n"><b>Every course covered. Enjoy.</b></div>':'<div class="j2n"><b>The rest of your meal is in the next round.</b></div>'):'')}</div>`;
 }
 function roundStrip(){ if(!D.f.ordering||!(S.rounds||[]).length) return ''; return journey('m'); }
 function splitName(n){ const i=n.indexOf(' '); return i<0?`<b>${n}</b>`:`<b>${n.slice(0,i)}</b><span>${n.slice(i+1)}</span>`; }
@@ -2191,11 +2213,21 @@ function cartView(){
   const right=b?`<button class="gp1 warn" data-act="fix">Fix ${b} ${b>1?'dishes':'dish'}${I.arrow}</button>`:`<button class="gp1" ${S.cart.length?'':'disabled'} data-act="send">${S.group?'Send for table':'Send to kitchen'}${I.arrow}</button>`;
   return `<div class="view"><div class="vh"><button class="ib" data-act="back" aria-label="Back">${I.back}</button><h2>Your <b>order</b></h2><span class="tg grey">Table 6</span></div><div class="scroll" id="cs">${S.cart.length?`<div class="osum"><span><b class="num">${n}</b> ${n>1?'dishes':'dish'} · <b class="num">${rs(B.pay)}</b></span><span class="mut">Check, then send to the kitchen</span></div>`:''}${S.group?`<div class="gcart"><span class="avs">${av('me')}${av('riya')}${av('kabir')}</span><div><b>Table order</b><span>3 people adding to one round</span></div><button data-act="invite">Invite</button></div>`:''}${b?`<div class="banner">${cap('sorry')}<div><b>${b} ${b>1?'dishes need':'dish needs'} your attention.</b> Nothing is lost. A swap is suggested below.</div></div>`:''}${S.cart.length?`<div class="dpn">${panel}${cap3?`<button class="more3" data-act="cartall">Show ${lines.length-3} more ${lines.length-3>1?'dishes':'dish'}</button>`:''}</div>`:`<div class="emp">${waiterSvg('think')}<b>Nothing on your table yet</b><span>Add a dish from the menu, or ask your waiter for ideas.</span></div>`}${S.cart.length?'<div class="kn">Add a note for the kitchen</div>':''}<div class="tot"><div class="bl"><span>Item total${b?' (available items)':''}</span><span class="num">${rs(B.sub)}</span></div><div class="bl"><span>GST 5% (CGST 2.5% + SGST 2.5%)</span><span class="num">₹${B.gst.toFixed(2)}</span></div><div class="bl t"><span>To pay</span><span class="num">${rs(B.pay)}</span></div></div><div style="height:16px"></div></div>${gbar(left,right)}</div>`;
 }
+/* a short window after an order: anything added now reaches the kitchen with it */
+const MISS_MS=5*60000;
+function missLeft(){ const R2=S.rounds||[], l=R2[R2.length-1]; return l?Math.max(0,MISS_MS-(Date.now()-l.at)):0; }
+const mmss=ms=>{ const t=Math.ceil(ms/1000); return Math.floor(t/60)+':'+String(t%60).padStart(2,'0'); };
+function missHtml(){ const left=missLeft(); if(!left||!D.f.ordering) return ''; const taken=new Set([...sentLines(),...S.cart].map(l=>l.item));
+  const picks=['naan','raita','lassi','jamun','garlic','chai','kachumber'].map(it).filter(i=>i&&!taken.has(i.id)&&!out(i.id)&&(!S.veg||i.veg)).slice(0,4);
+  return `<div class="miss"><div class="mh"><div><span class="eb">Missed something?</span><b>Add it now and it goes with this order</b></div><span class="mt num" id="mtime">${mmss(left)}</span></div><div class="mbar"><i id="mbar" style="width:${left/MISS_MS*100}%"></i></div><div class="mrow">${picks.map(i=>`<div class="mcd" data-act="open" data-id="${i.id}">${ph(i.h)}<div class="mcn">${vm(i.veg)}<span>${i.n}</span></div><div class="mcf"><span class="num">${rs(i.p)}</span>${qtyOf(i.id)?`<i class="p2ok">${I.tick}</i>`:`<button class="p2a" data-act="add" data-id="${i.id}" aria-label="Add ${i.n}">${I.plus}</button>`}</div></div>`).join('')}</div></div>`; }
+setInterval(()=>{ const t=document.getElementById('mtime'); if(!t) return; const left=missLeft(); if(!left){ render(); return; } t.textContent=mmss(left); const b=document.getElementById('mbar'); if(b) b.style.width=(left/MISS_MS*100)+'%'; },1000);
 function statusView(){
   const s=S.sent, n=s.lines.reduce((a,l)=>a+l.q,0);
-  const left=`<span class="gk">Bill so far</span><b class="num ${s.pay>=10000?'lg':''}">${rs(s.pay)}</b>`;
-  const right=`<button class="gp2" data-act="more">Order more</button><button class="gp1" data-act="paid">Pay bill</button>`;
-  return `<div class="view"><div class="scroll" id="ss"><div class="okh"><div class="okb">${waiterSvg('wow','wow,happy,serve,ok')}<i class="okt">${I.tick}</i></div><div class="eb mut">Round ${s.round||1} · Table 6</div><h2>Sent to the <b>kitchen</b></h2><p>${K()?'Thank you, Arjun. ':''}Sit back. We will bring it to your table.</p></div><div class="eta"><div class="eta-t"><span class="eb mut">Usually ready in</span><b class="num">15 to 20 min</b></div><div class="eta-b"><i></i></div><div class="eta-s"><span class="on">${I.tick} Sent just now</span><span>Being prepared</span></div></div><div class="callc"><div class="callh">${waiterSvg('explain')}<div><b>Need anything? Just tap.</b><span>I am right here for Table 6.</span></div></div><div class="callg">${[['help','Call waiter',GI.bell],['water','Water',GI.glass],['cutlery','Cutlery',GI.cut],['bill','The bill',GI.bill]].map(([k,t,ic])=>`<button data-act="callfor" data-id="${k}"><i>${ic}</i>${t}</button>`).join('')}</div></div>${S.paid&&D.f.ratings?(()=>{ const ids=[...new Set(s.lines.map(l=>l.item))], fb=S.fb||{}, all=ids.every(id=>fb[id]); return `<div class="fbk"><div class="eb">One tap each</div><b>How was each dish${K()?', Arjun':''}?</b>${ids.map(id=>{const i=it(id), v=fb[id]; return `<div class="fbr">${ph(i.h)}<span class="nm">${i.n}</span><button class="fbu ${v==='up'?'on':''}" data-act="fb" data-id="${id}" data-v="up" aria-label="Liked ${i.n}">${GI.up}</button><button class="fbd ${v&&v!=='up'?'on':''}" data-act="fb" data-id="${id}" data-v="down" aria-label="Did not like ${i.n}">${GI.up}</button></div>${v&&v!=='up'?`<div class="fbc">${['Too spicy','Cold','Too salty','Small portion'].map(t=>`<button class="${v===t?'on':''}" data-act="fb" data-id="${id}" data-v="${t}">${t}</button>`).join('')}</div>`:''}`;}).join('')}<div class="fbw">${GI.wa}<span>${all?'Thank you. The kitchen sees this tonight.':'We will also ask on WhatsApp if you shared your number.'}</span></div></div>`; })():''}${(()=>{ const c=count(); return (c?`<button class="nrn" data-act="cart"><span><b class="num">${c}</b> ${c>1?'dishes':'dish'} in your next round</span><span>Review${I.arrow}</span></button>`:'')+(D.f.ordering?journey('s'):''); })()}<div class="sum3"><button class="s3h" data-act="sumtoggle" aria-expanded="${!!S.sumOpen}"><span><span class="eb mut">Bill so far</span><b class="num">${rs(s.pay)}</b></span><span class="s3r">${n} ${n>1?'dishes':'dish'}<i class="s3c ${S.sumOpen?'up':''}"></i></span></button>${S.sumOpen?`<div class="sum2"><div class="eb mut">${n} ${n>1?'dishes':'dish'} on your table so far</div>${s.lines.map(l=>{const i=it(l.item); return `<div class="r2">${ph(i.h)}<span class="nm">${l.q} × ${i.n}</span><span class="num">${rs(unit(l)*l.q)}</span></div>`;}).join('')}<div class="r2 sub"><span class="nm">GST 5%</span><span class="num">₹${s.gst.toFixed(2)}</span></div><div class="r2 tt"><span class="nm">Bill so far</span><span class="num">${rs(s.pay)}</span></div></div>`:''}</div><p class="pay" style="margin:14px 16px 0">Pay whenever you are ready.</p><div style="height:20px"></div></div>${gbar(left,right)}</div>`;
+  const c=count(), nt=total();
+  /* once the guest adds dishes here, the bottom bar sends them; paying steps back */
+  const left=c?`<span class="gk">To send</span><b class="num">${rs(nt)}</b>`:`<span class="gk">Bill so far</span><b class="num ${s.pay>=10000?'lg':''}">${rs(s.pay)}</b>`;
+  const right=c?`<button class="gp2" data-act="cart">Review</button><button class="gp1 hot" data-act="sendnow">Send ${c} ${c>1?'dishes':'dish'}${I.arrow}</button>`:`<button class="gp2" data-act="more">Order more</button><button class="gp1" data-act="paid">Pay bill</button>`;
+  return `<div class="view"><div class="scroll" id="ss"><div class="okh"><div class="okb">${waiterSvg('wow','wow,happy,serve,ok')}<i class="okt">${I.tick}</i></div><div class="eb mut">Round ${s.round||1} · Table 6</div><h2>${S.merged?'Added to your <b>order</b>':'Sent to the <b>kitchen</b>'}</h2><p>${K()?'Thank you, Arjun. ':''}Sit back. We will bring it to your table.</p></div><div class="eta"><div class="eta-t"><span class="eb mut">Usually ready in</span><b class="num">15 to 20 min</b></div><div class="eta-b"><i></i></div><div class="eta-s"><span class="on">${I.tick} Sent just now</span><span>Being prepared</span></div></div>${(()=>{ const c=count(); return (c?`<button class="nrn hot" data-act="cart"><span><b class="num">${c}</b> ${c>1?'dishes':'dish'} ready to send · <b class="num">${rs(total())}</b></span><span>Review${I.arrow}</span></button>`:'')+missHtml(); })()}<div class="callc"><div class="callh">${waiterSvg('explain')}<div><b>Need anything? Just tap.</b><span>I am right here for Table 6.</span></div></div><div class="callg">${[['help','Call waiter',GI.bell],['water','Water',GI.glass],['cutlery','Cutlery',GI.cut],['bill','The bill',GI.bill]].map(([k,t,ic])=>`<button data-act="callfor" data-id="${k}"><i>${ic}</i>${t}</button>`).join('')}</div></div>${S.paid&&D.f.ratings?(()=>{ const ids=[...new Set(s.lines.map(l=>l.item))], fb=S.fb||{}, all=ids.every(id=>fb[id]); return `<div class="fbk"><div class="eb">One tap each</div><b>How was each dish${K()?', Arjun':''}?</b>${ids.map(id=>{const i=it(id), v=fb[id]; return `<div class="fbr">${ph(i.h)}<span class="nm">${i.n}</span><button class="fbu ${v==='up'?'on':''}" data-act="fb" data-id="${id}" data-v="up" aria-label="Liked ${i.n}">${GI.up}</button><button class="fbd ${v&&v!=='up'?'on':''}" data-act="fb" data-id="${id}" data-v="down" aria-label="Did not like ${i.n}">${GI.up}</button></div>${v&&v!=='up'?`<div class="fbc">${['Too spicy','Cold','Too salty','Small portion'].map(t=>`<button class="${v===t?'on':''}" data-act="fb" data-id="${id}" data-v="${t}">${t}</button>`).join('')}</div>`:''}`;}).join('')}<div class="fbw">${GI.wa}<span>${all?'Thank you. The kitchen sees this tonight.':'We will also ask on WhatsApp if you shared your number.'}</span></div></div>`; })():''}${(()=>{ const c=count(); return (D.f.ordering?journey('s'):''); })()}<div class="sum3"><button class="s3h" data-act="sumtoggle" aria-expanded="${!!S.sumOpen}"><span><span class="eb mut">Bill so far</span><b class="num">${rs(s.pay)}</b></span><span class="s3r">${n} ${n>1?'dishes':'dish'}<i class="s3c ${S.sumOpen?'up':''}"></i></span></button>${S.sumOpen?`<div class="sum2"><div class="eb mut">${n} ${n>1?'dishes':'dish'} on your table so far</div>${s.lines.map(l=>{const i=it(l.item); return `<div class="r2">${ph(i.h)}<span class="nm">${l.q} × ${i.n}</span><span class="num">${rs(unit(l)*l.q)}</span></div>`;}).join('')}<div class="r2 sub"><span class="nm">GST 5%</span><span class="num">₹${s.gst.toFixed(2)}</span></div><div class="r2 tt"><span class="nm">Bill so far</span><span class="num">${rs(s.pay)}</span></div></div>`:''}</div><p class="pay" style="margin:14px 16px 0">Pay whenever you are ready.</p><div style="height:20px"></div></div>${gbar(left,right)}</div>`;
 }
 
 /* ===== combo sheet ===== */
@@ -2281,23 +2313,27 @@ function render(){
   if(S.search&&S._sqf){ const q=document.getElementById('sq'); if(q){ q.focus(); q.setSelectionRange(q.value.length,q.value.length); } S._sqf=false; }
 }
 function showToast(kind,text){ S.toast={kind,text}; clearTimeout(S._t); S._t=setTimeout(()=>{S.toast=null;render();},3000); }
-function fly(src){ if(src&&src.isConnected) flyR({r:src.getBoundingClientRect(),bg:getComputedStyle(src).backgroundImage,rad:getComputedStyle(src).borderRadius}); }
+function srcOf(b){ let el=b; for(let n=0;n<7&&el;n++){ el=el.parentElement; const p=el&&el.querySelector('.ph'); if(p&&p.getBoundingClientRect().width>0) return p; } return null; }
+function fly(src,br){ if(src&&src.isConnected) flyR({r:src.getBoundingClientRect(),bg:getComputedStyle(src).backgroundImage,rad:getComputedStyle(src).borderRadius},br); }
 function confetti(x,y,n=10,spread=1){ if(RM()) return; const C=['#B3261E','#F59E0B','#16A34A','#7C3AED','#FCD34D','#fff'];
   for(let k=0;k<n;k++){ const d=document.createElement('i'); d.className='cf'; const sz=4+Math.random()*4; d.style.cssText=`left:${x}px;top:${y}px;width:${sz}px;height:${sz*(Math.random()<.5?1:1.8)}px;background:${C[k%C.length]};border-radius:${Math.random()<.5?'50%':'2px'}`;
     document.body.appendChild(d); const a=Math.random()*Math.PI*2, v=(26+Math.random()*44)*spread, dx=Math.cos(a)*v, dy=Math.sin(a)*v-30*spread;
     try{ d.animate([{transform:'translate(-50%,-50%) rotate(0)',opacity:1},{transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) rotate(${Math.random()*360}deg)`,opacity:1,offset:.55},{transform:`translate(calc(-50% + ${dx*1.2}px),calc(-50% + ${dy+40*spread}px)) rotate(${Math.random()*540}deg)`,opacity:0}],{duration:800+Math.random()*300,easing:'cubic-bezier(.2,.7,.3,1)'}); }catch(e){}
     setTimeout(()=>d.remove(),1150); } }
-function flyR(sr){ const bar=document.querySelector('.cbar'); if(!bar||RM()||!sr.r.width) return; const ths=bar.querySelectorAll('.th>*'), tgt=ths[ths.length-1]||bar, s0=sr.r, b=tgt.getBoundingClientRect();
+function cartTarget(){ const bar=document.querySelector('.cbar'); if(!bar) return null; const r=bar.getBoundingClientRect(); if(!r.width) return null; const hit=document.elementFromPoint(r.left+40,r.top+r.height/2); if(!hit||!bar.contains(hit)) return null; const ths=bar.querySelectorAll('.th>*'); return ths[ths.length-1]||bar; }
+function flyR(sr,br){ if(RM()||!sr.r.width) return; let tgt=cartTarget(), b;
+  if(tgt) b=tgt.getBoundingClientRect(); else if(br&&br.width){ b=br; tgt=null; } else return;
+  const s0=sr.r;
   const d=document.createElement('div'); d.className='fly2'; d.style.cssText=`left:${s0.left}px;top:${s0.top}px;width:${s0.width}px;height:${s0.height}px;background-image:${sr.bg};border-radius:${sr.rad||'16px'}`; document.body.appendChild(d);
   const sc=26/Math.max(s0.width,s0.height), dx=b.left+b.width/2-(s0.left+s0.width/2), dy=b.top+b.height/2-(s0.top+s0.height/2);
   const a=d.animate([{transform:'translate(0,0) scale(1)',opacity:1},{transform:`translate(${dx*.3}px,${dy*.2-36}px) scale(${Math.max(sc*2.4,.5)})`,borderRadius:'50%',opacity:1,offset:.42},{transform:`translate(${dx}px,${dy}px) scale(${sc})`,borderRadius:'50%',opacity:.85}],{duration:640,easing:'cubic-bezier(.45,0,.2,1)',fill:'forwards'});
-  a.onfinish=()=>{ d.remove(); tgt.animate([{transform:'scale(1)'},{transform:'scale(1.3)'},{transform:'scale(1)'}],{duration:280,easing:'cubic-bezier(.2,.8,.2,1)'}); }; setTimeout(()=>d.remove(),900); }
+  a.onfinish=()=>{ d.remove(); if(tgt) tgt.animate([{transform:'scale(1)'},{transform:'scale(1.3)'},{transform:'scale(1)'}],{duration:280,easing:'cubic-bezier(.2,.8,.2,1)'}); }; setTimeout(()=>d.remove(),900); }
 function addLine(item,portion,bread,srcSel,flashKey,combo,n=1){
   const before=qtyOf(item), again=!flashKey&&!portion&&!combo&&before>0;
   const k=combo?ckey(combo):portion?`${item}|${portion}|${bread}`:item, ex=S.cart.find(l=>l.k===k);
   if(ex) ex.q+=n; else S.cart.push({k,item,portion,bread,combo,q:n,...(S.group?{by:'me'}:{})});
   const sr=S._src&&S._src.isConnected?{r:S._src.getBoundingClientRect(),bg:getComputedStyle(S._src).backgroundImage,rad:getComputedStyle(S._src).borderRadius}:null; S._src=null; const t0=total();
-  S.bump=true; if(again){ clearTimeout(S._f); S.flash=null; S.anim={id:item,dir:'up'}; } else S.flash=flashKey||item; render(); S._btnR=null; if(sr) flyR(sr); else fly(document.querySelector(srcSel||`[data-src="${item}"] .ph`)); countUp(document.querySelector('.cbar .tx b'),t0,total());
+  S.bump=true; if(again){ clearTimeout(S._f); S.flash=null; S.anim={id:item,dir:'up'}; } else S.flash=flashKey||item; render(); const br=S._btnR; S._btnR=null; if(sr) flyR(sr,br); else fly(document.querySelector(srcSel||`[data-src="${item}"] .ph`),br); countUp(document.querySelector('.cbar .tx b'),t0,total());
   if(again){ return; }
   clearTimeout(S._f); S._f=setTimeout(()=>{S.flash=null; S.grow=item; if(flashKey==='sheet'){ S.sheet=null; S.combo=null; } render(); S.grow=null;},750);
 }
@@ -2311,8 +2347,10 @@ function setStock(key,val){
 }
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]'); if(!b||b.disabled) return; const a=b.dataset.act, id=b.dataset.id, k=b.dataset.k;
+  /* every add flies from the photo nearest to the tapped button, wherever it is on screen */
+  if(['add','cmpadd','padd','usual','repeat','again','addsheet','caddsheet'].includes(a)){ S._btnR=b.getBoundingClientRect(); S._src=srcOf(b); }
   switch(a){
-    case 'add': { e.stopPropagation(); S._btnR=b.getBoundingClientRect(); S._src=b.closest('.dk,.gc,.li,.pc2,.sr1,.mi,.pr1')?.querySelector('.ph')||null; const i=it(id); if(out(id)||!D.f.ordering) return; if(i.id==='platter'){ S.chat=null; S.cmp=null; S.search=null; S.sheet=null; S.combo={sel:{kebab:[],bread:null,sweet:null}}; break; } if(cust(i)){ S.chat=null; S.cmp=null; S.search=null; S.sheet={item:id,portion:null,bread:null,q:1}; break; } addLine(id); return; }
+    case 'add': { e.stopPropagation(); const i=it(id); if(out(id)||!D.f.ordering) return; if(i.id==='platter'){ S.chat=null; S.cmp=null; S.search=null; S.sheet=null; S.combo={sel:{kebab:[],bread:null,sweet:null}}; break; } if(cust(i)){ S.chat=null; S.cmp=null; S.search=null; S.sheet={item:id,portion:null,bread:null,q:1}; break; } addLine(id); return; }
     case 'cpick': { const g=COMBO.find(x=>x.k===b.dataset.g), c=S.combo.sel; if(out(id)) return; if(g.n===1) c[g.k]=c[g.k]===id?null:id; else { const arr=c[g.k], ix=arr.indexOf(id); if(ix>=0) arr.splice(ix,1); else { if(arr.length>=g.n) arr.shift(); arr.push(id); } } break; }
     case 'caddsheet': { addLine('platter',null,null,'.sh .hero','sheet',structuredClone(S.combo.sel)); return; }
     case 'closecombo': S.combo=null; break;
@@ -2383,7 +2421,9 @@ document.addEventListener('click',e=>{
     case 'swapitem': { const l=S.cart.find(x=>x.k===k), ex=S.cart.find(x=>x.k===id); if(ex){ ex.q+=l.q; S.cart=S.cart.filter(x=>x!==l);} else { l.item=id; l.k=id; delete l.portion; delete l.bread; } showToast('good',`Swapped for ${it(id).n}.`); break; }
     case 'swapopt': { const l=S.cart.find(x=>x.k===k); l.bread=id; l.k=`${l.item}|${l.portion}|${id}`; showToast('good',`Swapped to ${opt('bread',id).n}.`); break; }
     case 'fix': { const el=document.querySelector('.dl.bad'), cs=document.getElementById('cs'); if(el&&cs) cs.scrollTo({top:cs.scrollTop+el.getBoundingClientRect().top-cs.getBoundingClientRect().top-70,behavior:RM()?'auto':'smooth'}); return; }
-    case 'send': { S.cartAll=false; const B=bill(); S.rounds=S.rounds||[]; S.rounds.push({lines:S.cart.map(l=>({...l})),at:Date.now()}); const all=sentLines(), bs=all.reduce((a,l)=>a+unit(l)*l.q,0); S.sent={lines:all,gst:bs*.05,pay:Math.round(bs*1.05),round:S.rounds.length}; S._party=true; S.cart=[]; S.view='status'; S.paid=false; S.rate=0; S.log.unshift({t:ago(),text:'Order No. 41 sent to the kitchen.'}); break; }
+    case 'sendnow': { if(bad().length){ S.view='cart'; break; } }
+    // falls through: sending from the success page is the same as sending from the cart
+    case 'send': { S.cartAll=false; const B=bill(); S.rounds=S.rounds||[]; const lastR=S.rounds[S.rounds.length-1]; S.merged=!!(lastR&&Date.now()-lastR.at<MISS_MS); if(S.merged) lastR.lines.push(...S.cart.map(l=>({...l}))); else S.rounds.push({lines:S.cart.map(l=>({...l})),at:Date.now()}); const all=sentLines(), bs=all.reduce((a,l)=>a+unit(l)*l.q,0); S.sent={lines:all,gst:bs*.05,pay:Math.round(bs*1.05),round:S.rounds.length}; S._party=true; S.cart=[]; S.view='status'; S.paid=false; S.rate=0; S.log.unshift({t:ago(),text:S.merged?'More dishes added to Order No. 41.':'Order No. 41 sent to the kitchen.'}); break; }
     case 'more': { S.view='menu'; S.paid=false; S.rate=0; const R2=S.rounds||[], last=R2[R2.length-1]; if(last&&Date.now()-last.at<600000&&!S.toured){ S.toured=true; S.tour=0; render(); const sc=document.getElementById('sc'); if(sc) sc.scrollTop=0; placeCoach(); return; } break; }
     case 'tournext': S.tour=S.tour<TOUR.length-1?S.tour+1:null; break;
     case 'tourskip': S.tour=null; break;
@@ -2532,7 +2572,9 @@ function placeCoach(){ const c=document.getElementById('coach'); if(!c) return; 
   /* a target inside the menu scroll is brought into view first, so the tip can never end up off screen */
   const sc=document.getElementById('sc'); let ph=phE.getBoundingClientRect(), r=el.getBoundingClientRect();
   if(sc&&sc.contains(el)&&(r.top<ph.top+60||r.bottom>ph.bottom-160)){ sc.scrollTop+=r.top-ph.top-ph.height*.3; r=el.getBoundingClientRect(); }
-  const pad=8; Object.assign(h.style,{left:Math.max(4,r.left-ph.left-pad)+'px',top:r.top-ph.top-pad+'px',width:Math.min(ph.width-8,r.width+pad*2)+'px',height:r.height+pad*2+'px',borderRadius:Math.min(r.height/2+pad,24)+'px'});
+  /* the highlight always stays inside the phone, inset from its edges and rounded corners */
+  const pad=8, L=Math.max(8,r.left-ph.left-pad), T=Math.max(8,r.top-ph.top-pad), Rr=Math.min(ph.width-8,r.right-ph.left+pad), B=Math.min(ph.height-10,r.bottom-ph.top+pad);
+  Object.assign(h.style,{left:L+'px',top:T+'px',width:(Rr-L)+'px',height:(B-T)+'px',borderRadius:Math.min((B-T)/2,24)+'px'});
   const th=tip.offsetHeight||170, below=r.top-ph.top<ph.height/2; let top=below?r.bottom-ph.top+18:r.top-ph.top-18-th;
   tip.style.bottom='auto'; tip.style.top=Math.max(12,Math.min(ph.height-th-12,top))+'px'; }
 /* ===== G. group ordering ===== */
