@@ -184,7 +184,7 @@ These override the starting tokens in section 9 and the three first directions, 
 
 | Decision | Rule |
 | --- | --- |
-| **One font** | A single sans family across every surface, using weights for hierarchy. Working choice: Inter, with Noto Sans Devanagari for Hindi. No serif, no display face, no wide or condensed cuts |
+| **One font** | A single sans family across every surface, using weights for hierarchy. Chosen 15 Nov 2026: Plus Jakarta Sans, with Noto Sans Devanagari for Hindi. No serif, no display face, no wide or condensed cuts. Sizes 12, 14, 16, 20, 28, 40, plus 10 for capitals tags and small labels on photos (Customisable, Signature, counts); weights 300 (large display only), 400, 500, 600, 700; letter-spacing +0.1em for capitals labels, -0.02em for large headings, 0 elsewhere; tabular figures for every price. `design/check-type.py` fails on anything else. **One exception (founder, 15 Nov):** everything the waiter says (his pill label, chat messages, chat header, call card) is set in Nunito, a rounded sans, so his voice is recognisable; it uses the same sizes and weights. Weights lean light: bold (700) is kept for buttons, names use 600, labels 500 |
 | **White only** | v1 has a white background everywhere. No tinted page colours and no dark mode in v1 |
 | **Curves** | Rounded shapes throughout: large radius on images, cards, sheets and buttons |
 | **Bold CTAs** | The important action on a screen is a solid, saturated, large button (Add, Add to order, View order, Send to kitchen). Secondary actions are soft tints |
@@ -226,7 +226,10 @@ These override the starting tokens in section 9 and the three first directions, 
 - **Search** is a frosted glass card over a lightly dimmed menu, with a placeholder that types dish names, quick gradient chips (Kebabs, Veg, Sweet, Light) and popular dishes first. Picking a dish with choices closes search before the item page opens.
 - **Add** sends the dish photo itself on a curve into the cart bar's thumbnails. The thumbnail catches it and the total counts up. Confetti is kept for sending an order.
 - **Suggestions** shimmer once when they appear. A suggestion row always shows a third dish half cut off, which nudges once, so guests see there is more.
-- **Gradient chips** are used only for suggested questions and quick picks, in one horizontally scrolling row.
+- **Colour sits on elements, not backgrounds.** Chips, tiles and cards stay white or light grey; colour goes on icons and text. Suggested questions are two slowly drifting rows of plain chips with coloured text, which pause when touched.
+- **No lonely words.** A heading or short line never leaves one or two words alone on its last line: short text balances its lines, body text avoids a single last word, and copy is shortened where that reads better.
+- **Categories are clearly separated:** a soft 8px grey band between categories, and a roomier header with the count beside the name.
+- **Class names are unique.** A new style never reuses a class name that already exists (two clashes, `g2` and `gm`, broke the menu grid on 15 Nov).
 
 ## 14. Screen hierarchy (UX first)
 

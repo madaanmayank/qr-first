@@ -41,12 +41,14 @@ This is the only character allowed in the interface. See the rule in [AGENTS.md]
 - **Opening it** shows the waiter, a greeting by name when known, and four actions: **Order for me**, **Menu questions**, **Make a request** (water, the bill, cutlery, help) and **Raise a concern** (food is cold, waiting too long, wrong dish, something else). Below them, suggested questions are ready to tap ("What is popular?", "Something light", "Best vegetarian", "Is the seekh spicy?", "What goes with nihari?", "Get the bill").
 - **Ordering through the waiter:** it asks what the guest is in the mood for, shows dishes with Add buttons, and adds straight to the cart. Customisable dishes open their item page.
 - **Requests and concerns** are logged for staff at once, and the waiter confirms in one line.
+- **The bill always needs a confirmation (15 Nov 2026).** Asking for the bill from the chat, the success page or the waiter sheet first asks "Bring the bill to Table 6?", with the amount so far and a note that ordering more is still possible. Only "Yes, bring it" sends the request; "Not yet" sends nothing.
 - **The waiter appears at key moments:** the welcome on the menu, the order success page (excited, with a green tick), the empty cart (thinking) and a search with no results (concerned).
 
 ## 3b. The button and chat, updated (15 Nov 2026, evening)
 
-- The waiter's face is always inside the assistant button, on the violet gradient. He blinks every few seconds, now and then twice.
-- A small badge on the button cycles through what he can do (bell, water, cutlery, a question), and a short label shows now and then ("Call waiter", "Water?").
+- **The waiter pill (replaces the round button):** a slim white glass pill, 44px tall, docked bottom right and 12px above the cart bar, never over the dishes. It holds the waiter's face in a small circle with a thin violet ring (he blinks every few seconds) and one short label that crossfades slowly: "Ask me", "Water?", "Call waiter", "Cutlery".
+- While the guest scrolls, the pill shrinks to the face. It grows back a moment after scrolling stops.
+- Greetings and replies ("Hi Arjun, welcome back.", "On my way. Water for Table 6.") show in the label, not as a figure popping over the menu. The full figure appears only on the order success page and in the chat header.
 - The chat opens with icon tiles (Order, Waiter, Water, Cutlery, Bill, Concern), not text blocks. Answers come back as dish cards with photos and Add, after a short typing indicator. Suggested questions are one horizontal row of gradient chips, including mood prompts ("I am very hungry", "High protein").
 
 ## 4. What it knows

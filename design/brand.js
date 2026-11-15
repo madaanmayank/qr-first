@@ -7,7 +7,7 @@ const BRAND = {
   story: 'My grandfather lit this tandoor in Old Delhi in 1962. The seekh recipe has not changed since.',
   logo: '<svg viewBox="0 0 40 40" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 30V19a8 8 0 0116 0v11"/><path d="M9 30h22"/><path d="M20 25c-2.4-2.2-2.4-4.6 0-7 2.4 2.4 2.4 4.8 0 7z" fill="#fff" stroke="none"/></svg>',
   // placeholder hue -> image file
-  imgs: { 14: 'seekh', 20: 'galouti', 42: 'malai', 36: 'paneer', 22: 'nihari', 10: 'dal', 46: 'rumali', 40: 'tukda', 52: 'phirni', 18: 'platter' },
+  imgs: { 14: 'seekh', 20: 'galouti', 42: 'malai', 36: 'paneer', 22: 'nihari', 10: 'dal', 46: 'rumali', 40: 'tukda', 52: 'phirni', 18: 'platter', 60: 'tandoori', 61: 'fish', 62: 'dahikebab', 63: 'chaap', 64: 'butterchicken', 65: 'korma', 66: 'kadhai', 67: 'palak', 68: 'chole', 69: 'mbiryani', 70: 'cbiryani', 71: 'vbiryani', 72: 'jeera', 73: 'naan', 74: 'garlic', 75: 'khameeri', 76: 'laccha', 77: 'raita', 78: 'kachumber', 79: 'onion', 80: 'jamun', 81: 'kulfi', 82: 'chai', 83: 'lassi', 84: 'roohafza', 85: 'chaas', 86: 'limesoda', 87: 'thali' },
 };
 
 function brandHead(table) {
