@@ -797,7 +797,7 @@ main{display:block;max-width:1160px}
 .gbar .gk{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
 .gbar .gl b{font-size:16px;font-weight:600;letter-spacing:-.02em}
 .gbar .gl b.lg{font-size:14px}
-.gbar .gr2{display:flex;gap:8px;flex:none}
+.gbar .gbr{display:flex;gap:8px;flex:none}
 .gp1,.gp2{height:46px;padding:0 16px;border-radius:99px;font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .gp1{background:var(--p);color:#fff;box-shadow:0 8px 20px color-mix(in srgb,var(--p) 40%,transparent),inset 0 1px 0 rgba(255,255,255,.25)}
 .gp1.warn{background:#B45309;box-shadow:0 8px 20px rgba(180,83,9,.32)}
@@ -1793,6 +1793,38 @@ p,.ddesc,.d,.why,.m,.nlab,.banner div{text-wrap:pretty}
 @media (prefers-reduced-motion:reduce){.nrn.hot,.gp1.hot{animation:none}}
 
 .ch-tip p{text-wrap:pretty}
+
+/* bottom action bar: button centred, total readable, no glow */
+.gbar{height:calc(72px + env(safe-area-inset-bottom));padding:0 16px env(safe-area-inset-bottom);align-items:center}
+.gbar .gbr{display:flex;align-items:center;gap:8px}
+.gbar .gp1,.gbar .gp2{height:46px;box-shadow:none}
+.gbar .gl b{font-size:20px;font-weight:600}
+/* "Still room for more?": no tiles; round plates that bob, a countdown ring */
+.miss2{margin:22px 0 4px;padding:0 0 4px}
+.m2h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px}
+.m2h .eb{color:var(--p)}
+.m2h h3{margin:2px 0 0;font-size:20px;font-weight:600;letter-spacing:-.02em}
+.m2h p{margin:2px 0 0;font-size:14px;color:var(--ink2)}
+.m2r{position:relative;width:56px;height:56px;flex:none}
+.m2r svg{width:56px;height:56px;transform:rotate(-90deg)}
+.m2r circle{fill:none;stroke-width:3.5}
+.m2r .bg{stroke:#FDE8CC}
+.m2r .fg{stroke:#F59E0B;stroke-linecap:round;stroke-dasharray:119.4;transition:stroke-dashoffset 1s linear}
+.m2r b{position:absolute;inset:0;display:grid;place-items:center;font-size:12px;font-weight:700;color:#B45309}
+.m2row{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;padding:16px 16px 6px}
+.m2row::-webkit-scrollbar{display:none}
+.m2p{flex:none;width:92px;display:flex;flex-direction:column;align-items:center;text-align:center;cursor:pointer}
+.m2i{position:relative;width:88px;height:88px;animation:m2bob 3.2s ease-in-out infinite;animation-delay:calc(var(--k) * -.6s)}
+.m2i .ph{width:100%;height:100%;border-radius:50%;box-shadow:0 10px 20px rgba(16,24,40,.14)}
+@keyframes m2bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.m2a,.m2ok{position:absolute;right:-2px;bottom:2px;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;padding:0;border:2px solid #fff}
+.m2a{background:var(--p);color:#fff}
+.m2ok{background:#16A34A;color:#fff}
+.m2a svg,.m2ok svg{width:14px;height:14px;stroke-width:2.6}
+.m2a:active{transform:scale(.9)}
+.m2n{margin-top:10px;font-size:12px;font-weight:600;line-height:1.25;color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.m2c{font-size:12px;color:var(--ink2);margin-top:2px}
+@media (prefers-reduced-motion:reduce){.m2i{animation:none}.m2r .fg{transition:none}}
 </style>
 </head>
 <body>
@@ -2202,7 +2234,7 @@ function pairs(){ if(!D.f.suggestions) return null; const okl=okL(); if(!okl.len
   if(!cs.has('dessert')) pick.push(['tukda',K()?'You skipped it last time':'A sweet finish'],['phirni','Light and cool']);
   pick.push(['galouti','Most ordered here'],['paneer','Light and smoky'],['tukda','A sweet finish'],['phirni','Light and cool']); const seen=new Set(), list=pick.filter(([id])=>ok(id)&&!seen.has(id)&&seen.add(id)).slice(0,2); const fits=['starter','main'].includes(it(host.item).c); return list.length?{host:host.k,label:fits?'Goes well with '+it(host.item).n:'To complete your table',list}:null; }
 function pairHtml(P){ return `<div class="pair"><div class="pair-h"><svg viewBox="0 0 24 24"><path d="M12 3.5l1.9 5 5 1.9-5 1.9-1.9 5-1.9-5-5-1.9 5-1.9z" fill="currentColor" stroke="none"/></svg>Suggested · ${P.label}</div>${P.list.map(([id])=>{const i=it(id); return `<div class="pr1" data-act="open" data-id="${id}">${ph(i.h)}<div class="iname">${vm(i.veg)}<span>${i.n}</span></div><span class="num">${rs(i.p)}</span>${qtyOf(id)?'':`<button class="padd" data-act="add" data-id="${id}" aria-label="Add ${i.n}">${I.plus}Add</button>`}</div>`;}).join('')}</div>`; }
-function gbar(left,right){ return `<div class="gbar"><div class="gl">${left}</div><div class="gr2">${right}</div></div>`; }
+function gbar(left,right){ return `<div class="gbar"><div class="gl">${left}</div><div class="gbr">${right}</div></div>`; }
 function cartView(){
   const b=bad().length, B=bill(), P=!b?pairs():null, lines=S.cart.slice().sort((x,y)=>(!!issue(y))-(!!issue(x)));
   const cap3=lines.length>3&&!S.cartAll&&!b, shown=cap3?lines.slice(0,3):lines;
@@ -2218,9 +2250,9 @@ const MISS_MS=5*60000;
 function missLeft(){ const R2=S.rounds||[], l=R2[R2.length-1]; return l?Math.max(0,MISS_MS-(Date.now()-l.at)):0; }
 const mmss=ms=>{ const t=Math.ceil(ms/1000); return Math.floor(t/60)+':'+String(t%60).padStart(2,'0'); };
 function missHtml(){ const left=missLeft(); if(!left||!D.f.ordering) return ''; const taken=new Set([...sentLines(),...S.cart].map(l=>l.item));
-  const picks=['naan','raita','lassi','jamun','garlic','chai','kachumber'].map(it).filter(i=>i&&!taken.has(i.id)&&!out(i.id)&&(!S.veg||i.veg)).slice(0,4);
-  return `<div class="miss"><div class="mh"><div><span class="eb">Missed something?</span><b>Add it now and it goes with this order</b></div><span class="mt num" id="mtime">${mmss(left)}</span></div><div class="mbar"><i id="mbar" style="width:${left/MISS_MS*100}%"></i></div><div class="mrow">${picks.map(i=>`<div class="mcd" data-act="open" data-id="${i.id}">${ph(i.h)}<div class="mcn">${vm(i.veg)}<span>${i.n}</span></div><div class="mcf"><span class="num">${rs(i.p)}</span>${qtyOf(i.id)?`<i class="p2ok">${I.tick}</i>`:`<button class="p2a" data-act="add" data-id="${i.id}" aria-label="Add ${i.n}">${I.plus}</button>`}</div></div>`).join('')}</div></div>`; }
-setInterval(()=>{ const t=document.getElementById('mtime'); if(!t) return; const left=missLeft(); if(!left){ render(); return; } t.textContent=mmss(left); const b=document.getElementById('mbar'); if(b) b.style.width=(left/MISS_MS*100)+'%'; },1000);
+  const picks=['naan','raita','lassi','jamun','garlic','chai','kachumber'].map(it).filter(i=>i&&!taken.has(i.id)&&!out(i.id)&&(!S.veg||i.veg)).slice(0,5), C=119.4;
+  return `<div class="miss2"><div class="m2h"><div><span class="eb">Before it leaves the kitchen</span><h3>Still room for more?</h3><p>Add now and it goes out with your order.</p></div><div class="m2r"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" class="bg"/><circle cx="22" cy="22" r="19" class="fg" id="mring" style="stroke-dashoffset:${(C*(1-left/MISS_MS)).toFixed(1)}"/></svg><b class="num" id="mtime">${mmss(left)}</b></div></div><div class="m2row">${picks.map((i,k)=>`<div class="m2p" data-act="open" data-id="${i.id}" style="--k:${k}"><div class="m2i">${ph(i.h)}${qtyOf(i.id)?`<i class="m2ok">${I.tick}</i>`:`<button class="m2a" data-act="add" data-id="${i.id}" aria-label="Add ${i.n}">${I.plus}</button>`}</div><span class="m2n">${i.n}</span><span class="m2c num">${rs(i.p)}</span></div>`).join('')}</div></div>`; }
+setInterval(()=>{ const t=document.getElementById('mtime'); if(!t) return; const left=missLeft(); if(!left){ render(); return; } t.textContent=mmss(left); const r=document.getElementById('mring'); if(r) r.style.strokeDashoffset=(119.4*(1-left/MISS_MS)).toFixed(1); },1000);
 function statusView(){
   const s=S.sent, n=s.lines.reduce((a,l)=>a+l.q,0);
   const c=count(), nt=total();
