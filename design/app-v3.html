@@ -1899,6 +1899,58 @@ p,.ddesc,.d,.why,.m,.nlab,.banner div{text-wrap:pretty}
 /* chat tutorial: one tip under the six tiles, pointing up at them */
 .tiletip{position:relative;margin:12px 4px 0;padding:10px 12px;border-radius:14px;background:var(--ink);color:#fff;font-size:12px;line-height:1.4;box-shadow:0 10px 24px rgba(16,24,40,.2)}
 .tiletip::before{content:"";position:absolute;left:50%;top:-5px;width:10px;height:10px;margin-left:-5px;background:var(--ink);transform:rotate(45deg)}
+
+/* kitchen notes section */
+.kns{margin:14px 16px 0;padding:14px;border-radius:20px;background:#fff;border:1px solid var(--line)}
+.knh{display:block;font-size:16px;font-weight:600;margin-bottom:10px}
+.kns input{width:100%;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--fill);padding:0 12px;font:inherit;font-size:14px;color:var(--ink)}
+.knd{margin-top:12px}
+.kdish{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-top:6px;padding-bottom:2px}
+.kdish::-webkit-scrollbar{display:none}
+.kdish button{flex:none;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 12px 0 4px;border-radius:99px;border:1px solid var(--line);background:#fff;font-size:12px;font-weight:600;color:var(--ink)}
+.kdish button .ph{width:28px;height:28px;border-radius:50%}
+.kdish button.on{border-color:var(--ink);background:var(--ink);color:#fff}
+.kdish button.has::after{content:"";width:6px;height:6px;border-radius:50%;background:#F59E0B}
+.ked{margin-top:12px;padding:12px;border-radius:16px;background:var(--fill)}
+.kedh{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.kedh .ph{width:32px;height:32px;border-radius:50%}.kedh b{font-size:14px;font-weight:600}
+.kchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.kchips button{height:32px;padding:0 12px;border-radius:99px;border:1px solid var(--line);background:#fff;font-size:12px;font-weight:600;color:var(--ink2)}
+.kchips button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.ked input{background:#fff}
+.kedf{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}
+.kedf .sf{height:38px;padding:0 14px;border-radius:99px;background:#fff;border:1px solid var(--line);font-weight:600}
+.kedf .gp1{height:38px}
+.kdl{margin-top:12px;border-top:1px solid var(--line)}
+.kdn{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.kdn>div{flex:1;min-width:0}.kdn b{display:block;font-size:14px;font-weight:600}
+.kdn span{display:block;font-size:12px;color:#B45309;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kdn button{height:30px;padding:0 10px;border-radius:99px;border:1px solid var(--line);background:#fff;font-size:12px;font-weight:600;color:var(--ink2)}
+.kdn button:last-child{width:30px;padding:0;display:grid;place-items:center}.kdn button svg{width:12px;height:12px}
+
+/* added-to-order moment */
+.adv{background:#fff;animation:adin .32s cubic-bezier(.2,.8,.2,1)}
+@keyframes adin{from{opacity:.4;transform:translateY(24px)}}
+.adc{flex:1;overflow:auto;padding:36px 20px 20px;text-align:center}
+.adk{width:72px;height:72px;margin:0 auto 14px;display:block;animation:adpop .5s cubic-bezier(.2,.8,.2,1) .1s backwards}
+.adk circle{fill:#ECFDF3;stroke:#16A34A;stroke-width:3}
+.adk path{fill:none;stroke:#16A34A;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:44;stroke-dashoffset:44;animation:addraw .45s cubic-bezier(.4,0,.2,1) .35s forwards}
+@keyframes adpop{from{transform:scale(.6);opacity:.3}}
+@keyframes addraw{to{stroke-dashoffset:0}}
+.adc h2{margin:0;font-size:28px;font-weight:300}
+.adc h2 b{font-weight:600}
+.adc>p{margin:6px 0 18px;font-size:14px;color:var(--ink2)}
+.adl{text-align:left;border-top:1px solid var(--line)}
+.adr{display:grid;grid-template-columns:44px minmax(0,1fr) 26px;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);animation:adrow .4s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(.55s + var(--k) * .12s)}
+@keyframes adrow{from{opacity:0;transform:translateY(10px)}}
+.adr>.ph{width:44px;height:44px;border-radius:12px}
+.adn b{display:block;font-size:14px;font-weight:600}
+.adn span{display:block;font-size:12px;color:#B45309}
+.adt{width:26px;height:26px;border-radius:50%;background:#16A34A;color:#fff;display:grid;place-items:center}
+.adt svg{width:13px;height:13px}
+.ads{display:flex;justify-content:space-between;align-items:baseline;padding:14px 0 0;font-size:14px;color:var(--ink2)}
+.ads b{font-size:20px;font-weight:600;color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.adv,.adk,.adk path,.adr{animation:none}.adk path{stroke-dashoffset:0}}
 </style>
 </head>
 <body>
@@ -2128,7 +2180,7 @@ Object.keys(WIMG).forEach(m=>{ const i=new Image(); i.src=wsrc(m); });
 function wswap(im,m){ if(!im) return; const go=()=>{ im.src=wsrc(m); if(!RM()) im.animate([{transform:'scale(1,.9) translateY(3%)'},{transform:'scale(.97,1.04) translateY(-2%)',offset:.55},{transform:'none'}],{duration:340,easing:'cubic-bezier(.2,.8,.2,1)',composite:'add'}); }; go(); }
 setInterval(()=>{ if(document.hidden) return; document.querySelectorAll('#phone img[data-seq]').forEach(im=>{ const L=im.dataset.seq.split(','), n=((+im.dataset.i||0)+1)%L.length; im.dataset.i=n; wswap(im,L[n]); }); },2600);
 function waiter(){ if(S.view!=='menu'||S.sheet||S.combo||S.play||S.chat||S.search||S.splash||S.loading) return '';
-  return `<div class="wtr2 ${count()&&D.f.ordering?'up':''} ${S._wrest?'mini':''}" id="wtr"><button class="wpill" data-act="chat" aria-label="Your waiter: ask, order, call the waiter, water or cutlery"><span class="wpf"><img id="asfi" src="img/waiter2/face.png" alt=""></span><span class="wpl"><span id="wlab">${wlh(wlN)}</span></span></button></div>`; }
+  return `<div class="wtr2 ${count()&&D.f.ordering?'up':''} ${S._wrest?'mini':''}" id="wtr"><button class="wpill"${tip('home',1,'Call me any time','Water, cutlery, the bill or a question. I am one tap away.')} data-act="chat" aria-label="Your waiter: ask, order, call the waiter, water or cutlery"><span class="wpf"><img id="asfi" src="img/waiter2/face.png" alt=""></span><span class="wpl"><span id="wlab">${wlh(wlN)}</span></span></button></div>`; }
 function buzzSheet(){ const R=[['water','Water'],['bill','The bill'],['cutlery','Cutlery'],['help','Some help']];
   return `<div class="ov"><div class="scrim" data-act="closebuzz"></div><div class="sh bz"><div class="grab"></div><div class="bzh">${D.f.captain?waiterSvg('hi'):''}<div><b>How can we help${K()?', Arjun':''}?</b><span>Table 6</span></div></div><div class="bzt"><div class="eb mut">Call a waiter for</div><div class="bzr">${R.map(([k,n])=>`<button data-act="callfor" data-id="${k}">${n}</button>`).join('')}</div></div>${D.f.captain?`<button class="bza" data-act="buzzask">${cap()}<span><b>Ask waiter</b><small>What goes with my order? Is this spicy?</small></span>${I.arrow}</button>`:''}</div></div>`; }
 function peek(text){ const w=document.getElementById('wtr'), l=document.getElementById('wlab'); if(!w||!l) return; wsay(l,text||WMSG()); w.classList.add('say'); w.classList.remove('mini'); clearTimeout(S._pk); S._pk=setTimeout(()=>{ const w2=document.getElementById('wtr'), l2=document.getElementById('wlab'); if(w2){ w2.classList.remove('say'); if(S._wrest) w2.classList.add('mini'); } if(l2) wsay(l2,wlh(wlN),true); },3600); }
@@ -2178,7 +2230,7 @@ function menu(){
     h+=`<div class="us3 amber" ${so?'style="opacity:.6"':''}><span class="ph" style="--h:14"></span><div><div class="eb">Your usual</div><div class="iname">${vm(false)}Seekh Kebab</div><div class="d">${so?'Sold out right now':`${opt('portion','full').n} · ${opt('bread',ro?'khameeriO':'rumaliO').n}`}</div><div class="row"><span class="iprice num">${rs(ro?520:510)}</span>${so?'<span class="tg rose">Sold out</span>':!D.f.ordering?'':`<button class="cta md ${S.flash==='usual'?'go':''}" data-act="usual">${S.flash==='usual'?I.tick+'Added':'Add again'}</button>`}</div></div></div>`;
   }
   if(!W()&&!(S.rounds||[]).length&&D.f.captain) h+=`<div class="gr gr2 wb">${waiterSvg('hi')}<div><span class="eb mut">Welcome to Qissa</span><h2>I am your <b>waiter</b></h2><p class="wbp">Tap the purple button any time to order, ask or request.</p></div></div>`;
-  if((S.rounds||[]).length) h+=`<button class="wyw" data-act="games">${waiterSvg('serve')}<div><b>Your food is on its way</b><span>Play a quick table game while you wait</span></div><i>${GI.dice}</i></button>`;
+  if((S.rounds||[]).length) h+=`<button class="wyw"${tip('home',2,'Play while you wait','Quick table games for everyone at the table.')} data-act="games">${waiterSvg('serve')}<div><b>Your food is on its way</b><span>Play a quick table game while you wait</span></div><i>${GI.dice}</i></button>`;
   const pl=D.f.playMode&&D.f.ordering;
   if(D.f.vegFilter||pl) h+=`<div class="vp">${D.f.vegFilter?`<span class="vl">${vm(true)}<span>Veg only</span><button class="tw ${S.veg?'on':''}" data-act="veg" role="switch" aria-checked="${S.veg}" aria-label="Vegetarian only"></button></span>`:''}${pl?`<button class="chip tone violet" data-act="play" aria-label="Play to order">${I.cards}Play to order</button>`:''}<button class="chip tone teal" data-act="games">${GI.dice}Table games</button>${D.f.ordering?`<button class="chip tone pink" data-act="invite">${S.group?`<span class="avs">${av('me')}${av('riya')}${av('kabir')}</span>3 at table`:GI.users+'Order together'}</button>`:''}</div>`;
   const picks=(K()?[['galouti','Because you liked Seekh'],['tukda','Because you skipped dessert last time']]:[['seekh','Our most ordered dish'],['nihari','A favourite at dinner']]).map(([id,w])=>({i:it(id),w})).filter(x=>!out(x.i.id)&&(!S.veg||x.i.veg));
@@ -2300,11 +2352,8 @@ function lineHtml(l){
     const alt=OPT.bread.find(o=>o.id!==cur.id&&!optOut(o)), df=alt?alt.d-cur.d:0;
     fx=alt?swp(null,alt.n,df?`${df>0?'+':'−'}${rs(Math.abs(df))}${l.q>1?' each':''}`:'Same price',`data-act="swapopt" data-k="${l.k}" data-id="${alt.id}"`):''; }
   const stp=is?'':`<div class="stp"><button class="mn" data-act="ldec" data-k="${l.k}" aria-label="${l.q===1?'Remove':'Fewer'}">${l.q===1?BIN:I.minus}</button><span class="num">${l.q}</span><button data-act="linc" data-k="${l.k}" aria-label="More">${I.plus}</button></div>`;
-  const NCH={bread:['Extra butter','Well done','Less oil'],drink:['Less sugar','No ice','Extra ice'],dessert:['Less sugar','Served warm','Served cold'],side:['Less salt','No onion']};
-  const nch=NCH[i.c]||['Less spicy','Extra spicy','No onion','No garlic'], nt=[...(l.notes||[]),l.ntext].filter(Boolean).join(' · ');
-  const note=is||!D.f.ordering?'':S.noteK===l.k?`<div class="ned">${nch.map(t=>`<button class="${(l.notes||[]).includes(t)?'on':''}" data-act="notechip" data-k="${l.k}" data-id="${t}">${t}</button>`).join('')}<input id="ntext" maxlength="60" placeholder="Anything else for the kitchen" value="${(l.ntext||'').replace(/"/g,'&quot;')}"><button class="ndone" data-act="notedone" data-k="${l.k}">Done</button></div>`:nt?`<button class="nnote" data-act="note" data-k="${l.k}">${GI.ask}<span>${nt}</span></button>`:`<button class="nadd" data-act="note" data-k="${l.k}">${I.plus}Add note</button>`;
   const byl=S.group?`<div class="byl">${av(l.by||'me','s')}${l.by&&l.by!=='me'?'Added by '+MEM[l.by][0]:'Added by you'}</div>`:'';
-  return is?`<div class="dl bad"><div class="tp">${ph(i.h)}<div style="min-width:0"><div class="iname">${vm(i.veg)}<span>${i.n}</span></div>${ch?`<div class="ch">${ch}</div>`:''}${tag}</div><button class="rmx" data-act="rm" data-k="${l.k}" aria-label="Remove ${i.n}">${I.x}</button></div>${fx}</div>`:`<div class="dl"><div class="tp">${ph(i.h)}<div style="min-width:0"><div class="iname">${vm(i.veg)}<span>${i.n}</span></div>${ch?`<div class="ch">${ch}</div>`:''}${byl}<div class="row"><span class="pp num">${rs(unit(l)*l.q)}</span>${stp}</div></div></div>${note}</div>`;
+  return is?`<div class="dl bad"><div class="tp">${ph(i.h)}<div style="min-width:0"><div class="iname">${vm(i.veg)}<span>${i.n}</span></div>${ch?`<div class="ch">${ch}</div>`:''}${tag}</div><button class="rmx" data-act="rm" data-k="${l.k}" aria-label="Remove ${i.n}">${I.x}</button></div>${fx}</div>`:`<div class="dl"><div class="tp">${ph(i.h)}<div style="min-width:0"><div class="iname">${vm(i.veg)}<span>${i.n}</span></div>${ch?`<div class="ch">${ch}</div>`:''}${byl}<div class="row"><span class="pp num">${rs(unit(l)*l.q)}</span>${stp}</div></div></div></div>`;
 }
 function bill(){ const sub=total(), gst=sub*0.05, raw=sub+gst, pay=Math.round(raw); return {sub,gst,ro:pay-raw,pay}; }
 function pairs(){ if(S._pz===undefined) S._pz=pairsCalc(); return S._pz; }
@@ -2316,8 +2365,14 @@ function pairsCalc(){ if(!D.f.suggestions) return null; const okl=okL(); if(!okl
   if(!cs.has('main')&&cs.has('starter')) pick.push(['dal','Most tables add a main'],['nihari','Slow cooked']);
   if(!cs.has('dessert')) pick.push(['tukda',K()?'You skipped it last time':'A sweet finish'],['phirni','Light and cool']);
   pick.push(['galouti','Most ordered here'],['paneer','Light and smoky'],['tukda','A sweet finish'],['phirni','Light and cool']); const seen=new Set(), list=pick.filter(([id])=>ok(id)&&!seen.has(id)&&seen.add(id)).slice(0,2); const fits=['starter','main'].includes(it(host.item).c); return list.length?{host:host.k,label:fits?'Goes well with '+it(host.item).n:'To complete your table',list}:null; }
-function pairHtml(P){ return `<div class="pair"><div class="pair-h"><svg viewBox="0 0 24 24"><path d="M12 3.5l1.9 5 5 1.9-5 1.9-1.9 5-1.9-5-5-1.9 5-1.9z" fill="currentColor" stroke="none"/></svg>Suggested · ${P.label}</div>${P.list.map(([id])=>{const i=it(id); return `<div class="pr1" data-act="open" data-id="${id}">${ph(i.h)}<div class="iname">${vm(i.veg)}<span>${i.n}</span></div><span class="num">${rs(i.p)}</span>${qtyOf(id)?'':`<button class="padd" data-act="add" data-id="${id}" aria-label="Add ${i.n}">${I.plus}Add</button>`}</div>`;}).join('')}</div>`; }
+function pairHtml(P){ return `<div class="pair"${tip('cart1',1,'Picked for your order','Dishes that go with what you chose. Tap Add to put one in your order.')}><div class="pair-h"><svg viewBox="0 0 24 24"><path d="M12 3.5l1.9 5 5 1.9-5 1.9-1.9 5-1.9-5-5-1.9 5-1.9z" fill="currentColor" stroke="none"/></svg>Suggested · ${P.label}</div>${P.list.map(([id])=>{const i=it(id); return `<div class="pr1" data-act="open" data-id="${id}">${ph(i.h)}<div class="iname">${vm(i.veg)}<span>${i.n}</span></div><span class="num">${rs(i.p)}</span>${qtyOf(id)?'':`<button class="padd" data-act="add" data-id="${id}" aria-label="Add ${i.n}">${I.plus}Add</button>`}</div>`;}).join('')}</div>`; }
 function gbar(left,right){ return `<div class="gbar"><div class="gl">${left}</div><div class="gbr">${right}</div></div>`; }
+const NCH={bread:['Extra butter','Well done','Less oil'],drink:['Less sugar','No ice','Extra ice'],dessert:['Less sugar','Served warm','Served cold'],side:['Less salt','No onion']};
+const noteOf=l=>[...(l.notes||[]),l.ntext].filter(Boolean).join(' · ');
+/* one place for kitchen notes: a note for the table, and a note for any dish picked here; the dish rows stay clean */
+function kitchenNotes(){ const ok=S.cart.filter(l=>!issue(l)), ed=S.noteK&&ok.find(l=>l.k===S.noteK), noted=ok.filter(l=>noteOf(l)&&l!==ed);
+  const editor=ed?(()=>{ const i=it(ed.item), ch=NCH[i.c]||['Less spicy','Extra spicy','No onion','No garlic']; return `<div class="ked"><div class="kedh">${ph(i.h)}<b>${i.n}</b></div><div class="kchips">${ch.map(t=>`<button class="${(ed.notes||[]).includes(t)?'on':''}" data-act="notechip" data-k="${ed.k}" data-id="${t}">${t}</button>`).join('')}</div><input id="ntext" maxlength="60" placeholder="Anything else for this dish" value="${(ed.ntext||'').replace(/"/g,'&quot;')}"><div class="kedf"><button class="sf" data-act="notecancel">Cancel</button><button class="gp1" data-act="notedone" data-k="${ed.k}">Save note</button></div></div>`; })():'';
+  return `<div class="kns"><b class="knh">Notes for the kitchen</b><input id="kgen" maxlength="80" placeholder="For the table, e.g. bring the starters first" value="${(S.kgen||'').replace(/"/g,'&quot;')}"><div class="knd"${tip('cart1',2,'A note for any dish','Pick a dish here to add a note like less spicy or no onion. It goes to the kitchen with that dish.')}${(S.rounds||[]).length?tip('cart2',2,'Notes still work','Pick a dish here to add a note before you send.'):''}><span class="eb mut">Note for a dish</span><div class="kdish">${ok.map(l=>{const i=it(l.item); return `<button class="${S.noteK===l.k?'on':''} ${noteOf(l)?'has':''}" data-act="note" data-k="${l.k}">${ph(i.h)}<span>${i.n}</span></button>`;}).join('')}</div></div>${editor}${noted.length?`<div class="kdl">${noted.map(l=>`<div class="kdn"><div><b>${it(l.item).n}</b><span>${noteOf(l)}</span></div><button data-act="note" data-k="${l.k}">Edit</button><button data-act="noteclear" data-k="${l.k}" aria-label="Remove note">${I.x}</button></div>`).join('')}</div>`:''}</div>`; }
 function cartView(){
   const b=bad().length, B=bill(), P=!b?pairs():null, lines=S.cart.slice().sort((x,y)=>(!!issue(y))-(!!issue(x)));
   const cap3=lines.length>3&&!S.cartAll&&!b, shown=cap3?lines.slice(0,3):lines;
@@ -2326,7 +2381,7 @@ function cartView(){
   const n=count();
   const left=`<span class="gk">Total</span><b class="num ${B.pay>=10000?'lg':''}">${rs(B.pay)}</b>`;
   const right=b?`<button class="gp1 warn" data-act="fix">Fix ${b} ${b>1?'dishes':'dish'}${I.arrow}</button>`:`<button class="gp1" ${S.cart.length?'':'disabled'} data-act="send">${S.group?'Send for table':'Send to kitchen'}${I.arrow}</button>`;
-  return `<div class="view"><div class="vh"><button class="ib" data-act="back" aria-label="Back">${I.back}</button><h2>Your <b>order</b></h2><span class="tg grey">Table 6</span></div><div class="scroll" id="cs">${S.cart.length?`<div class="osum"><span><b class="num">${n}</b> ${n>1?'dishes':'dish'} · <b class="num">${rs(B.pay)}</b></span><span class="mut">Check, then send to the kitchen</span></div>`:''}${S.group?`<div class="gcart"><span class="avs">${av('me')}${av('riya')}${av('kabir')}</span><div><b>Table order</b><span>3 people adding to one round</span></div><button data-act="invite">Invite</button></div>`:''}${b?`<div class="banner">${cap('sorry')}<div><b>${b} ${b>1?'dishes need':'dish needs'} your attention.</b> Nothing is lost. A swap is suggested below.</div></div>`:''}${S.cart.length?`<div class="dpn">${panel}${cap3?`<button class="more3" data-act="cartall">Show ${lines.length-3} more ${lines.length-3>1?'dishes':'dish'}</button>`:''}</div>`:`<div class="emp">${waiterSvg('think')}<b>Nothing on your table yet</b><span>Add a dish from the menu, or ask your waiter for ideas.</span></div>`}${S.cart.length?'<div class="kn">Add a note for the kitchen</div>':''}<div class="tot"><div class="bl"><span>Item total${b?' (available items)':''}</span><span class="num">${rs(B.sub)}</span></div><div class="bl"><span>GST 5% (CGST 2.5% + SGST 2.5%)</span><span class="num">₹${B.gst.toFixed(2)}</span></div><div class="bl t"><span>To pay</span><span class="num">${rs(B.pay)}</span></div></div><div style="height:16px"></div></div>${gbar(left,right)}</div>`;
+  return `<div class="view"><div class="vh"><button class="ib" data-act="back" aria-label="Back">${I.back}</button><h2>Your <b>order</b></h2><span class="tg grey">Table 6</span></div><div class="scroll" id="cs">${S.cart.length?`<div class="osum"${(S.rounds||[]).length?tip('cart2',1,'Your next round','Everything here goes on the same bill as your first order.'):''}><span><b class="num">${n}</b> ${n>1?'dishes':'dish'} · <b class="num">${rs(B.pay)}</b></span><span class="mut">Check, then send to the kitchen</span></div>`:''}${S.group?`<div class="gcart"><span class="avs">${av('me')}${av('riya')}${av('kabir')}</span><div><b>Table order</b><span>3 people adding to one round</span></div><button data-act="invite">Invite</button></div>`:''}${b?`<div class="banner">${cap('sorry')}<div><b>${b} ${b>1?'dishes need':'dish needs'} your attention.</b> Nothing is lost. A swap is suggested below.</div></div>`:''}${S.cart.length?`<div class="dpn">${panel}${cap3?`<button class="more3" data-act="cartall">Show ${lines.length-3} more ${lines.length-3>1?'dishes':'dish'}</button>`:''}</div>`:`<div class="emp">${waiterSvg('think')}<b>Nothing on your table yet</b><span>Add a dish from the menu, or ask your waiter for ideas.</span></div>`}${S.cart.length?kitchenNotes():''}<div class="tot"><div class="bl"><span>Item total${b?' (available items)':''}</span><span class="num">${rs(B.sub)}</span></div><div class="bl"><span>GST 5% (CGST 2.5% + SGST 2.5%)</span><span class="num">₹${B.gst.toFixed(2)}</span></div><div class="bl t"><span>To pay</span><span class="num">${rs(B.pay)}</span></div></div><div style="height:16px"></div></div>${gbar(left,right)}</div>`;
 }
 /* a short window after an order: anything added now reaches the kitchen with it */
 const MISS_MS=5*60000;
@@ -2337,16 +2392,19 @@ function missHtml(){ const left=missLeft(); if(!left||!D.f.ordering) return ''; 
   const picks=S._mp.ids.map(it).filter(i=>!out(i.id)), C=119.4;
   return `<div class="miss2"><div class="m2h"><div><span class="eb">Before it leaves the kitchen</span><h3>Still room for more?</h3><p>Add now and it goes out with your order.</p></div><div class="m2r"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" class="bg"/><circle cx="22" cy="22" r="19" class="fg" id="mring" style="stroke-dashoffset:${(C*(1-left/MISS_MS)).toFixed(1)}"/></svg><b class="num" id="mtime">${mmss(left)}</b></div></div><div class="m2row">${picks.map((i,k)=>`<div class="m2p" data-act="open" data-id="${i.id}" style="--k:${k}"><div class="m2i">${ph(i.h)}${qtyOf(i.id)?`<i class="m2ok">${I.tick}</i>`:`<button class="m2a" data-act="add" data-id="${i.id}" aria-label="Add ${i.n}">${I.plus}</button>`}</div><span class="m2n">${i.n}</span><span class="m2c num">${rs(i.p)}</span></div>`).join('')}</div></div>`; }
 setInterval(()=>{ const t=document.getElementById('mtime'); if(!t) return; const left=missLeft(); if(!left){ render(); return; } t.textContent=mmss(left); const r=document.getElementById('mring'); if(r) r.style.strokeDashoffset=(119.4*(1-left/MISS_MS)).toFixed(1); },1000);
+/* the moment after sending more dishes: a tick draws, the dishes arrive one by one, then back to the order */
+function addedView(){ const A=S.added, n=A.lines.reduce((a,l)=>a+l.q,0), t=A.lines.reduce((a,l)=>a+unit(l)*l.q,0);
+  return `<div class="view adv"><div class="adc"><svg class="adk" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29"/><path d="M19 33l9 9 17-19"/></svg><h2>${A.merged?'Added to your <b>order</b>':`Sent as round <b>${A.round}</b>`}</h2><p>${A.merged?'They go out with your first order.':'It goes on the same bill.'} Usually ready in 15 to 20 min.</p><div class="adl">${A.lines.map((l,k)=>{const i=it(l.item), nt=noteOf(l); return `<div class="adr" style="--k:${k}">${ph(i.h)}<div class="adn"><b>${l.q} × ${i.n}</b>${nt?`<span>${nt}</span>`:''}</div><i class="adt">${I.tick}</i></div>`;}).join('')}</div><div class="ads"><span>${n} ${n>1?'dishes':'dish'} added</span><b class="num">${rs(t)}</b></div></div>${gbar(`<span class="gk">Bill so far</span><b class="num">${rs(S.sent.pay)}</b>`,`<button class="gp1" data-act="addeddone">Done</button>`)}</div>`; }
 function sendConfirm(){ const c=count(), left=missLeft(), b=bad().length;
   const row=l=>{ const i=it(l.item), ch=l.portion?`${opt('portion',l.portion).n.split(',')[0]} · ${opt('bread',l.bread).n}`:'', is=issue(l);
     return `<div class="sdr ${is?'bad':''}">${ph(i.h)}<div class="sdn"><div class="iname">${vm(i.veg)}<span>${i.n}</span></div>${is?'<span class="so">Sold out</span>':ch?`<small>${ch}</small>`:''}</div><div class="sdq"><button class="mn" data-act="ldec" data-k="${l.k}" aria-label="${l.q===1?'Remove':'One less'}">${l.q===1?BIN:I.minus}</button><span class="num">${l.q}</span><button data-act="linc" data-k="${l.k}" aria-label="One more">${I.plus}</button></div><span class="sdp num">${rs(unit(l)*l.q)}</span></div>`; };
-  return `<div class="ov"><div class="scrim" data-act="sendcancel"></div><div class="sh sdc"><div class="grab"></div><div class="sdh"><b>Send ${c} more ${c>1?'dishes':'dish'}?</b><p>${left?`These go out with your order. <span class="num">${mmss(left)}</span> left to add.`:'These start a new round on the same bill.'}</p></div><div class="sdl">${S.cart.map(row).join('')}</div><div class="sdt"><span>Adds to your bill</span><b class="num">${rs(total())}</b></div>${b?`<div class="sdw">${b>1?b+' dishes have':'A dish has'} sold out. Fix it in your order first.</div>`:''}<div class="two"><button class="sf" data-act="sendcancel">Not yet</button><button class="cta" data-act="sendconfirm">${b?'Fix my order':'Confirm and send'}</button></div></div></div>`; }
+  return `<div class="ov"><div class="scrim" data-act="sendcancel"></div><div class="sh sdc"><div class="grab"></div><div class="sdh"><b>Send ${c} more ${c>1?'dishes':'dish'}?</b><p>${left?`These go out with your order. <span class="num">${mmss(left)}</span> left to add.`:'These start a new round on the same bill.'}</p></div><div class="sdl">${S.cart.map(row).join('')}</div><div class="sdt"><span>Adds to your bill</span><b class="num">${rs(total())}</b></div>${b?`<div class="sdw">${b>1?b+' dishes have':'A dish has'} sold out. Fix it in your order first.</div>`:''}<div class="two"><button class="sf" data-act="sendcancel">Not yet</button><button class="cta" data-act="sendconfirm">${b?'Fix my order':'Send to order'}</button></div></div></div>`; }
 function statusView(){
   const s=S.sent, n=s.lines.reduce((a,l)=>a+l.q,0);
   const c=count(), nt=total();
   /* once the guest adds dishes here, the bottom bar sends them; paying steps back */
   const left=c?`<span class="gk">To send</span><b class="num">${rs(nt)}</b>`:`<span class="gk">Bill so far</span><b class="num ${s.pay>=10000?'lg':''}">${rs(s.pay)}</b>`;
-  const right=c?`<button class="gp1 hot" data-act="sendnow">Send ${c} ${c>1?'dishes':'dish'}${I.arrow}</button>`:`<button class="gp2" data-act="more">Order more</button><button class="gp1" data-act="paid">Pay bill</button>`;
+  const right=c?`<button class="gp1 hot" data-act="sendnow">Review added ${c>1?'dishes':'dish'}${I.arrow}</button>`:`<button class="gp2" data-act="more">Order more</button><button class="gp1" data-act="paid">Pay bill</button>`;
   return `<div class="view"><div class="scroll" id="ss"><div class="okh"><div class="okb">${waiterSvg('wow','wow,happy,serve,ok')}<i class="okt">${I.tick}</i></div><div class="eb mut">Round ${s.round||1} · Table 6</div><h2>${S.merged?'Added to your <b>order</b>':'Sent to the <b>kitchen</b>'}</h2><p>${K()?'Thank you, Arjun. ':''}Sit back. We will bring it to your table.</p></div><div class="eta"><div class="eta-t"><span class="eb mut">Usually ready in</span><b class="num">15 to 20 min</b></div><div class="eta-b"><i></i></div><div class="eta-s"><span class="on">${I.tick} Sent just now</span><span>Being prepared</span></div></div>${missHtml()}<div class="callc"><div class="callh">${waiterSvg('explain')}<div><b>Need anything? Just tap.</b><span>I am right here for Table 6.</span></div></div><div class="callg">${[['help','Call waiter',GI.bell],['water','Water',GI.glass],['cutlery','Cutlery',GI.cut],['bill','The bill',GI.bill]].map(([k,t,ic])=>`<button data-act="callfor" data-id="${k}"><i>${ic}</i>${t}</button>`).join('')}</div></div>${S.paid&&D.f.ratings?(()=>{ const ids=[...new Set(s.lines.map(l=>l.item))], fb=S.fb||{}, all=ids.every(id=>fb[id]); return `<div class="fbk"><div class="eb">One tap each</div><b>How was each dish${K()?', Arjun':''}?</b>${ids.map(id=>{const i=it(id), v=fb[id]; return `<div class="fbr">${ph(i.h)}<span class="nm">${i.n}</span><button class="fbu ${v==='up'?'on':''}" data-act="fb" data-id="${id}" data-v="up" aria-label="Liked ${i.n}">${GI.up}</button><button class="fbd ${v&&v!=='up'?'on':''}" data-act="fb" data-id="${id}" data-v="down" aria-label="Did not like ${i.n}">${GI.up}</button></div>${v&&v!=='up'?`<div class="fbc">${['Too spicy','Cold','Too salty','Small portion'].map(t=>`<button class="${v===t?'on':''}" data-act="fb" data-id="${id}" data-v="${t}">${t}</button>`).join('')}</div>`:''}`;}).join('')}<div class="fbw">${GI.wa}<span>${all?'Thank you. The kitchen sees this tonight.':'We will also ask on WhatsApp if you shared your number.'}</span></div></div>`; })():''}${(()=>{ const c=count(); return (D.f.ordering?journey('s'):''); })()}<div class="sum3"><button class="s3h" data-act="sumtoggle" aria-expanded="${!!S.sumOpen}"><span><span class="eb mut">Bill so far</span><b class="num">${rs(s.pay)}</b></span><span class="s3r">${n} ${n>1?'dishes':'dish'}<i class="s3c ${S.sumOpen?'up':''}"></i></span></button>${S.sumOpen?`<div class="sum2"><div class="eb mut">${n} ${n>1?'dishes':'dish'} on your table so far</div>${s.lines.map(l=>{const i=it(l.item); return `<div class="r2">${ph(i.h)}<span class="nm">${l.q} × ${i.n}</span><span class="num">${rs(unit(l)*l.q)}</span></div>`;}).join('')}<div class="r2 sub"><span class="nm">GST 5%</span><span class="num">₹${s.gst.toFixed(2)}</span></div><div class="r2 tt"><span class="nm">Bill so far</span><span class="num">${rs(s.pay)}</span></div></div>`:''}</div><p class="pay" style="margin:14px 16px 0">Pay whenever you are ready.</p><div style="height:20px"></div></div>${gbar(left,right)}</div>`;
 }
 
@@ -2409,11 +2467,12 @@ function dashHtml(){
   if(last) w+=`<div class="hist"><span>Last change: ${last.text}. By ${last.who}.</span><button data-act="undo">Undo</button></div>`;
   return w+`</div></div>`; }
 const toast=()=>S.toast?`<div class="toast ${S.toast.kind}">${S.toast.kind==='bad'?I.warn:I.bolt}<span>${S.toast.text}</span></div>`:'';
-const ENTER=new Set(['shup','vin','sqdown','shup2','vin2','sqdown2','whi','shim','peekn']);
+const ENTER=new Set(['shup','vin','sqdown','shup2','vin2','sqdown2','whi','shim','peekn','adin','adrow','addraw','adpop']);
 function render(){
+  TIPS={};
   if(S.view!==S._lv){ S._pz=undefined; S._lv=S.view; }
   const keep={}; ['sc','cs','ss','msgs','cshs','sshs'].forEach(id=>{const e=document.getElementById(id); if(e) keep[id]=e.scrollTop;});
-  const OV=[['v-'+S.view,S.view==='cart'?cartView():S.view==='status'?statusView():''],['sheet',S.sheet?sheet():''],['combo',S.combo?comboSheet():''],['play',S.play?playView():''],['cmp',S.cmp?compare():''],['chat',S.chat?chat():''],['search',S.search?searchView():''],['buzz',S.buzz?buzzSheet():''],['games',S.games?gamesView():''],['invite',S.invite?inviteView():''],['confirm',S.confirm?confirmView():''],['sendc',S.sendc&&count()?sendConfirm():'']].filter(x=>x[1]);
+  const OV=[['v-'+S.view,S.view==='cart'?cartView():S.view==='status'?statusView():''],['sheet',S.sheet?sheet():''],['combo',S.combo?comboSheet():''],['play',S.play?playView():''],['cmp',S.cmp?compare():''],['chat',S.chat?chat():''],['search',S.search?searchView():''],['buzz',S.buzz?buzzSheet():''],['games',S.games?gamesView():''],['invite',S.invite?inviteView():''],['confirm',S.confirm?confirmView():''],['sendc',S.sendc&&count()?sendConfirm():''],['added',S.added?addedView():'']].filter(x=>x[1]);
   document.getElementById('phone').innerHTML=menu()+OV.map(([k,h])=>`<div class="ovw" data-ov="${k}">${h}</div>`).join('')+coach()+toast();
   /* every render rebuilds the screen: an overlay that was already open must not slide in again, and loops must not restart */
   const was=S._ov||new Set(); document.querySelectorAll('#phone [data-ov]').forEach(w=>{ if(was.has(w.dataset.ov)) w.getAnimations({subtree:true}).forEach(a=>{ if(ENTER.has(a.animationName)) a.finish(); }); });
@@ -2467,6 +2526,7 @@ function setStock(key,val){
   showToast(val?'bad':'good', val?`${name} just sold out.${inCart?' Check your order.':''}`:`${name} is back.`);
   render();
 }
+document.addEventListener('input',e=>{ if(e.target&&e.target.id==='kgen') S.kgen=e.target.value; });
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]'); if(!b||b.disabled) return; const a=b.dataset.act, id=b.dataset.id, k=b.dataset.k;
   if(S.chat&&a!=='chat') S._bellSeen=true;
@@ -2546,9 +2606,10 @@ document.addEventListener('click',e=>{
     case 'fix': { const el=document.querySelector('.dl.bad'), cs=document.getElementById('cs'); if(el&&cs) cs.scrollTo({top:cs.scrollTop+el.getBoundingClientRect().top-cs.getBoundingClientRect().top-70,behavior:RM()?'auto':'smooth'}); return; }
     case 'sendnow': if(count()) S.sendc=true; break;
     case 'sendcancel': S.sendc=null; break;
-    case 'sendconfirm': { S.sendc=null; if(bad().length){ S.view='cart'; break; } }
+    case 'addeddone': S.added=null; render(); { const ss=document.getElementById('ss'); if(ss) ss.scrollTo({top:0,behavior:RM()?'auto':'smooth'}); } return;
+    case 'sendconfirm': { S.sendc=null; if(bad().length){ S.view='cart'; break; } S._addedFrom=S.cart.map(l=>({...l})); }
     // falls through: a confirmed send from the success page is the same as sending from the cart
-    case 'send': { S.cartAll=false; const B=bill(); S.rounds=S.rounds||[]; const lastR=S.rounds[S.rounds.length-1]; S.merged=!!(lastR&&Date.now()-lastR.at<MISS_MS); if(S.merged) lastR.lines.push(...S.cart.map(l=>({...l}))); else S.rounds.push({lines:S.cart.map(l=>({...l})),at:Date.now()}); const all=sentLines(), bs=all.reduce((a,l)=>a+unit(l)*l.q,0); S.sent={lines:all,gst:bs*.05,pay:Math.round(bs*1.05),round:S.rounds.length}; S._party=true; S.cart=[]; S.view='status'; S.paid=false; S.rate=0; S.log.unshift({t:ago(),text:S.merged?'More dishes added to Order No. 41.':'Order No. 41 sent to the kitchen.'}); break; }
+    case 'send': { S.cartAll=false; const B=bill(); S.rounds=S.rounds||[]; const lastR=S.rounds[S.rounds.length-1]; S.merged=!!(lastR&&Date.now()-lastR.at<MISS_MS); if(S.merged) lastR.lines.push(...S.cart.map(l=>({...l}))); else S.rounds.push({lines:S.cart.map(l=>({...l})),at:Date.now()}); const all=sentLines(), bs=all.reduce((a,l)=>a+unit(l)*l.q,0); S.sent={lines:all,gst:bs*.05,pay:Math.round(bs*1.05),round:S.rounds.length}; S._party=true; S.cart=[]; S.view='status'; S.paid=false; S.rate=0; S.log.unshift({t:ago(),text:S.merged?'More dishes added to Order No. 41.':'Order No. 41 sent to the kitchen.'}); if(S._addedFrom){ S.added={lines:S._addedFrom,merged:S.merged,round:S.rounds.length}; S._addedFrom=null; S._party=false; } break; }
     case 'more': { S.view='menu'; S.paid=false; S.rate=0; const R2=S.rounds||[], last=R2[R2.length-1]; if(last&&Date.now()-last.at<600000&&!S.toured){ S.toured=true; S.tourSet='home'; S.tour=0; render(); const sc=document.getElementById('sc'); if(sc) sc.scrollTop=0; placeCoach(); return; } break; }
     case 'tournext': S.tour=S.tour<TT().length-1?S.tour+1:null; break;
     case 'tourskip': S.tour=null; break;
@@ -2557,6 +2618,8 @@ document.addEventListener('click',e=>{
     case 'closegames': S.games=null; break;
     case 'note': { const prev=S.noteK&&S.cart.find(x=>x.k===S.noteK), t=document.getElementById('ntext'); if(prev&&t) prev.ntext=t.value.trim(); S.noteK=k; break; }
     case 'notechip': { const l=S.cart.find(x=>x.k===k), t=document.getElementById('ntext'); if(t) l.ntext=t.value.trim(); l.notes=l.notes||[]; const ix=l.notes.indexOf(id); if(ix>=0) l.notes.splice(ix,1); else l.notes.push(id); break; }
+    case 'notecancel': S.noteK=null; break;
+    case 'noteclear': { const l=S.cart.find(x=>x.k===k); if(l){ l.notes=[]; l.ntext=''; } if(S.noteK===k) S.noteK=null; break; }
     case 'notedone': { const l=S.cart.find(x=>x.k===k), t=document.getElementById('ntext'); if(l&&t) l.ntext=t.value.trim(); S.noteK=null; break; }
     case 'nobill': S.confirm=null; if(S.chat) S.chat.msgs.push({q:'Not yet'},{a:{mood:'ok',text:'No problem. Just ask when you are ready.'}}); break;
     case 'game': S.games={g:id,qi:0,score:0,ans:null,rot:0}; break;
@@ -2695,12 +2758,13 @@ function gamesView(){ const G=S.games, head=`<div class="grab"></div><div class=
   return `<div class="ov"><div class="scrim" data-act="closegames"></div><div class="sh">${head}<div class="gms gspin"><div class="sw2"><div class="bt" id="bt" style="transform:rotate(${G.rot||0}deg)"><svg viewBox="0 0 40 120"><path d="M14 4h12v22c0 6 8 10 8 22v62a6 6 0 01-6 6H12a6 6 0 01-6-6V48c0-12 8-16 8-22z" fill="#16A34A" opacity=".85"/></svg></div>${seats.map((n,k)=>`<span class="seat" style="--a:${k*360/seats.length}deg">${n}</span>`).join('')}</div><b class="gres">${G.res?G.res+' picks the dessert':'Tap spin'}</b><button class="cta" data-act="spin">Spin</button></div></div></div>`; }
 
 /* ===== F. short tour after an order ===== */
-const TOURS={home:[['.wpill','Call me any time','Water, cutlery, the bill or a question. I am one tap away.'],['[data-act="games"]','Play while you wait','Quick table games for everyone at the table.']],
-  cart1:[['.pair','Picked for your order','Dishes that go with what you chose. Tap + to add one.'],['.nadd','A note for any dish','Less spicy, no onion, extra butter. It goes to the kitchen with that dish.']],
-  cart2:[['.osum','Your next round','Everything here goes on the same bill as your first order.'],['.nadd','Notes still work','Add a note to any dish before you send.']]};
-const TT=()=>TOURS[S.tourSet||'home'];
-function coach(){ if(S.tour==null) return ''; const t=TT()[S.tour]; return `<div class="coach" id="coach"><i class="ch-hole" id="chole"></i><div class="ch-tip" id="ctip"><span class="eb">${S.tour+1} of ${TT().length}</span><b>${t[1]}</b><p>${t[2]}</p><div class="ch-a"><button data-act="tourskip">Skip</button><button class="gp1" data-act="tournext">${S.tour<TT().length-1?'Next':'Got it'}</button></div></div></div>`; }
-function placeCoach(){ const c=document.getElementById('coach'); if(!c) return; const t=TT()[S.tour], el=t[0].split(',').map(x=>document.querySelector('#phone '+x)).find(Boolean), phE=document.getElementById('phone'), h=document.getElementById('chole'), tip=document.getElementById('ctip');
+/* tutorial tips are declared by the features themselves (tip()); a feature that changes or goes away takes its tip with it */
+let TIPS={};
+const tip=(set,n,title,text)=>{ (TIPS[set]=TIPS[set]||{})[n]=[title,text]; return ` data-tip-${set}="${n}"`; };
+const TT=()=>{ const set=S.tourSet||'home', T=TIPS[set]||{}; return Object.keys(T).sort((a,b)=>a-b).map(n=>[`[data-tip-${set}="${n}"]`,T[n][0],T[n][1]]); };
+function coach(){ if(S.tour==null) return ''; const t=TT()[S.tour]; if(!t) return ''; return `<div class="coach" id="coach"><i class="ch-hole" id="chole"></i><div class="ch-tip" id="ctip"><span class="eb">${S.tour+1} of ${TT().length}</span><b>${t[1]}</b><p>${t[2]}</p><div class="ch-a"><button data-act="tourskip">Skip</button><button class="gp1" data-act="tournext">${S.tour<TT().length-1?'Next':'Got it'}</button></div></div></div>`; }
+function placeCoach(){ const c=document.getElementById('coach'); if(!c) return; if(document.getAnimations().some(a=>ENTER.has(a.animationName)&&a.playState==='running')){ setTimeout(placeCoach,90); return; } const t=TT()[S.tour], el=t[0].split(',').map(x=>document.querySelector('#phone '+x)).find(Boolean), phE=document.getElementById('phone'), h=document.getElementById('chole'), tip=document.getElementById('ctip');
+  if(!t){ S.tour=null; render(); return; }
   if(!el){ S.tour=S.tour<TT().length-1?S.tour+1:null; render(); return; }
   /* a target inside the menu scroll is brought into view first, so the tip can never end up off screen */
   const sc=el.closest('.scroll'); let ph=phE.getBoundingClientRect(), r=el.getBoundingClientRect();
