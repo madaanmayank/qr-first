@@ -285,6 +285,13 @@ Each uses the event envelope in [03-domain-model.md](03-domain-model.md) section
 - The cart bar shows the people at the table. Anyone can send the round ("Send for table"), and it goes to one tab.
 - Splitting the bill by person comes later (see the bill split in the payment files).
 
+## 1j. A note on any dish (15 Nov 2026)
+
+- Special requests for a dish without options are added in the cart, never at add-to-cart, so adding stays one tap.
+- Each cart line has "Add note". It opens a small row on that line with quick chips chosen by dish type (curries and kebabs: Less spicy, Extra spicy, No onion, No garlic; breads: Extra butter, Well done, Less oil; drinks: Less sugar, No ice, Extra ice; desserts: Less sugar, Served warm, Served cold; sides: Less salt, No onion) and a short free-text box.
+- The saved note shows on the line ("Less spicy · Make it smoky") and goes to the kitchen with that dish. "Add a note for the kitchen" stays for table-wide notes.
+- Cart intros show once each: on the first cart visit, the suggested dishes and "A note for any dish"; on the first cart visit after an order, "Your next round" (same bill) and "Notes still work".
+
 ## 1i. After an order (15 Nov 2026)
 
 - **Add-on window:** for 5 minutes after a round is sent, the success page shows "Missed something? Add it now and it goes with this order" with a running timer and a few quick dishes. Anything sent inside the window joins the same round ("Added to your order"); after it, a new round starts.

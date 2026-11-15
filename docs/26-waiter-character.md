@@ -46,6 +46,10 @@ This is the only character allowed in the interface. See the rule in [AGENTS.md]
 
 ## 3b. The button and chat, updated (15 Nov 2026, evening)
 
+- **The journey starts with the waiter (founder, 15 Nov).** After the entry screen, the waiter chat opens once per visit as a sheet over the menu: a greeting by name, "Shall I suggest something, or would you like to see the menu?", and four choices: Suggest something, My usual (Something light for a first visit), Call waiter, Browse the menu. Closing it, or Browse the menu, shows the usual menu. The restaurant can switch the start to the menu instead.
+- **The bell lives in the chat header.** The first time the chat opens, a short tip points at it: "Tap the bell any time: water, cutlery, the bill, or someone to your table." Any tap in the chat dismisses it for good.
+- **The pill stays quiet.** Its label tours Ask me, Water?, Call waiter and Cutlery five times in the first minute or so, then the pill rests as his face with a blink. It speaks only at real moments (a greeting, a request confirmed, food on its way). No random greetings.
+
 - **The waiter pill (replaces the round button):** a slim white glass pill, 44px tall, docked bottom right and 12px above the cart bar, never over the dishes. It holds the waiter's face in a small circle with a thin violet ring (he blinks every few seconds) and one short label that crossfades slowly: "Ask me", "Water?", "Call waiter", "Cutlery".
 - While the guest scrolls, the pill shrinks to the face. It grows back a moment after scrolling stops.
 - Greetings and replies ("Hi Arjun, welcome back.", "On my way. Water for Table 6.") show in the label, not as a figure popping over the menu. The full figure appears only on the order success page and in the chat header.
