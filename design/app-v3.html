@@ -2650,13 +2650,13 @@ function gamesView(){ const G=S.games, head=`<div class="grab"></div><div class=
   return `<div class="ov"><div class="scrim" data-act="closegames"></div><div class="sh">${head}<div class="gms gspin"><div class="sw2"><div class="bt" id="bt" style="transform:rotate(${G.rot||0}deg)"><svg viewBox="0 0 40 120"><path d="M14 4h12v22c0 6 8 10 8 22v62a6 6 0 01-6 6H12a6 6 0 01-6-6V48c0-12 8-16 8-22z" fill="#16A34A" opacity=".85"/></svg></div>${seats.map((n,k)=>`<span class="seat" style="--a:${k*360/seats.length}deg">${n}</span>`).join('')}</div><b class="gres">${G.res?G.res+' picks the dessert':'Tap spin'}</b><button class="cta" data-act="spin">Spin</button></div></div></div>`; }
 
 /* ===== F. short tour after an order ===== */
-const TOUR=[['.wpill','Call me any time','Water, cutlery, the bill or a question. I am one tap away.'],['[data-act="games"]','Play while you wait','Quick table games for everyone at the table.'],['.cbar,#tabs','Order more any time','A dessert or another round goes on the same bill.']];
+const TOUR=[['.wpill','Call me any time','Water, cutlery, the bill or a question. I am one tap away.'],['[data-act="games"]','Play while you wait','Quick table games for everyone at the table.'],['.cbar,#sc .jr3,#cchips','Order more any time','A dessert or another round goes on the same bill.']];
 function coach(){ if(S.tour==null) return ''; const t=TOUR[S.tour]; return `<div class="coach" id="coach"><i class="ch-hole" id="chole"></i><div class="ch-tip" id="ctip"><span class="eb">${S.tour+1} of ${TOUR.length}</span><b>${t[1]}</b><p>${t[2]}</p><div class="ch-a"><button data-act="tourskip">Skip</button><button class="gp1" data-act="tournext">${S.tour<TOUR.length-1?'Next':'Got it'}</button></div></div></div>`; }
 function placeCoach(){ const c=document.getElementById('coach'); if(!c) return; const t=TOUR[S.tour], el=t[0].split(',').map(x=>document.querySelector('#phone '+x)).find(Boolean), phE=document.getElementById('phone'), h=document.getElementById('chole'), tip=document.getElementById('ctip');
   if(!el){ S.tour=S.tour<TOUR.length-1?S.tour+1:null; render(); return; }
   /* a target inside the menu scroll is brought into view first, so the tip can never end up off screen */
   const sc=document.getElementById('sc'); let ph=phE.getBoundingClientRect(), r=el.getBoundingClientRect();
-  if(sc&&sc.contains(el)&&(r.top<ph.top+60||r.bottom>ph.bottom-160)){ sc.scrollTop+=r.top-ph.top-ph.height*.3; r=el.getBoundingClientRect(); }
+  const key=S.tour+'|'+t[0]; if(sc&&sc.contains(el)&&(r.top<ph.top+60||r.bottom>ph.bottom-160)&&placeCoach._k!==key){ placeCoach._k=key; sc.scrollTop+=r.top-ph.top-70; requestAnimationFrame(()=>requestAnimationFrame(placeCoach)); return; }
   /* the highlight always stays inside the phone, inset from its edges and rounded corners */
   const pad=8, L=Math.max(8,r.left-ph.left-pad), T=Math.max(8,r.top-ph.top-pad), Rr=Math.min(ph.width-8,r.right-ph.left+pad), B=Math.min(ph.height-10,r.bottom-ph.top+pad);
   Object.assign(h.style,{left:L+'px',top:T+'px',width:(Rr-L)+'px',height:(B-T)+'px',borderRadius:Math.min((B-T)/2,24)+'px'});
