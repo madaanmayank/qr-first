@@ -2110,9 +2110,13 @@ function journey(where){
   const sent=sentLines(), cartL=S.cart, P=plan(); if(!P) return '';
   const has=(ls,k)=>ls.some(l=>!l.combo&&it(l.item).c===k), img=(ls,k)=>{ const l=ls.find(l=>!l.combo&&it(l.item).c===k); return l?ph(it(l.item).h):''; };
   const st=P.map(x=>({...x,s:has(sent,x.key)?'done':has(cartL,x.key)?'cart':'todo'}));
-  const nx=st.find(x=>x.s==='todo'), sel=st.find(x=>x.key===S.jsel&&x.s==='todo')||nx, done=st.filter(x=>x.s==='done').length;
+  const nx=st.find(x=>x.s==='todo'), done=st.filter(x=>x.s==='done').length;
+  /* the course being suggested stays put until the round is sent, so adding from it never swaps the list */
+  S._js=S._js||{}; const fk=sent.length; if(nx&&!S._js[fk]) S._js[fk]=nx.key;
+  const sel=st.find(x=>x.key===S.jsel&&x.s!=='done')||st.find(x=>x.key===S._js[fk]&&x.s!=='done')||nx;
   const taken=new Set([...sent,...cartL].map(l=>l.item));
-  const picks=sel?ITEMS.filter(i=>sel.m(i)&&i.c!=='combo'&&!out(i.id)&&!taken.has(i.id)&&(!S.veg||i.veg)).slice(0,3):[];
+  S._jp=S._jp||{}; const jk=sent.length+'|'+(sel?sel.key:''); if(sel&&!S._jp[jk]) S._jp[jk]=ITEMS.filter(i=>sel.m(i)&&i.c!=='combo'&&!out(i.id)&&!taken.has(i.id)&&(!S.veg||i.veg)).slice(0,2).map(i=>i.id);
+  const picks=sel?(S._jp[jk]||[]).map(it).filter(i=>!out(i.id)):[];
   const track=st.map((x,k)=>`${k?`<i class="tk-l ${st[k-1].s==='done'?'on':''}"></i>`:''}<button class="tk tk-${x.s} ${sel&&x.key===sel.key?'tk-nx':''}" ${x.s==='todo'?`data-act="jgo" data-id="${x.key}"`:'disabled'}><span class="tk-n">${x.s==='done'?img(sent,x.key)+`<i class="tk-k">${I.tick}</i>`:x.s==='cart'?img(cartL,x.key):`<b class="num">${k+1}</b>`}</span><span class="tk-x">${x.label}</span></button>`).join('');
   return `<div class="jr3 ${where}"><div class="j3h"><span class="eb">Your meal</span><b>${done} of ${st.length} courses</b><i class="j3p"><i style="width:${Math.round(done/st.length*100)}%"></i></i></div><div class="tk-r">${track}</div>${sel&&picks.length?`<div class="j2n"><b>Ready for a ${sel.label.toLowerCase()}?</b><div class="jbs">${picks.map(i=>`<div class="jbb" data-act="open" data-id="${i.id}"><div class="jbi">${ph(i.h)}${qtyOf(i.id)?`<i class="jok">${I.tick}</i>`:`<button class="jba" data-act="add" data-id="${i.id}" aria-label="Add ${i.n}">${I.plus}</button>`}</div><span class="jbn">${i.n}</span><span class="jbp num">${rs(i.p)}</span></div>`).join('')}</div></div>`:(!nx?(st.every(x=>x.s==='done')?'<div class="j2n"><b>Every course covered. Enjoy.</b></div>':'<div class="j2n"><b>The rest of your meal is in the next round.</b></div>'):'')}</div>`;
 }
@@ -2253,7 +2257,8 @@ function lineHtml(l){
   return is?`<div class="dl bad"><div class="tp">${ph(i.h)}<div style="min-width:0"><div class="iname">${vm(i.veg)}<span>${i.n}</span></div>${ch?`<div class="ch">${ch}</div>`:''}${tag}</div><button class="rmx" data-act="rm" data-k="${l.k}" aria-label="Remove ${i.n}">${I.x}</button></div>${fx}</div>`:`<div class="dl"><div class="tp">${ph(i.h)}<div style="min-width:0"><div class="iname">${vm(i.veg)}<span>${i.n}</span></div>${ch?`<div class="ch">${ch}</div>`:''}${byl}<div class="row"><span class="pp num">${rs(unit(l)*l.q)}</span>${stp}</div></div></div></div>`;
 }
 function bill(){ const sub=total(), gst=sub*0.05, raw=sub+gst, pay=Math.round(raw); return {sub,gst,ro:pay-raw,pay}; }
-function pairs(){ if(!D.f.suggestions) return null; const okl=okL(); if(!okl.length) return null;
+function pairs(){ if(S._pz===undefined) S._pz=pairsCalc(); return S._pz; }
+function pairsCalc(){ if(!D.f.suggestions) return null; const okl=okL(); if(!okl.length) return null;
   const cs=new Set(okl.flatMap(l=>l.combo?cparts(l.combo).map(x=>x.g.course):[it(l.item).c]));
   const ok=id=>{const i=it(id); return i&&!out(id)&&!qtyOf(id)&&(!S.veg||i.veg);};
   const host=okl.find(l=>!l.combo&&['starter','main'].includes(it(l.item).c))||okl[0];
@@ -2278,7 +2283,8 @@ const MISS_MS=5*60000;
 function missLeft(){ const R2=S.rounds||[], l=R2[R2.length-1]; return l?Math.max(0,MISS_MS-(Date.now()-l.at)):0; }
 const mmss=ms=>{ const t=Math.ceil(ms/1000); return Math.floor(t/60)+':'+String(t%60).padStart(2,'0'); };
 function missHtml(){ const left=missLeft(); if(!left||!D.f.ordering) return ''; const taken=new Set([...sentLines(),...S.cart].map(l=>l.item));
-  const picks=['naan','raita','lassi','jamun','garlic','chai','kachumber'].map(it).filter(i=>i&&!taken.has(i.id)&&!out(i.id)&&(!S.veg||i.veg)).slice(0,5), C=119.4;
+  const R2=S.rounds, mk=R2.length+'|'+R2[R2.length-1].at; if(!S._mp||S._mp.k!==mk){ journey('s'); const inTrack=new Set(Object.entries(S._jp||{}).filter(([k])=>k.startsWith(sentLines().length+'|')).flatMap(([,v])=>v)); S._mp={k:mk,ids:['naan','raita','lassi','jamun','garlic','chai','kachumber','kulfi'].filter(id=>{const i=it(id); return i&&!taken.has(id)&&!inTrack.has(id)&&!out(id)&&(!S.veg||i.veg);}).slice(0,3)}; }
+  const picks=S._mp.ids.map(it).filter(i=>!out(i.id)), C=119.4;
   return `<div class="miss2"><div class="m2h"><div><span class="eb">Before it leaves the kitchen</span><h3>Still room for more?</h3><p>Add now and it goes out with your order.</p></div><div class="m2r"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19" class="bg"/><circle cx="22" cy="22" r="19" class="fg" id="mring" style="stroke-dashoffset:${(C*(1-left/MISS_MS)).toFixed(1)}"/></svg><b class="num" id="mtime">${mmss(left)}</b></div></div><div class="m2row">${picks.map((i,k)=>`<div class="m2p" data-act="open" data-id="${i.id}" style="--k:${k}"><div class="m2i">${ph(i.h)}${qtyOf(i.id)?`<i class="m2ok">${I.tick}</i>`:`<button class="m2a" data-act="add" data-id="${i.id}" aria-label="Add ${i.n}">${I.plus}</button>`}</div><span class="m2n">${i.n}</span><span class="m2c num">${rs(i.p)}</span></div>`).join('')}</div></div>`; }
 setInterval(()=>{ const t=document.getElementById('mtime'); if(!t) return; const left=missLeft(); if(!left){ render(); return; } t.textContent=mmss(left); const r=document.getElementById('mring'); if(r) r.style.strokeDashoffset=(119.4*(1-left/MISS_MS)).toFixed(1); },1000);
 function sendConfirm(){ const c=count(), left=missLeft(), b=bad().length;
@@ -2355,6 +2361,7 @@ function dashHtml(){
 const toast=()=>S.toast?`<div class="toast ${S.toast.kind}">${S.toast.kind==='bad'?I.warn:I.bolt}<span>${S.toast.text}</span></div>`:'';
 const ENTER=new Set(['shup','vin','sqdown','shup2','vin2','sqdown2','whi','shim','peekn']);
 function render(){
+  if(S.view!==S._lv){ S._pz=undefined; S._lv=S.view; }
   const keep={}; ['sc','cs','ss','msgs','cshs','sshs'].forEach(id=>{const e=document.getElementById(id); if(e) keep[id]=e.scrollTop;});
   const OV=[['v-'+S.view,S.view==='cart'?cartView():S.view==='status'?statusView():''],['sheet',S.sheet?sheet():''],['combo',S.combo?comboSheet():''],['play',S.play?playView():''],['cmp',S.cmp?compare():''],['chat',S.chat?chat():''],['search',S.search?searchView():''],['buzz',S.buzz?buzzSheet():''],['games',S.games?gamesView():''],['invite',S.invite?inviteView():''],['confirm',S.confirm?confirmView():''],['sendc',S.sendc&&count()?sendConfirm():'']].filter(x=>x[1]);
   document.getElementById('phone').innerHTML=menu()+OV.map(([k,h])=>`<div class="ovw" data-ov="${k}">${h}</div>`).join('')+coach()+toast();
@@ -2384,7 +2391,8 @@ function confetti(x,y,n=10,spread=1){ if(RM()) return; const C=['#B3261E','#F59E
     document.body.appendChild(d); const a=Math.random()*Math.PI*2, v=(26+Math.random()*44)*spread, dx=Math.cos(a)*v, dy=Math.sin(a)*v-30*spread;
     try{ d.animate([{transform:'translate(-50%,-50%) rotate(0)',opacity:1},{transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) rotate(${Math.random()*360}deg)`,opacity:1,offset:.55},{transform:`translate(calc(-50% + ${dx*1.2}px),calc(-50% + ${dy+40*spread}px)) rotate(${Math.random()*540}deg)`,opacity:0}],{duration:800+Math.random()*300,easing:'cubic-bezier(.2,.7,.3,1)'}); }catch(e){}
     setTimeout(()=>d.remove(),1150); } }
-function cartTarget(){ const bar=document.querySelector('.cbar'); if(!bar) return null; const r=bar.getBoundingClientRect(); if(!r.width) return null; const hit=document.elementFromPoint(r.left+40,r.top+r.height/2); if(!hit||!bar.contains(hit)) return null; const ths=bar.querySelectorAll('.th>*'); return ths[ths.length-1]||bar; }
+function seen(el){ if(!el) return false; const r=el.getBoundingClientRect(); if(!r.width) return false; const hit=document.elementFromPoint(r.left+Math.min(20,r.width/2),r.top+r.height/2); return !!hit&&(el.contains(hit)||hit.contains(el)); }
+function cartTarget(){ const bar=document.querySelector('.cbar'); if(seen(bar)){ const ths=bar.querySelectorAll('.th>*'); return ths[ths.length-1]||bar; } const tot=[...document.querySelectorAll('.gbar .gl b')].reverse().find(seen); return tot||null; }
 function flyR(sr,br){ if(RM()||!sr.r.width) return; let tgt=cartTarget(), b;
   if(tgt) b=tgt.getBoundingClientRect(); else if(br&&br.width){ b=br; tgt=null; } else return;
   const s0=sr.r;
@@ -2397,7 +2405,7 @@ function addLine(item,portion,bread,srcSel,flashKey,combo,n=1){
   const k=combo?ckey(combo):portion?`${item}|${portion}|${bread}`:item, ex=S.cart.find(l=>l.k===k);
   if(ex) ex.q+=n; else S.cart.push({k,item,portion,bread,combo,q:n,...(S.group?{by:'me'}:{})});
   const sr=S._src&&S._src.isConnected?{r:S._src.getBoundingClientRect(),bg:getComputedStyle(S._src).backgroundImage,rad:getComputedStyle(S._src).borderRadius}:null; S._src=null; const t0=total();
-  S.bump=true; if(again){ clearTimeout(S._f); S.flash=null; S.anim={id:item,dir:'up'}; } else S.flash=flashKey||item; render(); const br=S._btnR; S._btnR=null; if(sr) flyR(sr,br); else fly(document.querySelector(srcSel||`[data-src="${item}"] .ph`),br); countUp(document.querySelector('.cbar .tx b'),t0,total());
+  S.bump=true; if(again){ clearTimeout(S._f); S.flash=null; S.anim={id:item,dir:'up'}; } else S.flash=flashKey||item; render(); const br=S._btnR; S._btnR=null; if(sr) flyR(sr,br); else fly(document.querySelector(srcSel||`[data-src="${item}"] .ph`),br); countUp(seen(document.querySelector('.cbar'))?document.querySelector('.cbar .tx b'):[...document.querySelectorAll('.gbar .gl b')].reverse().find(seen),t0,total());
   if(again){ return; }
   clearTimeout(S._f); S._f=setTimeout(()=>{S.flash=null; S.grow=item; if(flashKey==='sheet'){ S.sheet=null; S.combo=null; } render(); S.grow=null;},750);
 }
