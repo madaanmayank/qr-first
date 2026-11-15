@@ -4,3 +4,33 @@ node_modules/
 # design backups kept locally only
 design/*-before-*.html
 design/*-before-*
+
+# Private business docs (kept local, not published)
+docs/00-master-plan.md
+
+# Private business docs (kept local, not published)
+docs/02-lessons-from-incumbents.md
+
+# Private business docs (kept local, not published)
+docs/11-mvp-and-roadmap.md
+
+# Private business docs (kept local, not published)
+docs/12-build-plan.md
+
+# Private business docs (kept local, not published)
+docs/13-open-decisions.md
+
+# Private business docs (kept local, not published)
+docs/14-gap-log.md
+
+# Private business docs (kept local, not published)
+docs/16-ecosystem-and-entry.md
+
+# Private business docs (kept local, not published)
+docs/19-business-model.md
+
+# Private business docs (kept local, not published)
+docs/20-merchant-offer.md
+
+# Private business docs (kept local, not published)
+docs/24-first-100-delhi.md
