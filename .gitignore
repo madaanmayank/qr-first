@@ -1,0 +1,5 @@
+node_modules/
+.DS_Store
+*.zip
+# design backups kept locally only
+design/*-before-*.html

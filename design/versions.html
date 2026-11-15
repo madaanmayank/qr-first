@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design versions</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font:14px/1.4 Inter,system-ui,sans-serif;background:#F3F4F6;color:#0F1222;display:flex;flex-direction:column}
+nav{display:flex;gap:6px;align-items:center;padding:10px 16px;background:#fff;border-bottom:1px solid #E5E7EB;overflow-x:auto;flex:none}
+nav b{font-size:13px;margin-right:8px;white-space:nowrap}
+nav a{flex:none;text-decoration:none;color:#4A5063;font-size:12.5px;font-weight:600;padding:7px 12px;border-radius:10px;white-space:nowrap}
+nav a small{display:block;font-size:10.5px;font-weight:500;color:#8990A1}
+nav a:hover{background:#F5F6F8}
+nav a.on{background:#0F1222;color:#fff}
+nav a.on small{color:#C9CCD3}
+nav .open{margin-left:auto;font-size:12px;color:#4A5063}
+iframe{flex:1;width:100%;border:0;background:#F3F4F6}
+</style>
+</head>
+<body>
+<nav id="nav"><b>Versions</b></nav>
+<iframe id="f" title="Design version"></iframe>
+<script>
+// Newest first. Add a row here when a new version file is created.
+const V=[
+  ['app-v3.html','Dark cards','Chosen version'],
+];
+const nav=document.getElementById('nav'), f=document.getElementById('f');
+nav.insertAdjacentHTML('beforeend',V.map(([p,n,d])=>`<a href="#${p}" data-p="${p}">${n}<small>${d}</small></a>`).join('')+'<a class="open" id="open" target="_blank">Open alone</a>');
+function show(){
+  const p=(location.hash.slice(1)||V[0][0]);
+  f.src=p+'?t='+Date.now();
+  document.querySelectorAll('nav a[data-p]').forEach(a=>a.classList.toggle('on',a.dataset.p===p));
+  document.getElementById('open').href=p;
+}
+addEventListener('hashchange',show); show();
+</script>
+</body>
+</html>

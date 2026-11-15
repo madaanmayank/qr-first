@@ -1,0 +1,27 @@
+{
+  "name": "qr-first-platform",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Non-UI platform foundation: contracts and engine (milestones M0 and M1)",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check-docs": "npm run check-docs -w @qr-first/contracts",
+    "check": "npm run typecheck && npm run check-docs && npm test",
+    "typecheck": "tsc -p packages/contracts/tsconfig.json --noEmit && tsc -p packages/engine/tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.23.15",
+    "typescript": "~5.9.3",
+    "vitest": "^5.1.0",
+    "zod": "^4.6.7"
+  }
+}

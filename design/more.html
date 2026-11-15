@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clean White v2: combo, play, dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Noto+Sans+Devanagari:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="v2.css">
+<style>
+main{max-width:1180px}
+.lead{width:100%;margin:6px 0 0;font-size:16px;font-weight:700;letter-spacing:-.015em}
+.lead small{display:block;font-size:12.5px;font-weight:400;color:var(--ink3);margin-top:2px;letter-spacing:0}
+
+/* combo */
+.prog{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:14px 16px 0}
+.prog i{height:5px;border-radius:99px;background:var(--line)}
+.prog i.on{background:var(--p)}
+.prog-t{padding:8px 16px 0;font-size:var(--t-sm);color:var(--ink2)}
+.prog-t b{color:var(--ink)}
+.opt.lnk{grid-template-columns:20px 48px 1fr auto;height:66px;padding:0 12px}
+.opt.lnk .ph{width:48px;height:48px;border-radius:14px}
+.cta.dim{background:#E7E9EE;color:#8990A1;box-shadow:none}
+.foot{grid-template-columns:auto minmax(0,1fr)}
+.foot .cta.xl{padding:0 14px;font-size:14.5px}
+.foot .qty{gap:6px}
+.foot .qty span{width:28px}
+
+/* play */
+.ptop{display:flex;justify-content:space-between;align-items:center;padding:18px 16px 0}
+.ptop .h{display:flex;gap:8px;align-items:center}
+.psub{padding:4px 16px 0;font-size:var(--t-sm);color:var(--ink2)}
+.deck{position:relative;margin:14px 16px 0;flex:1;min-height:0}
+.deck::before,.deck::after{content:"";position:absolute;left:0;right:0;top:0;bottom:0;border-radius:28px;background:#fff;border:1px solid var(--line)}
+.deck::before{transform:translateY(14px) scale(.9)}
+.deck::after{transform:translateY(7px) scale(.95)}
+.card{position:absolute;inset:0 0 14px 0;z-index:1;border-radius:28px;background:#fff;border:1px solid var(--line);box-shadow:0 12px 32px rgba(16,24,40,.12);overflow:hidden;display:flex;flex-direction:column}
+.card .ph{flex:1;border-radius:0;min-height:120px;position:relative}
+.card .ph .tg{position:absolute;left:12px;top:12px}
+.card .tx{padding:14px 16px 16px}
+.card .iname{font-size:var(--t-h)}
+.card .why{font-size:var(--t-md);color:var(--ink2);line-height:1.4;margin-top:6px}
+.card .iprice{margin-top:8px;font-size:var(--t-item)}
+.pact{display:grid;grid-template-columns:1fr 1.7fr;gap:10px;padding:22px 16px 10px}
+.pact .cta{height:50px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:var(--t-item)}
+.pass{height:50px;border-radius:16px;background:var(--fill);font-weight:650;font-size:var(--t-item)}
+.tray{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px 16px}
+.slot{text-align:center;font-size:var(--t-xs);color:var(--ink3)}
+.slot .bx{aspect-ratio:1;border-radius:16px;border:1.5px dashed #D3D8E0;margin-bottom:4px;position:relative}
+.slot.f{color:var(--ink);font-weight:600}
+.slot.f .bx{border:0}
+.slot.f .ph{width:100%;height:100%;border-radius:16px}
+.slot .bx i{position:absolute;right:-4px;top:-4px;width:18px;height:18px;border-radius:50%;background:#16A34A;border:2px solid #fff;display:grid;place-items:center;color:#fff}
+.slot .bx i svg{width:9px;height:9px;stroke-width:3.4}
+
+/* dashboard */
+.dash{width:100%;display:grid;grid-template-columns:196px minmax(0,1fr) 330px;height:780px;background:#fff;border-radius:22px;border:1px solid #DDE1E7;box-shadow:0 1px 2px rgba(16,24,40,.04),0 24px 56px rgba(16,24,40,.08);overflow:hidden}
+.nav{padding:16px 12px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.nav .st{display:flex;gap:10px;align-items:center;padding:2px 6px 16px}
+.nav .st b{font-size:var(--t-md);font-weight:650;line-height:1.2;display:block}
+.nav .st span{font-size:var(--t-sm);color:var(--ink3);font-weight:400}
+.nav button{background:transparent;text-align:left;padding:10px 12px;border-radius:12px;font-size:var(--t-md);font-weight:550;color:var(--ink2);display:flex;gap:10px;align-items:center}
+.nav button svg{width:17px;height:17px}
+.nav button.on{background:var(--pt);color:var(--p);font-weight:650}
+.nav button:disabled{opacity:.5;cursor:default}
+.work{display:flex;flex-direction:column;min-width:0;min-height:0}
+.ws{flex:1;overflow:auto;padding:26px 30px 18px}
+.wh h1{font-size:var(--t-xl);margin:0;font-weight:700;letter-spacing:-.03em;line-height:1.15}
+.wh p{margin:6px 0 0;font-size:var(--t-md);color:var(--ink2);max-width:56ch}
+.fg{margin-top:22px}
+.fg-t{font-size:var(--t-md);font-weight:650;margin-bottom:8px}
+.box{border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.fr{display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:center;padding:13px 16px;border-top:1px solid var(--line)}
+.fr:first-child{border-top:0}
+.fr .tl{width:36px;height:36px;border-radius:12px;background:var(--tt);color:var(--t);display:grid;place-items:center}
+.fr .tl svg{width:18px;height:18px}
+.fr b{font-weight:600;font-size:var(--t-md);display:flex;gap:8px;align-items:center}
+.fr p{margin:1px 0 0;font-size:var(--t-sm);color:var(--ink2)}
+.fr p.need{color:#B45309}
+.tw{width:42px;height:25px;border-radius:99px;background:#D5D9E0;position:relative;padding:0;transition:background .15s;flex:none}
+.tw::after{content:"";position:absolute;left:2px;top:2px;width:21px;height:21px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.28);transition:transform .18s cubic-bezier(.3,.7,.2,1)}
+.tw.on{background:var(--p)}
+.tw.on::after{transform:translateX(17px)}
+.tw:disabled{opacity:.4;cursor:default}
+.sg{display:inline-flex;background:var(--fill);border-radius:12px;padding:3px}
+.sg button{padding:7px 13px;border-radius:10px;font-size:var(--t-sm);font-weight:600;color:var(--ink2);background:transparent}
+.sg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(16,24,40,.16)}
+.asst{border-top:1px solid var(--line);padding:12px 30px 14px}
+.prop{margin-bottom:10px;padding:12px 14px;border-radius:16px;background:#F1EBFF;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center}
+.prop small{display:block;font-size:var(--t-sm);color:#5B4A8A}
+.prop b{font-weight:650}
+.prop .a{display:flex;gap:6px}
+.prop .cta{height:36px;padding:0 14px;border-radius:12px;font-size:var(--t-sm);box-shadow:none}
+.prop .sf{height:36px;padding:0 14px;border-radius:12px;background:#fff;font-weight:650;font-size:var(--t-sm)}
+.ain{display:flex;gap:8px;align-items:center;border:1.5px solid #DDE1E7;border-radius:16px;padding:5px 5px 5px 14px}
+.ain svg{color:#6D28D9}
+.ain span{flex:1;font-size:var(--t-md);color:var(--ink3)}
+.ain .cta{height:38px;padding:0 16px;border-radius:12px;font-size:var(--t-sm);box-shadow:none;background:#6D28D9}
+.chp{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chp button{background:var(--fill);border-radius:99px;padding:7px 12px;font-size:var(--t-sm);font-weight:550;color:var(--ink2)}
+.hist{margin-top:9px;font-size:var(--t-sm);color:var(--ink3);display:flex;gap:10px;align-items:center}
+.hist button{font-weight:650;color:var(--p);background:transparent;padding:0}
+.pv{border-left:1px solid var(--line);background:var(--fill);display:flex;flex-direction:column;align-items:center;padding:14px 0 0;min-height:0}
+.pv-h{width:100%;padding:0 18px 10px;display:flex;justify-content:space-between;align-items:center;font-size:var(--t-sm)}
+.pv-h b{font-weight:650}
+.pv-fit{width:288px;height:602px;flex:none;position:relative}
+.pv-fit .screen{transform:scale(.9);transform-origin:top left;position:absolute;left:0;top:0}
+.pv-f{font-size:var(--t-sm);color:var(--ink3);margin-top:10px}
+.hp{padding:2px 16px 0}
+.hp .note{padding:14px;border-radius:20px;background:var(--fill)}
+.hp .note p{margin:0;font-weight:500;line-height:1.5}
+.hp .note span{display:block;font-size:var(--t-sm);color:var(--ink2);margin-top:8px}
+.fab{position:absolute;right:14px;bottom:84px;width:46px;height:46px;border-radius:50%;background:#fff;color:#1D4ED8;box-shadow:0 8px 22px rgba(16,24,40,.18);display:grid;place-items:center;border:1px solid var(--line)}
+
+/* brand kit */
+.kit{width:100%;display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}
+.kc{width:300px;border:1px solid #DDE1E7;border-radius:26px;background:#fff;padding:22px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.kc .lg{display:flex;gap:14px;align-items:center}
+.kc .av{width:72px;height:72px;border-radius:22px;background:var(--p);display:grid;place-items:center}
+.kc .nm{font-size:20px;font-weight:700;letter-spacing:-.025em;line-height:1.15}
+.kc .tg2{font-size:var(--t-sm);color:var(--ink2);margin-top:2px}
+.kc h4{font-size:var(--t-xs);font-weight:700;color:var(--ink3);letter-spacing:.04em;margin:20px 0 8px;text-transform:uppercase}
+.sws{display:flex;gap:8px}
+.sws i{flex:1;height:44px;border-radius:14px;display:block;border:1px solid rgba(16,24,40,.06)}
+.sws small{display:block;font-size:10.5px;color:var(--ink3);margin-top:4px;font-style:normal;text-align:center}
+.kc .cvt{height:92px;border-radius:18px;background:#2a1a12 url(img/cover.jpg) center/cover}
+.kc p{margin:0;font-size:var(--t-md);color:var(--ink2);line-height:1.5}
+.kc .ty{font-size:26px;font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.kc .ty span{display:block;font-size:var(--t-sm);font-weight:400;color:var(--ink3);letter-spacing:0;margin-top:2px}
+.tm{width:290px}
+.tm .lab{font-size:var(--t-sm);color:var(--ink3);margin:10px 4px 0}
+.tm .lab b{color:var(--ink);font-weight:600}
+.tent{border-radius:26px;background:#fff;box-shadow:0 1px 2px rgba(16,24,40,.06),0 20px 44px rgba(16,24,40,.12);overflow:hidden;text-align:center}
+.tent .hd{background:var(--p);color:#fff;padding:22px 20px 18px}
+.tent .hd .av{width:52px;height:52px;border-radius:16px;background:#fff;margin:0 auto 10px;display:grid;place-items:center}
+.tent .hd .av svg{stroke:var(--p);fill:none}
+.tent .hd .av svg path[fill]{fill:var(--p)}
+.tent .hd b{display:block;font-size:19px;letter-spacing:-.02em}
+.tent .hd span{font-size:var(--t-sm);opacity:.9}
+.tent .bd{padding:20px}
+.tent .qr{width:150px;height:150px;margin:0 auto}
+.tent .sc{font-size:var(--t-h);font-weight:700;letter-spacing:-.02em;margin-top:14px}
+.tent .sc2{font-size:var(--t-sm);color:var(--ink2);margin-top:2px}
+.tent .tb{display:inline-block;margin-top:12px;font-size:var(--t-sm);font-weight:650;background:var(--pt);color:var(--p);border-radius:99px;padding:5px 12px}
+.bill{border-radius:20px;background:#fff;border:1px solid #DDE1E7;padding:18px 18px 16px;box-shadow:0 1px 2px rgba(16,24,40,.04);font-size:var(--t-sm)}
+.bill .top2{display:flex;gap:10px;align-items:center;padding-bottom:12px;border-bottom:1px dashed #C6CBD5}
+.bill .av{width:40px;height:40px;border-radius:12px;background:var(--p);display:grid;place-items:center}
+.bill b.n{display:block;font-size:var(--t-md);font-weight:700}
+.bill small{display:block;font-size:10.5px;color:var(--ink3);line-height:1.4}
+.bill .rw{display:flex;justify-content:space-between;padding:5px 0;color:var(--ink2)}
+.bill .rw.t{border-top:1px dashed #C6CBD5;margin-top:6px;padding-top:10px;color:var(--ink);font-weight:700;font-size:var(--t-md)}
+.bill .th{text-align:center;margin-top:12px;color:var(--ink2)}
+.wa{border-radius:24px;background:#EFEAE2;padding:14px;box-shadow:0 1px 2px rgba(16,24,40,.04)}
+.wa .hdr{display:flex;gap:9px;align-items:center;margin-bottom:12px}
+.wa .hdr .av{width:34px;height:34px;border-radius:50%;background:var(--p);display:grid;place-items:center}
+.wa .hdr b{font-size:var(--t-md);font-weight:650;display:block;line-height:1.2}
+.wa .hdr span{font-size:11px;color:var(--ink3)}
+.wa .bub{background:#fff;border-radius:6px 18px 18px 18px;padding:12px 14px;font-size:var(--t-md);line-height:1.5;box-shadow:0 1px 1px rgba(16,24,40,.08)}
+.wa .bub .cb{display:block;margin-top:10px;text-align:center;font-weight:650;color:#1D4ED8;border-top:1px solid var(--line);padding-top:10px;font-size:var(--t-sm)}
+.wa .bub small{display:block;text-align:right;color:var(--ink3);font-size:10.5px;margin-top:4px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Clean White v2: combo, play to order, dashboard</h1>
+    <p>Real images and the Qissa Kebab House brand on every screen, then a view of where the brand shows in print and on WhatsApp. The same rules as the first three screens. The dashboard is live: flip a switch, change login, or use the assistant, and the preview on the right changes.</p>
+  </div>
+  <div class="sw">Button colour
+    <button class="on" style="--c:#B3261E" data-c="#B3261E" aria-label="Spice red"></button>
+    <button style="--c:#1F6FEB" data-c="#1F6FEB" aria-label="Blue"></button>
+    <button style="--c:#0E8A5F" data-c="#0E8A5F" aria-label="Green"></button>
+    <button style="--c:#111827" data-c="#111827" aria-label="Black"></button>
+  </div>
+</header>
+<main>
+
+<h2 class="lead">Guest screens<small>Kebab platter for two, and the game-like way to order.</small></h2>
+
+<!-- Combo -->
+<div>
+<div class="screen">
+  <div class="scroll">
+    <div class="ph hero" style="--h:18;height:200px"><button class="ib x" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="pad">
+      <h2 class="ttl"><span class="vm nv"></span>Kebab platter for two</h2>
+      <div class="sub"><span class="tg blue">Combo</span><span class="iprice num">₹780</span></div>
+      <div class="idesc" style="margin-top:8px">Two kebabs, a bread basket and a sweet.</div>
+    </div>
+    <div class="prog"><i class="on"></i><i class="on"></i><i></i></div>
+    <div class="prog-t"><b>2 of 3 steps done.</b> One more to go.</div>
+    <div class="grp">
+      <div class="gh"><b>Choose 2 kebabs</b><span class="tg green"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>2 of 2</span></div>
+      <div class="opt lnk sq on"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span class="ph" style="--h:14"></span><span>Seekh Kebab</span><span></span></div>
+      <div class="opt lnk sq"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span class="ph" style="--h:20"></span><span>Galouti Kebab</span><span class="num">+ ₹40</span></div>
+      <div class="opt lnk sq on"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span class="ph" style="--h:42"></span><span>Chicken Malai Tikka</span><span></span></div>
+    </div>
+    <div class="grp">
+      <div class="gh"><b>Choose your bread</b><span class="tg green"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Done</span></div>
+      <div class="opt lnk on"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span class="ph" style="--h:46"></span><span>Rumali Roti</span><span></span></div>
+    </div>
+    <div class="grp" style="padding-bottom:18px">
+      <div class="gh"><b>Choose a sweet</b><span class="tg amber">Choose 1</span></div>
+      <div class="opt lnk"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span class="ph" style="--h:40"></span><span>Shahi Tukda</span><span></span></div>
+      <div class="opt lnk"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span class="ph" style="--h:52"></span><span>Phirni</span><span></span></div>
+    </div>
+  </div>
+  <div class="foot"><div class="qty"><span><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></span>1<span><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></div><button class="cta xl dim"><span>Choose a sweet</span><span class="num">₹780</span></button></div>
+</div>
+<div class="cap"><b>Combo.</b> Same sheet as any item. Progress is always visible.</div>
+</div>
+
+<!-- Play -->
+<div>
+<div class="screen">
+  <div class="ptop"><div class="h h2" style="font-size:var(--t-h);font-weight:700;letter-spacing:-.02em">Play to order <span class="tg violet">Fun</span></div><button class="ib" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="psub">Card 3 of 6. Add what you like, pass on the rest.</div>
+  <div class="deck">
+    <div class="card">
+      <span class="ph" style="--h:22"><span class="tg violet">Main</span></span>
+      <div class="tx"><div class="iname"><span class="vm nv"></span>Nihari</div><div class="why">It is a cold evening. This is what the regulars order.</div><div class="iprice num">₹440</div></div>
+    </div>
+  </div>
+  <div class="pact"><button class="pass">Pass</button><button class="cta">Add to my table</button></div>
+  <div class="tray">
+    <div class="slot f"><div class="bx"><span class="ph" style="--h:14"></span><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i></div>Kebab</div>
+    <div class="slot"><div class="bx"></div>Main</div>
+    <div class="slot"><div class="bx"></div>Bread</div>
+    <div class="slot"><div class="bx"></div>Sweet</div>
+  </div>
+</div>
+<div class="cap"><b>Play to order.</b> One dish at a time. No prizes, just a faster choice.</div>
+</div>
+
+<h2 class="lead" style="margin-top:22px">Merchant dashboard<small>Switch features, set guest login, or ask the assistant. The preview is the guest app for this restaurant.</small></h2>
+
+<div class="dash" id="dash"></div>
+
+
+<h2 class="lead" style="margin-top:22px">The brand, everywhere it shows<small>One brand kit (logo, colour, tagline, story, cover) carries to the table tent, the printed bill and the WhatsApp receipt, with no extra setup.</small></h2>
+<section class="kit">
+  <div class="kc">
+    <div class="lg"><span class="av"></span><div><div class="nm">Qissa Kebab House</div><div class="tg2">Kebabs since 1962 · Old Delhi</div></div></div>
+    <h4>Colour</h4>
+    <div class="sws"><div style="flex:1"><i style="background:var(--p)"></i><small>Brand</small></div><div style="flex:1"><i style="background:var(--pt)"></i><small>Tint</small></div><div style="flex:1"><i style="background:#0F1222"></i><small>Ink</small></div><div style="flex:1"><i style="background:#fff"></i><small>White</small></div></div>
+    <h4>Type</h4>
+    <div class="ty">Qissa Kebab House<span>One family, set in bold for the name and regular for reading</span></div>
+    <h4>Cover</h4>
+    <div class="cvt"></div>
+    <h4>Voice</h4>
+    <p>Warm and plain, written by the owner. "Good to see you again." "Thank you for eating with us."</p>
+  </div>
+  <div class="tm">
+    <div class="tent">
+      <div class="hd"><span class="av"></span><b>Qissa Kebab House</b><span>Kebabs since 1962 · Old Delhi</span></div>
+      <div class="bd"><svg class="qr" viewBox="0 0 29 29" id="qr" aria-label="QR code stand-in"></svg><div class="sc">Scan to order</div><div class="sc2">Order and pay from your phone</div><span class="tb">Table 6</span></div>
+    </div>
+    <div class="lab"><b>Table tent.</b> Printed in the store's colour and logo.</div>
+  </div>
+  <div class="tm">
+    <div class="bill">
+      <div class="top2"><span class="av"></span><div><b class="n">Qissa Kebab House</b><small>GSTIN: to be added · FSSAI: to be added<br>Invoice 000412 · Table 6</small></div></div>
+      <div class="rw"><span>Seekh Kebab, full</span><span class="num">₹510</span></div>
+      <div class="rw"><span>Dal Makhani</span><span class="num">₹260</span></div>
+      <div class="rw"><span>CGST 2.5% + SGST 2.5%</span><span class="num">₹38.50</span></div>
+      <div class="rw"><span>Round off</span><span class="num">₹0.50</span></div>
+      <div class="rw t"><span>Total</span><span class="num">₹809</span></div>
+      <div class="th">Thank you, Arjun. See you again.<br>Imran</div>
+    </div>
+    <div class="lab"><b>Printed bill.</b> The same brand on the paper.</div>
+  </div>
+  <div class="tm">
+    <div class="wa">
+      <div class="hdr"><span class="av"></span><div><b>Qissa Kebab House</b><span>Business account</span></div></div>
+      <div class="bub">Thank you, Arjun. Your bill for Table 6 is <b>₹809</b>, paid by UPI.<br><br>Your usual seekh will be waiting next time.<br>Imran<span class="cb">Download bill</span><small>9:42 pm</small></div>
+    </div>
+    <div class="lab"><b>WhatsApp receipt.</b> Sent in the store's name.</div>
+  </div>
+</section>
+</main>
+<script>
+const I={
+ plus:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+ home:'<svg viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8H4z"/></svg>',
+ menu:'<svg viewBox="0 0 24 24"><path d="M5 7h14M5 12h14M5 17h9"/></svg>',
+ sw:'<svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="8" rx="4"/><circle cx="16" cy="12" r="2.2"/></svg>',
+ user:'<svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.6"/><path d="M5 20c1-4 4-5.5 7-5.5s6 1.5 7 5.5"/></svg>',
+ leaf:'<svg viewBox="0 0 24 24"><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14z"/><path d="M5 19l8-8"/></svg>',
+ spark:'<svg viewBox="0 0 24 24"><path d="M12 4l1.8 4.7L18.5 10.5 13.8 12.3 12 17l-1.8-4.7L5.5 10.5l4.7-1.8z"/></svg>',
+ cards:'<svg viewBox="0 0 24 24"><rect x="5" y="7" width="11" height="14" rx="2"/><path d="M8 4h9.5A1.5 1.5 0 0119 5.5V17"/></svg>',
+ bag:'<svg viewBox="0 0 24 24"><path d="M6 8h12l-1 11H7z"/><path d="M9 8a3 3 0 016 0"/></svg>',
+ sliders:'<svg viewBox="0 0 24 24"><path d="M5 8h8M17 8h2M5 16h2M11 16h8"/><circle cx="15" cy="8" r="2"/><circle cx="9" cy="16" r="2"/></svg>',
+ bell:'<svg viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 1112 0v5l1.5 2h-15L6 16z"/><path d="M10 20.5a2 2 0 004 0"/></svg>',
+ star:'<svg viewBox="0 0 24 24"><path d="M12 4l2.5 5.2 5.6.8-4 4 1 5.6L12 17l-5.1 2.6 1-5.6-4-4 5.6-.8z"/></svg>',
+ chat:'<svg viewBox="0 0 24 24"><path d="M5 6h14v10h-9l-4 3v-3H5z"/></svg>',
+ tick:'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+ search:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg>',
+ arrow:'<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+};
+const FEATS=[
+ {g:'Welcome',items:[
+  {k:'personalWelcome',n:'Personal welcome',e:'Greets returning guests by name and shows their usual.',c:'amber',i:'user',needs:true},
+  {k:'vegFilter',n:'Vegetarian filter',e:'A veg-only switch on the menu.',c:'green',i:'leaf'}]},
+ {g:'Choosing',items:[
+  {k:'suggestions',n:'Personal suggestions',e:'A few picks with a reason, from each guest\'s taste.',c:'violet',i:'spark'},
+  {k:'playMode',n:'Play to order',e:'A game-like way to choose a meal, one dish at a time.',c:'violet',i:'cards'}]},
+ {g:'Ordering',items:[
+  {k:'ordering',n:'Order from the phone',e:'Guests add items and send orders. Off shows the menu only.',c:'rose',i:'bag'},
+  {k:'choices',n:'Customisation',e:'Sizes, add-ons and other choices on items.',c:'blue',i:'sliders'}]},
+ {g:'At the table and after',items:[
+  {k:'callWaiter',n:'Call waiter',e:'Guests ask for water, the bill or help.',c:'blue',i:'bell'},
+  {k:'ratings',n:'Ratings',e:'One-tap rating after the visit.',c:'amber',i:'star',late:'Seen after paying'}]},
+];
+const FLAT=FEATS.flatMap(g=>g.items);
+const state={login:'optional',f:{personalWelcome:true,vegFilter:true,suggestions:true,playMode:true,ordering:true,choices:true,callWaiter:true,ratings:true},hist:[],prop:null,reply:''};
+const CHIPS=['Turn off guest login','Switch off call waiter','Hide play to order','Make login required'];
+
+function apply(s,c){const n=structuredClone(s); if(c.t==='login')n.login=c.v; else n.f[c.k]=c.v; return n;}
+function say(c){return c.t==='login'?'Set guest login to '+c.v:(c.v?'Turn on ':'Turn off ')+FLAT.find(x=>x.k===c.k).n.toLowerCase();}
+function parse(t){t=t.toLowerCase();
+  if(/log ?in/.test(t)){const v=/required|must/.test(t)?'required':/off|no |without/.test(t)?'off':'optional';return [{t:'login',v}];}
+  const off=/off|hide|stop|disable/.test(t);
+  const map={waiter:'callWaiter',play:'playMode',veg:'vegFilter',suggest:'suggestions',custom:'choices',rating:'ratings'};
+  for(const w in map) if(t.includes(w)) return [{t:'f',k:map[w],v:!off}];
+  return [];}
+function propose(text){const cmds=parse(text); if(!cmds.length){state.prop=null;state.reply='In this prototype I can change guest login and the features listed. Try a suggestion below.';return;}
+  const next=cmds.reduce(apply,state); if(JSON.stringify(next)===JSON.stringify({...state,hist:state.hist,prop:state.prop,reply:state.reply})){state.prop=null;state.reply='That is already set this way.';return;}
+  state.reply='';state.prop={cmds,lines:cmds.map(c=>say(c))};}
+function commit(cmds,who){const before=structuredClone({login:state.login,f:state.f});const lines=cmds.map(say).join('; ');
+  const n=cmds.reduce(apply,state); state.login=n.login; state.f=n.f; state.hist.push({text:lines,who,before});}
+
+function preview(s){
+  const f=s.f, known=s.login!=='off', per=f.personalWelcome&&known, ord=f.ordering;
+  const add=ord?`<button class="cta md">${I.plus}Add</button>`:'';
+  let h=`<div class="screen"><div class="scroll"><div data-brand-head data-table="Table 6"></div>`;
+  if(per) h+=`<div class="hello pad"><h2>Good evening, <em>Arjun</em></h2><p>Good to see you again.</p></div><div class="usual amber"><span class="ph" style="--h:14"></span><div><small>Your usual</small><div class="iname"><span class="vm nv"></span>Seekh Kebab</div><div class="d">${f.choices?'Full, extra hot, with rumali roti':'Same as last time'}</div></div><div class="row"><span class="iprice num">₹510</span>${ord?'<button class="cta md">Add again</button>':''}</div></div>`;
+  else h+=`<div class="hp"><div class="note"><p>My grandfather lit this tandoor in 1962. The seekh recipe has not changed since.</p><span>Imran, Qissa Kebab House</span></div></div>`;
+  const ch=[]; if(f.vegFilter)ch.push('<button class="chip"><span class="vm"></span>Veg only</button>'); if(f.playMode&&ord)ch.push(`<button class="chip tone violet">${I.cards}Play to order</button>`);
+  if(ch.length)h+=`<div class="chips">${ch.join('')}</div>`;
+  if(f.suggestions)h+=`<div class="sec"><h3 class="h">${per?'Picked for you':'Popular here'}</h3><span class="tg violet">${per?'For you':'Popular'}</span></div><div class="rail"><div class="pc"><span class="ph" style="--h:20"></span><div class="iname"><span class="vm nv"></span>Galouti Kebab</div><div class="why">${per?'You liked the seekh. This is its softer cousin.':'Most ordered at dinner.'}</div><div class="row"><span class="iprice num">₹320</span>${ord?`<button class="soft">${I.plus}Add</button>`:''}</div></div><div class="pc"><span class="ph" style="--h:40"></span><div class="iname"><span class="vm"></span>Shahi Tukda</div><div class="why">${per?'You skipped dessert last time.':'Most tables end with this.'}</div><div class="row"><span class="iprice num">₹140</span>${ord?`<button class="soft">${I.plus}Add</button>`:''}</div></div></div>`;
+  h+=`<div data-brand-story></div><div class="tabs"><span class="on">Kebabs</span><span>Mains</span><span>Breads</span></div><div class="pad"><div class="it"><div><div class="iname"><span class="vm nv"></span>Seekh Kebab</div><div class="ihi">सीख कबाब</div><div class="idesc">Hand-minced mutton, charcoal grilled on the skewer.</div><div class="meta"><span class="iprice num">₹260</span>${f.choices?'<span class="tg blue">Customisable</span>':''}</div></div><div class="side"><span class="ph" style="--h:14"></span>${add}</div></div><div class="it"><div><div class="iname"><span class="vm"></span>Paneer Tikka</div><div class="ihi">पनीर टिक्का</div><div class="idesc">Thick-cut paneer, mustard and curd.</div><div class="meta"><span class="iprice num">₹280</span></div></div><div class="side"><span class="ph" style="--h:36"></span>${add}</div></div></div></div>`;
+  if(f.callWaiter) h+=`<button class="fab" aria-label="Call waiter">${I.bell}</button>`;
+  if(ord) h+=`<div class="bar"><button class="cta xl"><span>${s.login==='required'?'Sign in to order':'2 items <small>· ₹770</small>'}</span>${s.login==='required'?I.arrow:'<span>View order</span>'}</button></div>`;
+  return h+'</div>';
+}
+
+function render(){
+  const s=state, last=s.hist[s.hist.length-1];
+  const lt={off:'Guests go straight to the menu. No one is recognised.',optional:'Guests can order without signing in. Returning guests are recognised.',required:'Guests sign in before they order.'}[s.login];
+  const nav=[['home','Home',0],['menu','Menu',0],['sw','Features',1],['sliders','Look',0]].map(([i,n,on])=>`<button class="${on?'on':''}" ${on?'':'disabled'}>${I[i]}${n}</button>`).join('');
+  let work=`<div class="wh"><h1>Features</h1><p>Switch any part of the guest experience on or off. The preview shows the result as you go.</p></div>`;
+  work+=`<div class="fg"><div class="fg-t">Sign-in</div><div class="box"><div class="fr"><span class="tl" style="--t:#4A5063;--tt:#F1F2F5">${I.user}</span><div><b>Guest login</b><p>${lt}</p></div><div class="sg">${['off','optional','required'].map(v=>`<button class="${s.login===v?'on':''}" data-login="${v}">${v[0].toUpperCase()+v.slice(1)}</button>`).join('')}</div></div></div></div>`;
+  for(const g of FEATS){work+=`<div class="fg"><div class="fg-t">${g.g}</div><div class="box">`+g.items.map(x=>{const blocked=x.needs&&s.login==='off';
+    return `<div class="fr ${x.c}"><span class="tl">${I[x.i]}</span><div><b>${x.n}${x.late?`<span class="tg ${x.c}">${x.late}</span>`:''}</b><p class="${blocked?'need':''}">${blocked?'Needs guest login. Turn login on to use this.':x.e}</p></div><button class="tw ${s.f[x.k]&&!blocked?'on':''}" ${blocked?'disabled':''} data-f="${x.k}" role="switch" aria-checked="${!!s.f[x.k]}" aria-label="${x.n}"></button></div>`}).join('')+`</div></div>`;}
+  let as='<div class="asst">';
+  if(s.prop)as+=`<div class="prop"><div><small>The assistant will make ${s.prop.lines.length>1?'these changes':'this change'}. The preview shows the result.</small>${s.prop.lines.map(l=>`<b>${l}</b>`).join('<br>')}</div><div class="a"><button class="sf" data-cancel>Cancel</button><button class="cta" data-apply>Apply</button></div></div>`;
+  else if(s.reply)as+=`<div class="prop"><div><small>Assistant</small>${s.reply}</div><div class="a"><button class="sf" data-cancel>Close</button></div></div>`;
+  as+=`<div class="ain">${I.chat}<span>Tell the assistant what to change</span><button class="cta" disabled style="opacity:.0;width:0;padding:0"></button></div><div class="chp">${CHIPS.map(c=>`<button data-chip="${c}">${c}</button>`).join('')}</div>`;
+  if(last)as+=`<div class="hist"><span>Last change: ${last.text}. By ${last.who}.</span><button data-undo>Undo</button></div>`;
+  as+='</div>';
+  const pv=s.prop?s.prop.cmds.reduce(apply,s):s;
+  document.getElementById('dash').innerHTML=`<div class="nav"><div class="st"><span class="av">Q</span><div><b>Qissa Kebab House</b><span>Kebab and Mughlai</span></div></div>${nav}</div><div class="work"><div class="ws">${work}</div>${as}</div><div class="pv"><div class="pv-h"><b>Live preview</b><span class="tg ${s.prop?'violet':'green'}">${s.prop?'Proposed':'Draft'}</span></div><div class="pv-fit">${preview(pv)}</div><div class="pv-f">The real guest app for this restaurant.</div></div>`;
+}
+document.addEventListener('click',e=>{const t=e.target.closest('button'); if(!t||t.disabled)return;
+  if(t.dataset.login){commit([{t:'login',v:t.dataset.login}],'you');}
+  else if(t.dataset.f){commit([{t:'f',k:t.dataset.f,v:!state.f[t.dataset.f]}],'you');}
+  else if(t.dataset.chip){propose(t.dataset.chip);}
+  else if(t.dataset.apply!==undefined){commit(state.prop.cmds,'the assistant at your request');state.prop=null;}
+  else if(t.dataset.cancel!==undefined){state.prop=null;state.reply='';}
+  else if(t.dataset.undo!==undefined){const l=state.hist.pop(); if(l){state.login=l.before.login;state.f=l.before.f;}}
+  else if(t.closest('.sw')){document.documentElement.style.setProperty('--p',t.dataset.c);document.querySelectorAll('.sw button').forEach(x=>x.classList.toggle('on',x===t));return;}
+  else return;
+  render();});
+render();
+</script>
+
+<script>
+(function(){const n=29,svg=document.getElementById('qr');let seed=1962,r=()=>(seed=(seed*1103515245+12345)&0x7fffffff)/0x7fffffff;let g='';
+const finder=(x,y)=>x<8&&y<8||x>n-9&&y<8||x<8&&y>n-9;
+for(let y=0;y<n;y++)for(let x=0;x<n;x++){if(finder(x,y))continue;if(r()>.52)g+=`<rect x="${x}" y="${y}" width="1" height="1"/>`;}
+const fp=(x,y)=>`<rect x="${x}" y="${y}" width="7" height="7" fill="#0F1222"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="#0F1222"/>`;
+svg.innerHTML=`<g fill="#0F1222">${g}</g>${fp(0,0)}${fp(n-7,0)}${fp(0,n-7)}`;})();
+</script>
+<script src="brand.js"></script>
+</body>
+</html>

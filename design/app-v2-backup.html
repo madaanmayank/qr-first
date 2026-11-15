@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guest app: Qissa Kebab House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Noto+Sans+Devanagari:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="v2.css">
+<style>
+/* Entry animations are avoided on purpose: every state must look right with motion off. */
+main{max-width:1040px;align-items:flex-start;gap:32px}
+.screen{width:340px;height:712px}
+.grey{--t:#4A5063;--tt:#F1F2F5}
+.bh .cv{height:128px}
+.hello{padding-top:14px}
+.vrow{display:flex;justify-content:space-between;align-items:center;margin:16px 16px 0;padding:10px 12px 10px 14px;border-radius:18px;background:var(--fill);font-size:var(--t-md);font-weight:600}
+.vrow span{display:flex;gap:8px;align-items:center}
+.tw{width:42px;height:25px;border-radius:99px;background:#D5D9E0;position:relative;padding:0;flex:none}
+.tw::after{content:"";position:absolute;left:2px;top:2px;width:21px;height:21px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(16,24,40,.28);transition:transform .18s}
+.tw.on{background:#16A34A}.tw.on::after{transform:translateX(17px)}
+.tw.red.on{background:#BE123C}
+.tabs{position:sticky;top:0;background:#fff;z-index:5;padding:12px 16px;margin-top:14px;border-bottom:1px solid var(--line)}
+.tabs button{font-size:var(--t-sm);font-weight:600;height:36px;padding:0 14px;border-radius:999px;background:var(--fill);color:var(--ink2);flex:none}
+.tabs button.on{background:var(--ink);color:#fff}
+.csec{padding:20px 16px 0;display:flex;gap:8px;align-items:baseline}
+.csec small{font-size:var(--t-sm);color:var(--ink3)}
+.list{padding:0 16px}
+.it{cursor:pointer}
+.it .side{position:relative;height:124px}
+.it.out .ph{filter:grayscale(1);opacity:.5}
+.it.out .iname,.it.out .idesc,.it.out .ihi{opacity:.5}
+.pc{cursor:pointer}
+/* add states */
+.addb{position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);min-width:90px;height:40px;padding:0 14px;border-radius:13px;font-weight:700;font-size:var(--t-md);display:inline-flex;align-items:center;justify-content:center;gap:5px;background:var(--p);color:#fff;box-shadow:0 8px 22px color-mix(in srgb,var(--p) 34%,transparent);white-space:nowrap}
+.addb svg{width:14px;height:14px;stroke-width:2.6}
+.addb.ok{background:#16A34A;box-shadow:0 8px 22px rgba(22,163,74,.38);animation:pop .34s}
+@keyframes pop{0%{transform:translateX(-50%) scale(1)}45%{transform:translateX(-50%) scale(1.12)}100%{transform:translateX(-50%) scale(1)}}
+.addb.out{background:#E7E9EE;color:#6B7280;box-shadow:none}
+.addb .n{background:rgba(255,255,255,.26);border-radius:99px;min-width:20px;height:20px;display:grid;place-items:center;font-size:12px;padding:0 5px}
+.mstp{position:absolute;left:50%;bottom:-14px;transform:translateX(-50%);height:40px;background:#fff;border-radius:13px;display:flex;align-items:center;gap:2px;box-shadow:0 6px 18px rgba(16,24,40,.16);border:1.5px solid #16A34A;padding:0 3px;font-weight:700;color:#15803D}
+.mstp button{width:32px;height:32px;border-radius:10px;background:transparent;color:#15803D;display:grid;place-items:center}
+.mstp button svg{width:14px;height:14px;stroke-width:2.6}
+.mstp span{min-width:22px;text-align:center}
+.inl{position:static;transform:none;box-shadow:none;min-width:0;height:36px;border-radius:12px}
+.inl.ok{animation:none}
+/* dock: captain + sticky cart bar */
+.dock{flex:none;position:relative}
+.capb{position:absolute;right:14px;top:-58px;width:52px;height:52px;border-radius:50%;background:#fff;box-shadow:0 8px 22px rgba(16,24,40,.2);border:1px solid var(--line);display:grid;place-items:center;padding:0}
+.capb .cap{width:42px;height:42px}
+.cbar{margin:8px 12px 14px;height:58px;border-radius:18px;background:var(--p);color:#fff;display:flex;justify-content:space-between;align-items:center;padding:0 18px;font-weight:700;font-size:15px;box-shadow:0 10px 26px color-mix(in srgb,var(--p) 34%,transparent);width:calc(100% - 24px)}
+.cbar.warn{background:#B45309;box-shadow:0 10px 26px rgba(180,83,9,.34)}
+.cbar .l{display:flex;gap:10px;align-items:center}
+.cbar .badge{background:rgba(255,255,255,.24);border-radius:99px;min-width:28px;height:28px;display:grid;place-items:center;font-size:13px;padding:0 7px}
+.cbar.bump .badge{animation:bump .36s}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.4)}100%{transform:scale(1)}}
+.fly{position:fixed;z-index:80;width:46px;height:46px;border-radius:14px;pointer-events:none;background-size:cover;background-position:center;box-shadow:0 8px 20px rgba(16,24,40,.3)}
+.toast{position:absolute;left:14px;right:14px;top:14px;z-index:60;background:#111827;color:#fff;border-radius:16px;padding:11px 14px;font-size:var(--t-sm);font-weight:550;display:flex;gap:9px;align-items:center;box-shadow:0 10px 28px rgba(16,24,40,.3)}
+.toast svg{width:16px;height:16px;flex:none}
+.toast.bad svg{color:#FDA4AF}.toast.good svg{color:#86EFAC}
+/* overlays */
+.ov{position:absolute;inset:0;z-index:30;display:flex;flex-direction:column;justify-content:flex-end}
+.ov .scrim{position:absolute;inset:0;background:rgba(15,18,34,.45)}
+.sh{position:relative;background:#fff;border-radius:30px 30px 0 0;max-height:92%;display:flex;flex-direction:column}
+.sh.tall{height:92%}
+.shs{overflow:auto;scrollbar-width:none;flex:1;min-height:0}
+.shs::-webkit-scrollbar{display:none}
+.sh .hero{height:190px;margin:12px 12px 0}
+.grab{width:40px;height:4px;border-radius:9px;background:#D5D9E0;margin:8px auto 0}
+.nut{margin:14px 16px 0;border-radius:20px;background:var(--fill);display:grid;grid-template-columns:1fr 1fr 1fr;padding:12px 6px}
+.nut div{text-align:center;font-size:var(--t-sm);color:var(--ink2);border-left:1px solid #E3E6EB}
+.nut div:first-child{border-left:0}
+.nut b{display:block;font-size:var(--t-h);color:var(--ink);font-weight:700;letter-spacing:-.02em}
+.nutn{margin:6px 18px 0;font-size:var(--t-xs);color:var(--ink3);display:flex;gap:6px;align-items:center}
+.acts{display:flex;gap:8px;padding:14px 16px 0}
+.act{flex:1;height:42px;border-radius:14px;background:var(--fill);font-weight:650;font-size:var(--t-sm);display:flex;align-items:center;justify-content:center;gap:7px}
+.act .cap{width:24px;height:24px}
+.act svg.i{width:15px;height:15px}
+.opt{width:100%;background:#fff;text-align:left;cursor:pointer}
+.opt.dis{opacity:.55;background:var(--fill);border-color:transparent;cursor:default}
+.opt.dis span:nth-child(2){text-decoration:line-through}
+.so{font-size:var(--t-xs);font-weight:700;color:#BE123C;background:#FFE8ED;border-radius:99px;padding:2px 8px}
+.need{font-size:var(--t-xs);font-weight:700;color:#B45309;background:#FFF3DC;border-radius:99px;padding:3px 9px}
+.cta.off{background:#E7E9EE;color:#8990A1;box-shadow:none}
+.cta.warn{background:#B45309;box-shadow:0 8px 22px rgba(180,83,9,.34)}
+.cta.go{background:#16A34A;box-shadow:0 8px 22px rgba(22,163,74,.38)}
+.foot{grid-template-columns:auto minmax(0,1fr)}
+/* compare */
+.cmp-h{display:flex;align-items:center;gap:10px;padding:10px 16px 0}
+.cmp-h h2{flex:1;margin:0;font-size:var(--t-h);font-weight:700;letter-spacing:-.02em}
+.verd{margin:12px 16px 0;padding:12px;border-radius:20px;background:#F1EBFF;display:grid;grid-template-columns:36px 1fr;gap:10px;align-items:center;font-size:var(--t-md);line-height:1.45}
+.verd .cap{width:36px;height:36px}
+.verd small{display:block;font-size:var(--t-xs);font-weight:700;color:#6D28D9}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px 16px 0}
+.col .ph{width:100%;aspect-ratio:1;height:auto;border-radius:22px}
+.col .iname{margin-top:8px}
+.col .iprice{margin-top:2px}
+.col .chg{font-size:var(--t-sm);font-weight:650;color:var(--p);background:transparent;padding:4px 0}
+.facts{margin:12px 16px 0;border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.fact{display:grid;grid-template-columns:1fr 84px 1fr;align-items:center;padding:10px 12px;border-top:1px solid var(--line);font-size:var(--t-md);font-weight:650;text-align:center}
+.fact:first-child{border-top:0}
+.fact small{font-size:var(--t-xs);color:var(--ink3);font-weight:500}
+.cfoot{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px 16px 16px;border-top:1px solid var(--line)}
+.cfoot .cta{height:48px;border-radius:15px;display:flex;align-items:center;justify-content:center;gap:5px;font-size:var(--t-md)}
+.cfoot .cta svg{width:14px;height:14px;stroke-width:2.6}
+/* captain chat */
+.cap{display:block}
+.cap *{stroke:none}
+.ch-h{display:flex;gap:12px;align-items:center;padding:8px 16px 12px;border-bottom:1px solid var(--line)}
+.ch-h .cap{width:54px;height:54px}
+.ch-h b{display:block;font-size:var(--t-h);font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.ch-h span{font-size:var(--t-sm);color:var(--ink2)}
+.msgs{padding:14px 16px 6px;display:flex;flex-direction:column;gap:10px}
+.m{max-width:88%;padding:11px 14px;border-radius:6px 20px 20px 20px;background:var(--fill);font-size:var(--t-md);line-height:1.45}
+.m.me{align-self:flex-end;background:var(--p);color:#fff;border-radius:20px 20px 6px 20px;font-weight:550}
+.mi{display:grid;grid-template-columns:52px 1fr auto;gap:10px;align-items:center;padding:8px;border-radius:18px;border:1px solid var(--line);background:#fff;margin-top:8px}
+.mi .ph{width:52px;height:52px;border-radius:14px}
+.mi small{font-size:var(--t-sm);color:var(--ink2)}
+.mlink{margin-top:10px;height:38px;padding:0 14px;border-radius:12px;background:#fff;font-weight:650;font-size:var(--t-sm);color:var(--ink);border:1px solid var(--line);display:inline-flex;align-items:center;gap:6px}
+.sugs{display:flex;gap:6px;flex-wrap:wrap;padding:6px 16px 8px}
+.sugs button{height:36px;padding:0 13px;border-radius:99px;background:#F1EBFF;color:#6D28D9;font-weight:600;font-size:var(--t-sm)}
+.inp{margin:4px 16px 16px;height:48px;border-radius:16px;border:1.5px solid #DDE1E7;display:flex;align-items:center;padding:0 14px;font-size:var(--t-md);color:var(--ink3)}
+/* cart + status views */
+.view{position:absolute;inset:0;z-index:20;background:#fff;display:flex;flex-direction:column}
+.vh{display:flex;align-items:center;gap:10px;padding:16px 16px 6px}
+.vh h2{margin:0;font-size:var(--t-xl);font-weight:700;letter-spacing:-.03em;flex:1}
+.banner{margin:8px 16px 0;padding:12px 14px;border-radius:18px;background:#FFF3DC;color:#7A3F06;font-size:var(--t-sm);line-height:1.45;display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:center}
+.banner .cap{width:34px;height:34px}
+.banner b{font-weight:650}
+.ln{display:grid;grid-template-columns:76px 1fr;gap:12px;padding:16px 0;border-top:1px solid var(--line);align-items:start}
+.ln:first-child{border-top:0}
+.ln .ph{width:76px;height:76px;border-radius:20px}
+.ln.bad .ph{filter:grayscale(1);opacity:.5}
+.ln .ch{font-size:var(--t-sm);color:var(--ink2);margin-top:2px}
+.ln .ch .xx{color:#BE123C;font-weight:650;text-decoration:line-through}
+.ln .tg{margin-top:6px}
+.ln .row{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.ln.bad .iprice{text-decoration:line-through;color:var(--ink3)}
+.fx{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.fx button{height:36px;padding:0 12px;border-radius:12px;font-size:var(--t-sm);font-weight:650;background:var(--pt);color:var(--p)}
+.fx button.sf{background:var(--fill);color:var(--ink)}
+.stp{display:flex;align-items:center;gap:8px;font-weight:700;background:var(--fill);border-radius:12px;padding:3px}
+.stp button{width:30px;height:30px;border-radius:9px;background:#fff;display:grid;place-items:center;box-shadow:0 1px 2px rgba(16,24,40,.1)}
+.stp button svg{width:13px;height:13px;stroke-width:2.4}
+.stp span{min-width:16px;text-align:center}
+.sug{cursor:default}
+.vb{padding:10px 14px 16px;border-top:1px solid var(--line);background:#fff}
+.bl{display:flex;justify-content:space-between;font-size:var(--t-sm);color:var(--ink2);padding:2px}
+.bl.t{font-size:var(--t-item);color:var(--ink);font-weight:700;padding:6px 2px 10px}
+.vb .cta.xl{box-shadow:none}
+.st-top{margin:8px 16px 0;padding:16px;border-radius:24px;background:#E8F7EE;display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:center}
+.st-top .cap{width:56px;height:56px}
+.st-top b{display:block;font-size:var(--t-h);font-weight:700;letter-spacing:-.02em;color:#0F5F2C}
+.st-top span{font-size:var(--t-sm);color:#2F6B45}
+.steps{margin:16px 16px 0;padding:6px 16px;border-radius:22px;border:1px solid var(--line)}
+.step{display:grid;grid-template-columns:26px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line);font-size:var(--t-md);font-weight:600;color:var(--ink3)}
+.step:first-child{border-top:0}
+.step i{width:24px;height:24px;border-radius:50%;border:2px solid #D5D9E0;display:grid;place-items:center;color:#fff}
+.step i svg{width:12px;height:12px;stroke-width:3.2}
+.step.done{color:var(--ink)}.step.done i{background:#16A34A;border-color:#16A34A}
+.step.now{color:var(--ink)}.step.now i{border-color:var(--p);box-shadow:inset 0 0 0 5px #fff,inset 0 0 0 12px var(--p)}
+.step small{font-size:var(--t-sm);font-weight:500;color:var(--ink3)}
+.sum{margin:16px 16px 0;padding:14px;border-radius:22px;background:var(--fill)}
+.sum .r{display:flex;justify-content:space-between;font-size:var(--t-md);padding:3px 0}
+.two{display:grid;grid-template-columns:1fr 1.5fr;gap:10px}
+.two .sf{height:54px;border-radius:16px;background:var(--fill);font-weight:650;font-size:var(--t-md)}
+/* side panel */
+.panel{width:340px;display:flex;flex-direction:column;gap:14px}
+.card{background:#fff;border:1px solid #DDE1E7;border-radius:22px;padding:18px}
+.card h3{margin:0 0 4px;font-size:var(--t-item);font-weight:700;letter-spacing:-.015em}
+.card p{margin:0 0 10px;font-size:var(--t-sm);color:var(--ink2);line-height:1.45}
+.ctl{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line);font-size:var(--t-md)}
+.ctl small{display:block;font-size:var(--t-xs);color:var(--ink3)}
+.seg{display:inline-flex;background:var(--fill);border-radius:12px;padding:3px}
+.seg button{padding:7px 13px;border-radius:10px;font-size:var(--t-sm);font-weight:600;color:var(--ink2);background:transparent}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(16,24,40,.16)}
+.try{margin:0;padding-left:18px;font-size:var(--t-sm);color:var(--ink2);line-height:1.6}
+.try b{color:var(--ink)}
+.rst{height:34px;padding:0 14px;border-radius:11px;background:var(--fill);font-weight:650;font-size:var(--t-sm);margin-top:10px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Guest app, end to end</h1>
+    <p>One connected flow for Qissa Kebab House: menu, item with nutrition, compare, Captain (the waiter character), cart with live stock, and order status. Everything on the phone is clickable.</p>
+  </div>
+</header>
+<main>
+  <div><div class="screen" id="phone"></div><div class="cap2 cap" style="display:none"></div></div>
+  <div class="panel" id="panel"></div>
+</main>
+<script>
+const I={
+ plus:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+ minus:'<svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg>',
+ tick:'<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+ back:'<svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>',
+ x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+ warn:'<svg viewBox="0 0 24 24"><path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17v.5"/></svg>',
+ bolt:'<svg viewBox="0 0 24 24"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg>',
+ arrow:'<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+ cmp:'<svg class="i" viewBox="0 0 24 24"><rect x="4" y="5" width="6.5" height="14" rx="2"/><rect x="13.5" y="5" width="6.5" height="14" rx="2"/></svg>',
+ bell:'<svg viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 1112 0v5l1.5 2h-15L6 16z"/><path d="M10 20.5a2 2 0 004 0"/></svg>',
+};
+/* Captain: the one character. Bow tie takes the store colour. */
+function cap(mood='idle'){
+  const mouth={idle:'M19.5 28.2c2.8 2.6 6.2 2.6 9 0',happy:'M18.5 27.5c3.4 4 7.6 4 11 0',sorry:'M19.5 29.8c2.8-2 6.2-2 9 0',think:'M20.5 29h7'}[mood];
+  const ey=mood==='think'?21.6:23;
+  return `<svg class="cap" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="23" r="15" fill="#FBE3C8"/><path d="M9.4 20.5C10 12.4 16 7.5 24 7.5s14 4.9 14.6 13c-3.8-3.6-8.8-5.2-14.6-5.2S13.2 16.9 9.4 20.5z" fill="#2B2F3A"/><circle cx="18.6" cy="${ey}" r="1.8" fill="#2B2F3A"/><circle cx="29.4" cy="${ey}" r="1.8" fill="#2B2F3A"/><path d="${mouth}" fill="none" style="stroke:#2B2F3A;stroke-width:1.8;stroke-linecap:round"/><circle cx="14.6" cy="27.4" r="2.1" fill="#F5B9A0" opacity=".7"/><circle cx="33.4" cy="27.4" r="2.1" fill="#F5B9A0" opacity=".7"/><path d="M24 41.5l-7.5-4.2v8.4zM24 41.5l7.5-4.2v8.4z" fill="var(--p)"/><circle cx="24" cy="41.5" r="2.2" fill="var(--p)"/></svg>`;
+}
+const COURSES=[['starter','Starters'],['main','Mains'],['bread','Breads'],['dessert','Desserts'],['combo','Combos']];
+const CN={starter:'Starter',main:'Main',bread:'Bread',dessert:'Dessert',combo:'Combo'};
+const ITEMS=[
+ {id:'seekh',n:'Seekh Kebab',hi:'सीख कबाब',veg:false,p:260,h:14,c:'starter',sp:'Hot',k:420,pr:28,d:'Hand-minced mutton, charcoal grilled on the skewer.',custom:true,sig:true},
+ {id:'galouti',n:'Galouti Kebab',hi:'गलौटी कबाब',veg:false,p:320,h:20,c:'starter',sp:'Medium',k:340,pr:22,d:'So soft it was made for a toothless nawab.'},
+ {id:'malai',n:'Chicken Malai Tikka',veg:false,p:340,h:42,c:'starter',sp:'Mild',k:380,pr:32,d:'Cream, cheese and white pepper marinade.'},
+ {id:'paneer',n:'Paneer Tikka',hi:'पनीर टिक्का',veg:true,p:280,h:36,c:'starter',sp:'Medium',k:310,pr:18,d:'Thick-cut paneer, mustard and curd.'},
+ {id:'nihari',n:'Nihari',hi:'निहारी',veg:false,p:440,h:22,c:'main',sp:'Hot',k:520,pr:34,d:'Shank stew, cooked from the night before.'},
+ {id:'dal',n:'Dal Makhani',hi:'दाल मखनी',veg:true,p:260,h:10,c:'main',sp:'Mild',k:360,pr:14,d:'Black lentils, simmered overnight.'},
+ {id:'rumali',n:'Rumali Roti',hi:'रुमाली रोटी',veg:true,p:30,h:46,c:'bread',sp:null,k:120,pr:4,d:'Paper thin, folded like a handkerchief.'},
+ {id:'tukda',n:'Shahi Tukda',veg:true,p:140,h:40,c:'dessert',sp:null,k:380,pr:7,d:'Fried bread in saffron milk, with rabri.'},
+ {id:'phirni',n:'Phirni',veg:true,p:110,h:52,c:'dessert',sp:null,k:240,pr:6,d:'Ground rice pudding, set in clay.'},
+ {id:'platter',n:'Kebab platter for two',veg:false,p:780,h:18,c:'combo',sp:null,d:'Two kebabs, a bread basket and a sweet.'},
+];
+const OPT={portion:[{id:'half',n:'Half, 2 pieces',d:0,m:.5},{id:'full',n:'Full, 4 pieces',d:220,m:1}],bread:[{id:'rumaliO',n:'Rumali roti',d:30,stock:'rumali'},{id:'khameeriO',n:'Khameeri roti',d:40,stock:'khameeri'}]};
+const NAME={...Object.fromEntries(ITEMS.map(i=>[i.id,i.n])),khameeri:'Khameeri roti'};
+const S={known:true,veg:false,stock:{},cart:[],view:'menu',sheet:null,cmp:null,chat:null,flash:null,bump:false,toast:null,log:[],tab:'starter',sent:null};
+const it=id=>ITEMS.find(i=>i.id===id), opt=(g,id)=>OPT[g].find(o=>o.id===id);
+const out=id=>!!S.stock[id], optOut=o=>out(o.stock), rs=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+const unit=l=>{const b=it(l.item).p; return l.portion?b+opt('portion',l.portion).d+opt('bread',l.bread).d:b;};
+function issue(l){ if(out(l.item)) return {type:'item'}; if(l.bread&&optOut(opt('bread',l.bread))) return {type:'opt',opt:l.bread}; return null; }
+const count=()=>S.cart.reduce((a,l)=>a+l.q,0), bad=()=>S.cart.filter(issue), okL=()=>S.cart.filter(l=>!issue(l));
+const total=()=>okL().reduce((a,l)=>a+unit(l)*l.q,0), qtyOf=id=>S.cart.filter(l=>l.item===id).reduce((a,l)=>a+l.q,0);
+const ph=(h,cls='')=>`<span class="ph ${cls}" style="--h:${h}"></span>`, vm=v=>`<span class="vm ${v?'':'nv'}"></span>`;
+const vis=()=>ITEMS.filter(i=>!S.veg||i.veg);
+const ago=()=>new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+const r10=n=>Math.round(n/10)*10;
+
+function addBtn(i,inline){
+  const o=out(i.id), q=qtyOf(i.id), cls=inline?' inl':'';
+  if(o) return `<span class="addb out${cls}">Sold out</span>`;
+  if(S.flash===i.id) return `<button class="addb ok${cls}" data-act="add" data-id="${i.id}">${I.tick}Added</button>`;
+  if(q&&!i.custom) return `<div class="mstp${cls}"><button data-act="dec" data-id="${i.id}" aria-label="Remove one">${I.minus}</button><span class="num">${q}</span><button data-act="add" data-id="${i.id}" aria-label="Add one">${I.plus}</button></div>`;
+  return `<button class="addb${cls}" data-act="add" data-id="${i.id}">${I.plus}Add${q?`<span class="n num">${q}</span>`:''}</button>`;
+}
+function row(i){
+  const o=out(i.id), q=qtyOf(i.id);
+  const tag=o?`<span class="tg rose">${q?'Sold out, in your order':'Sold out'}</span>`:(i.sig?'<span class="tg brand">Our signature</span>':'')+(i.custom?'<span class="tg blue">Customisable</span>':'');
+  return `<div class="it ${o?'out':''}" data-act="open" data-id="${i.id}"><div><div class="iname">${vm(i.veg)}${i.n}</div>${i.hi?`<div class="ihi">${i.hi}</div>`:''}<div class="idesc">${i.d}</div><div class="meta"><span class="iprice num">${rs(i.p)}</span>${tag}</div></div><div class="side" data-src="${i.id}">${ph(i.h)}${addBtn(i)}</div></div>`;
+}
+function gaps(){ const cs=new Set(okL().map(l=>it(l.item).c)); if(!cs.size) return null;
+  const pick=(id,why)=>{const i=it(id); return i&&!out(id)&&!qtyOf(id)&&(!S.veg||i.veg)?{i,why}:null;};
+  if((cs.has('starter')||cs.has('main'))&&!cs.has('bread')&&!S.cart.some(l=>l.bread)) { const g=pick('rumali','Most tables add a bread with this.'); if(g) return g; }
+  if(!cs.has('main')&&cs.has('starter')) { const g=pick('nihari','The main most tables order after kebabs.')||pick('dal','A classic to share.'); if(g) return g; }
+  if(!cs.has('dessert')) return pick('tukda',S.known?'You skipped dessert last time.':'Most tables end with this.')||pick('phirni','A light, cool finish.');
+  return null; }
+function dock(){
+  const n=count(), b=bad().length;
+  const bar=n?`<button class="cbar ${b?'warn':''} ${S.bump?'bump':''}" data-act="cart"><span class="l"><span class="badge num">${n}</span><span>${b?b+(b>1?' items need':' item needs')+' a look':'View order'}</span></span><span class="num">${rs(total())}</span></button>`:'<div style="height:14px"></div>';
+  return `<div class="dock"><button class="capb" data-act="chat" aria-label="Ask Captain">${cap(b?'sorry':'idle')}</button>${bar}</div>`;
+}
+function menu(){
+  let h=`<div class="scroll" id="sc"><div data-brand-head data-table="Table 6"></div>`;
+  if(S.known){ const u=it('seekh');
+    h+=`<div class="hello pad"><h2>Good evening, <em>Arjun</em></h2><p>Good to see you again. You were last here on Diwali weekend.</p></div>`;
+    h+=`<div class="usual amber" ${out('seekh')?'style="opacity:.6"':''}><span class="ph" style="--h:14"></span><div><small>Your usual</small><div class="iname">${vm(false)}Seekh Kebab</div><div class="d">${out('seekh')?'Sold out right now':optOut(opt('bread','rumaliO'))?'Full, extra hot. Rumali roti is sold out today':'Full, extra hot, with rumali roti'}</div></div><div class="row"><span class="iprice num">${rs(optOut(opt('bread','rumaliO'))?520:510)}</span>${out('seekh')?'<span class="tg rose">Sold out</span>':`<button class="cta md" data-act="usual">${S.flash==='usual'?I.tick+'Added':'Add again'}</button>`}</div></div>`;
+  }
+  h+=`<div class="vrow"><span>${vm(true)}Vegetarian only</span><button class="tw ${S.veg?'on':''}" data-act="veg" role="switch" aria-checked="${S.veg}" aria-label="Vegetarian only"></button></div>`;
+  const picks=(S.known?[['galouti','You liked the seekh. This is its softer cousin.'],['tukda','You skipped dessert last time.']]:[['seekh','The dish this kitchen is known for.'],['nihari','Most ordered at dinner.']]).map(([id,w])=>({i:it(id),w})).filter(x=>!out(x.i.id)&&(!S.veg||x.i.veg));
+  if(picks.length) h+=`<div class="sec"><h3 class="h">${S.known?'Picked for you':'Popular here'}</h3><span class="tg violet">${S.known?'For you':'Popular'}</span></div><div class="rail">${picks.map(x=>`<div class="pc" data-act="open" data-id="${x.i.id}">${ph(x.i.h)}<div class="iname">${vm(x.i.veg)}${x.i.n}</div><div class="why">${x.w}</div><div class="row"><span class="iprice num">${rs(x.i.p)}</span>${addBtn(x.i,true)}</div></div>`).join('')}</div>`;
+  else if(!S.known) h+='';
+  if(!S.known) h+=`<div data-brand-story></div>`;
+  const cs=COURSES.filter(([c])=>vis().some(i=>i.c===c));
+  h+=`<div class="tabs">${cs.map(([c,n])=>`<button class="${S.tab===c?'on':''}" data-act="tab" data-id="${c}">${n}</button>`).join('')}</div>`;
+  for(const [c,n] of cs){ const its=vis().filter(i=>i.c===c); h+=`<div class="csec" id="c-${c}"><h3 class="h">${n}</h3><small>${its.length} ${its.length>1?'items':'item'}</small></div><div class="list">${its.map(row).join('')}</div>`; }
+  return h+`<div style="height:24px"></div></div>${dock()}`;
+}
+function nutRow(i,mult=1){ if(!i.k) return `<div class="nutn" style="margin-top:14px">Nutrition depends on what you choose.</div>`;
+  return `<div class="nut"><div><b class="num">${r10(i.k*mult)}</b>kcal, about</div><div><b class="num">${Math.round(i.pr*mult)} g</b>protein, about</div><div><b>${CN[i.c]}</b>${i.sp?i.sp+' spice':'course'}</div></div><div class="nutn"><span class="tg grey">AI estimate</span>Per serving. Ask our team about allergens.</div>`; }
+function sheet(){
+  const sh=S.sheet, i=it(sh.item), o=out(i.id);
+  const grp=(g,title,sel)=>`<div class="grp"><div class="gh"><b>${title}</b>${sel?'<span class="tg green">'+I.tick+'Done</span>':'<span class="need">Choose 1</span>'}</div>`+OPT[g].map(x=>{const dis=g==='bread'&&optOut(x);return `<button class="opt ${sel===x.id?'on':''} ${dis?'dis':''}" ${dis?'disabled':''} data-act="pick" data-g="${g}" data-id="${x.id}"><i>${I.tick}</i><span>${x.n}</span><span class="num">${dis?'<b class="so">Sold out</b>':(x.d?'+ '+rs(x.d):'')}</span></button>`;}).join('')+'</div>';
+  const ready=!i.custom||(sh.portion&&sh.bread), p=i.custom?i.p+(sh.portion?opt('portion',sh.portion).d:0)+(sh.bread?opt('bread',sh.bread).d:0):i.p;
+  const mult=i.custom&&sh.portion?opt('portion',sh.portion).m:(i.custom?.5:1);
+  let cta;
+  if(o) cta=`<button class="cta xl off" disabled><span>Sold out today</span><span></span></button>`;
+  else if(S.flash==='sheet') cta=`<button class="cta xl go"><span>${I.tick} Added</span><span class="num">${rs(p)}</span></button>`;
+  else cta=`<button class="cta xl ${ready?'':'off'}" data-act="addsheet" ${ready?'':'disabled'}><span>${ready?'Add to order':'Choose to continue'}</span><span class="num">${rs(p)}</span></button>`;
+  return `<div class="ov"><div class="scrim" data-act="closesheet"></div><div class="sh tall"><div class="shs"><div class="ph hero" style="--h:${i.h};${o?'filter:grayscale(1);opacity:.6':''}"><button class="ib x" data-act="closesheet" aria-label="Close">${I.x}</button></div><div class="pad"><h2 class="ttl">${vm(i.veg)}${i.n}</h2><div class="sub"><span class="ihi">${i.hi||CN[i.c]}</span><span class="iprice num">${rs(i.p)}</span></div><div class="idesc" style="margin-top:8px;-webkit-line-clamp:3">${i.d}</div></div>${o?'<div class="like rose" style="--t:#BE123C;--tt:#FFE8ED"><span><b>Sold out today.</b> Captain can suggest something close.</span></div>':''}${nutRow(i,mult)}<div class="acts"><button class="act" data-act="cmp" data-id="${i.id}">${I.cmp}Compare</button><button class="act" data-act="ask" data-id="${i.id}">${cap()}Ask Captain</button></div>${i.custom?grp('portion','Portion',sh.portion)+grp('bread','Bread',sh.bread):''}<div style="height:16px"></div></div><div class="foot"><div class="qty"><span>${I.minus}</span>1<span>${I.plus}</span></div>${cta}</div></div></div>`;
+}
+function verdict(a,b){ if(!a.k||!b.k) return 'These two are hard to compare by numbers. Ask me what you are in the mood for.';
+  const parts=[], dk=r10(a.k)-r10(b.k), dp=a.pr-b.pr;
+  if(dk) parts.push(`${dk<0?a.n:b.n} is about ${Math.abs(dk)} kcal lighter.`);
+  if(dp) parts.push(`${dp>0?a.n:b.n} has about ${Math.abs(dp)} g more protein.`);
+  if(a.p!==b.p) parts.push(`${a.p<b.p?a.n:b.n} costs ${rs(Math.abs(a.p-b.p))} less.`);
+  return parts.slice(0,2).join(' ')||'They are very close. Pick the one you are in the mood for.'; }
+function compare(){
+  const a=it(S.cmp.a), b=it(S.cmp.b);
+  const col=(i,side)=>`<div class="col">${ph(i.h)}<div class="iname">${vm(i.veg)}${i.n}</div><div class="iprice num">${rs(i.p)}</div>${side==='b'?'<button class="chg" data-act="cmpnext">Change dish</button>':'<span class="chg" style="visibility:hidden">.</span>'}</div>`;
+  const f=(l,x,y)=>`<div class="fact"><span class="num">${x}</span><small>${l}</small><span class="num">${y}</span></div>`;
+  const btn=i=>out(i.id)?`<button class="cta off" disabled>Sold out</button>`:`<button class="cta ${S.flash==='cmp-'+i.id?'go':''}" data-act="cmpadd" data-id="${i.id}">${S.flash==='cmp-'+i.id?I.tick+'Added':I.plus+'Add'}</button>`;
+  return `<div class="ov"><div class="scrim" data-act="closecmp"></div><div class="sh tall"><div class="grab"></div><div class="cmp-h"><h2>Compare</h2><button class="ib" data-act="closecmp" aria-label="Close">${I.x}</button></div><div class="shs"><div class="verd">${cap('happy')}<div><small>Captain</small>${verdict(a,b)}</div></div><div class="cols">${col(a,'a')}${col(b,'b')}</div><div class="facts">${f('Calories, about',a.k?r10(a.k)+' kcal':'Varies',b.k?r10(b.k)+' kcal':'Varies')}${f('Protein, about',a.pr?a.pr+' g':'Varies',b.pr?b.pr+' g':'Varies')}${f('Spice',a.sp||'None',b.sp||'None')}${f('Course',CN[a.c],CN[b.c])}${f('Diet',a.veg?'Veg':'Non-veg',b.veg?'Veg':'Non-veg')}</div><div class="nutn" style="margin-bottom:14px"><span class="tg grey">AI estimate</span>Numbers are per serving.</div></div><div class="cfoot">${btn(a)}${btn(b)}</div></div></div>`;
+}
+/* Captain's answers come only from the menu data above. */
+const QS=[['light','Something light'],['protein','High protein, vegetarian'],['versus','Seekh or galouti?'],['pair','What goes with nihari?'],['gluten','Is the seekh gluten free?']];
+function answer(q){
+  const av=ITEMS.filter(i=>!out(i.id)&&i.k&&(!S.veg||i.veg));
+  if(q==='light'){ const l=av.filter(i=>i.c==='starter'||i.c==='main').sort((a,b)=>a.k-b.k).slice(0,2); return {mood:'happy',text:`Two of our lighter plates. ${l[0].n} is about ${r10(l[0].k)} kcal.`,items:l.map(i=>i.id)}; }
+  if(q==='protein'){ const l=av.filter(i=>i.veg&&(i.c==='starter'||i.c==='main')).sort((a,b)=>b.pr-a.pr).slice(0,2); return l.length?{mood:'happy',text:`${l[0].n} has the most protein among our vegetarian dishes, about ${l[0].pr} g.`,items:l.map(i=>i.id)}:{mood:'sorry',text:'Our vegetarian plates are sold out right now. Shall I call someone for you?',call:true}; }
+  if(q==='versus'){ if(out('seekh')||out('galouti')){ const o=out('seekh')?'Seekh Kebab':'Galouti Kebab', k=out('seekh')?'galouti':'seekh'; return {mood:'sorry',text:`${o} has just sold out, so I would go with the other one today.`,items:out(k)?[]:[k]}; } return {mood:'happy',text:verdict(it('seekh'),it('galouti'))+' The seekh is smoky and firm. The galouti melts.',cmp:['seekh','galouti']}; }
+  if(q==='pair'){ const l=['rumali','tukda'].filter(id=>!out(id)); return l.length?{mood:'happy',text:'A rumali roti to scoop it up, and something sweet to finish.',items:l}:{mood:'sorry',text:'The usual partners are sold out right now. Dal Makhani is a good friend to it.',items:out('dal')?[]:['dal']}; }
+  return {mood:'sorry',text:'I cannot be sure about allergens, and I would not want to guess. Let me call someone from our team who knows.',call:true};
+}
+function chat(){
+  const c=S.chat, last=c.msgs[c.msgs.length-1], mood=last&&last.a?last.a.mood:'idle';
+  const mi=id=>{const i=it(id);return `<div class="mi">${ph(i.h)}<div><div class="iname">${vm(i.veg)}${i.n}</div><small class="num">${rs(i.p)} · about ${r10(i.k)} kcal</small></div>${addBtn(i,true)}</div>`;};
+  const msgs=c.msgs.map(m=>m.q?`<div class="m me">${m.q}</div>`:`<div class="m">${m.a.text}${(m.a.items||[]).map(mi).join('')}${m.a.cmp?`<br><button class="mlink" data-act="cmpopen" data-a="${m.a.cmp[0]}" data-b="${m.a.cmp[1]}">${I.cmp}See them side by side</button>`:''}${m.a.call?`<br><button class="mlink" data-act="callstaff">${I.bell}Call someone</button>`:''}</div>`).join('');
+  return `<div class="ov"><div class="scrim" data-act="closechat"></div><div class="sh tall"><div class="grab"></div><div class="ch-h">${cap(mood)}<div style="flex:1"><b>Captain</b><span>Ask me anything about the menu</span></div><button class="ib" data-act="closechat" aria-label="Close">${I.x}</button></div><div class="shs" id="msgs"><div class="msgs"><div class="m">${S.known?'Good evening, Arjun.':'Good evening.'} ${c.about?`Asking about the ${it(c.about).n}? `:''}What can I help you choose?</div>${msgs}</div></div><div class="sugs">${QS.map(([k,t])=>`<button data-act="q" data-id="${k}">${t}</button>`).join('')}</div><div class="inp">Type or speak your question</div></div></div>`;
+}
+function lineHtml(l){
+  const i=it(l.item), is=issue(l); let ch='';
+  if(l.portion) ch=`${opt('portion',l.portion).n.split(',')[0]} · ${is&&is.type==='opt'?`<span class="xx">${opt('bread',l.bread).n}</span>`:opt('bread',l.bread).n}`;
+  let tag='',fx='';
+  if(is&&is.type==='item'){ tag='<span class="tg rose">Sold out</span>';
+    const sim=ITEMS.find(x=>x.c===i.c&&x.veg===i.veg&&x.id!==i.id&&!out(x.id)&&!x.custom&&!qtyOf(x.id));
+    fx=`<div class="fx">${sim?`<button data-act="swapitem" data-k="${l.k}" data-id="${sim.id}">Swap for ${sim.n}</button>`:''}<button class="sf" data-act="rm" data-k="${l.k}">Remove</button></div>`;
+  } else if(is){ const cur=opt('bread',l.bread); tag=`<span class="tg rose">${cur.n} sold out</span>`;
+    const alt=OPT.bread.find(o=>o.id!==cur.id&&!optOut(o)), df=alt?alt.d-cur.d:0;
+    fx=`<div class="fx">${alt?`<button data-act="swapopt" data-k="${l.k}" data-id="${alt.id}">Swap to ${alt.n}${df?` (${df>0?'+':''}${rs(df)})`:''}</button>`:''}<button class="sf" data-act="rm" data-k="${l.k}">Remove item</button></div>`; }
+  const stp=is?'<span></span>':`<div class="stp"><button data-act="ldec" data-k="${l.k}" aria-label="Fewer">${I.minus}</button><span class="num">${l.q}</span><button data-act="linc" data-k="${l.k}" aria-label="More">${I.plus}</button></div>`;
+  return `<div class="ln ${is?'bad':''}">${ph(i.h)}<div><div class="iname">${vm(i.veg)}${i.n}</div>${ch?`<div class="ch">${ch}</div>`:''}${tag}<div class="row">${stp}<span class="iprice num">${rs(unit(l)*l.q)}</span></div>${fx}</div></div>`;
+}
+function bill(){ const sub=total(), gst=sub*0.05, raw=sub+gst, pay=Math.round(raw); return {sub,gst,ro:pay-raw,pay}; }
+function cartView(){
+  const b=bad().length, B=bill(), g=!b?gaps():null;
+  const sug=g?`<div class="sug violet"><span class="ph" style="--h:${g.i.h}"></span><div><small>Completes your table</small><div class="iname">${vm(g.i.veg)}${g.i.n}</div><div class="w">${g.why}</div></div>${addBtn(g.i,true)}</div>`:'';
+  return `<div class="view"><div class="vh"><button class="ib" data-act="back" aria-label="Back">${I.back}</button><h2>Your order</h2><span class="tg grey">Table 6</span></div><div class="scroll" id="cs">${b?`<div class="banner">${cap('sorry')}<div><b>${b} ${b>1?'items need':'item needs'} your attention.</b> Nothing is lost. I have suggested a swap below.</div></div>`:''}<div class="pad" style="padding-top:8px">${S.cart.slice().sort((x,y)=>(!!issue(y))-(!!issue(x))).map(lineHtml).join('')||'<p style="color:var(--ink3);padding:40px 0;text-align:center">Your order is empty.</p>'}</div>${sug}${S.cart.length?'<div class="kn">Add a note for the kitchen</div>':''}<div style="height:16px"></div></div><div class="vb"><div class="bl"><span>Item total${b?' (available items)':''}</span><span class="num">${rs(B.sub)}</span></div><div class="bl"><span>GST 5% (CGST 2.5% + SGST 2.5%)</span><span class="num">₹${B.gst.toFixed(2)}</span></div><div class="bl t"><span>To pay</span><span class="num">${rs(B.pay)}</span></div>${b?`<button class="cta xl warn" data-act="fix"><span>Fix ${b} ${b>1?'items':'item'} to continue</span>${I.arrow}</button>`:`<button class="cta xl ${S.cart.length?'':'off'}" ${S.cart.length?'':'disabled'} data-act="send"><span>Send to kitchen</span><span class="num">${rs(B.pay)}</span></button>`}</div></div>`;
+}
+function statusView(){
+  const s=S.sent;
+  return `<div class="view"><div class="vh"><h2>Order sent</h2><span class="tg grey">Table 6 · No. 41</span></div><div class="scroll"><div class="st-top">${cap('happy')}<div><b>It is with the kitchen${S.known?', Arjun':''}.</b><span>I will let you know the moment it is ready.</span></div></div><div class="steps"><div class="step done"><i>${I.tick}</i>Sent<small>just now</small></div><div class="step now"><i></i>Being prepared<small>about 15 min</small></div><div class="step"><i></i>Ready</div><div class="step"><i></i>Served</div></div><div class="sum">${s.lines.map(l=>`<div class="r"><span>${l.q} × ${it(l.item).n}</span><span class="num">${rs(unit(l)*l.q)}</span></div>`).join('')}<div class="r" style="color:var(--ink2);font-size:var(--t-sm)"><span>GST 5%</span><span class="num">₹${s.gst.toFixed(2)}</span></div><div class="r" style="font-weight:700;border-top:1px solid #E3E6EB;margin-top:6px;padding-top:9px"><span>Bill so far</span><span class="num">${rs(s.pay)}</span></div></div><div class="bfoot"><span class="av"></span><div><b>Cooked fresh in Old Delhi</b><span>Thank you for eating with us. Imran</span></div></div><div style="height:16px"></div></div><div class="vb"><p class="pay" style="margin:0 0 8px">You pay at the end of your meal.</p><div class="two"><button class="sf" data-act="more">Order more</button><button class="cta xl" data-act="paid"><span>Pay bill</span><span class="num">${rs(s.pay)}</span></button></div></div></div>`;
+}
+const toast=()=>S.toast?`<div class="toast ${S.toast.kind}">${S.toast.kind==='bad'?I.warn:I.bolt}<span>${S.toast.text}</span></div>`:'';
+function render(){
+  const keep={}; ['sc','cs','msgs'].forEach(id=>{const e=document.getElementById(id); if(e) keep[id]=e.scrollTop;});
+  document.getElementById('phone').innerHTML=menu()+(S.view==='cart'?cartView():S.view==='status'?statusView():'')+(S.sheet?sheet():'')+(S.cmp?compare():'')+(S.chat?chat():'')+toast();
+  if(window.applyBrand) applyBrand();
+  ['sc','cs'].forEach(id=>{const e=document.getElementById(id); if(e&&keep[id]) e.scrollTop=keep[id];});
+  const m=document.getElementById('msgs'); if(m) m.scrollTop=m.scrollHeight;
+  S.bump=false; panel();
+}
+function showToast(kind,text){ S.toast={kind,text}; clearTimeout(S._t); S._t=setTimeout(()=>{S.toast=null;render();},3000); }
+function fly(src){ const bar=document.querySelector('.cbar'); if(!src||!bar||matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const s=src.getBoundingClientRect(), b=bar.getBoundingClientRect(), d=document.createElement('div'); d.className='fly'; d.style.backgroundImage=getComputedStyle(src).backgroundImage;
+  d.style.left=(s.left+s.width/2-23)+'px'; d.style.top=(s.top+s.height/2-23)+'px'; document.body.appendChild(d);
+  const dx=(b.left+44)-(s.left+s.width/2), dy=(b.top+b.height/2)-(s.top+s.height/2);
+  try{ d.animate([{transform:'translate(0,0) scale(1.1)',opacity:1},{transform:`translate(${dx*.6}px,${dy*.35-30}px) scale(.8)`,opacity:1,offset:.45},{transform:`translate(${dx}px,${dy}px) scale(.3)`,opacity:.1}],{duration:560,easing:'cubic-bezier(.4,0,.2,1)'}); }catch(e){}
+  setTimeout(()=>d.remove(),580); }
+function addLine(item,portion,bread,srcSel,flashKey){
+  const k=portion?`${item}|${portion}|${bread}`:item, ex=S.cart.find(l=>l.k===k);
+  if(ex) ex.q++; else S.cart.push({k,item,portion,bread,q:1});
+  S.bump=true; S.flash=flashKey||item; render(); fly(document.querySelector(srcSel||`[data-src="${item}"] .ph`));
+  clearTimeout(S._f); S._f=setTimeout(()=>{S.flash=null; if(flashKey==='sheet') S.sheet=null; render();},750);
+}
+function setStock(key,val){
+  S.stock[key]=val; const name=NAME[key], inCart=S.cart.some(l=>l.item===key||(l.bread&&opt('bread',l.bread).stock===key));
+  S.log.unshift({t:ago(),text:`Staff ${val?'marked':'restocked'} ${name}.`});
+  if(S.sheet&&val&&S.sheet.bread&&opt('bread',S.sheet.bread).stock===key) S.sheet.bread=null;
+  showToast(val?'bad':'good', val?`${name} just sold out.${inCart?' Check your order.':''}`:`${name} is back.`);
+  render();
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]'); if(!b||b.disabled) return; const a=b.dataset.act, id=b.dataset.id, k=b.dataset.k;
+  switch(a){
+    case 'add': { e.stopPropagation(); const i=it(id); if(out(id)) return; if(i.custom||i.c==='combo'){ if(i.c==='combo'){ addLine(id); return; } S.chat=null; S.cmp=null; S.sheet={item:id,portion:null,bread:null}; break; } addLine(id); return; }
+    case 'dec': { const l=S.cart.find(x=>x.item===id); if(l){ l.q--; if(l.q<=0) S.cart=S.cart.filter(x=>x!==l);} break; }
+    case 'usual': { const br=optOut(opt('bread','rumaliO'))?'khameeriO':'rumaliO'; addLine('seekh','full',br,'.usual .ph','usual'); return; }
+    case 'open': S.sheet={item:id,portion:null,bread:null}; break;
+    case 'pick': S.sheet[b.dataset.g]=id; break;
+    case 'closesheet': S.sheet=null; break;
+    case 'addsheet': { const s=S.sheet; addLine(s.item,s.portion,s.bread,'.sh .hero','sheet'); return; }
+    case 'cmp': { const a0=it(id), o=ITEMS.find(x=>x.c===a0.c&&x.id!==id&&(!S.veg||x.veg))||ITEMS.find(x=>x.id!==id); S.sheet=null; S.cmp={a:id,b:o.id}; break; }
+    case 'cmpopen': S.chat=null; S.cmp={a:b.dataset.a,b:b.dataset.b}; break;
+    case 'cmpnext': { const a0=it(S.cmp.a), pool=ITEMS.filter(x=>x.id!==a0.id&&x.k&&(!S.veg||x.veg)), ix=pool.findIndex(x=>x.id===S.cmp.b); S.cmp.b=pool[(ix+1)%pool.length].id; break; }
+    case 'cmpadd': { const i=it(id); if(i.custom){ S.cmp=null; S.sheet={item:id,portion:null,bread:null}; break; } addLine(id,null,null,'.col .ph','cmp-'+id); return; }
+    case 'closecmp': S.cmp=null; break;
+    case 'chat': S.chat=S.chat||{msgs:[],about:null}; break;
+    case 'ask': S.sheet=null; S.chat={msgs:[],about:id}; break;
+    case 'q': { const t=QS.find(x=>x[0]===id)[1]; S.chat.msgs.push({q:t},{a:answer(id)}); break; }
+    case 'callstaff': showToast('good','Someone from the team is on the way.'); S.log.unshift({t:ago(),text:'Guest at Table 6 asked for a team member (allergen question).'}); break;
+    case 'closechat': S.chat=null; break;
+    case 'veg': S.veg=!S.veg; if(!vis().some(i=>i.c===S.tab)) S.tab='starter'; break;
+    case 'tab': { S.tab=id; render(); const el=document.getElementById('c-'+id), sc=document.getElementById('sc'); if(el&&sc) sc.scrollTop=el.offsetTop-64; return; }
+    case 'cart': S.view='cart'; break;
+    case 'back': S.view='menu'; break;
+    case 'ldec': { const l=S.cart.find(x=>x.k===k); l.q--; if(l.q<=0) S.cart=S.cart.filter(x=>x!==l); break; }
+    case 'linc': S.cart.find(x=>x.k===k).q++; S.bump=true; break;
+    case 'rm': S.cart=S.cart.filter(x=>x.k!==k); showToast('good','Removed from your order.'); break;
+    case 'swapitem': { const l=S.cart.find(x=>x.k===k), ex=S.cart.find(x=>x.k===id); if(ex){ ex.q+=l.q; S.cart=S.cart.filter(x=>x!==l);} else { l.item=id; l.k=id; delete l.portion; delete l.bread; } showToast('good',`Swapped for ${it(id).n}.`); break; }
+    case 'swapopt': { const l=S.cart.find(x=>x.k===k); l.bread=id; l.k=`${l.item}|${l.portion}|${id}`; showToast('good',`Swapped to ${opt('bread',id).n}.`); break; }
+    case 'fix': { const el=document.querySelector('.ln.bad'); if(el) el.scrollIntoView({block:'center'}); return; }
+    case 'send': { const B=bill(); S.sent={lines:S.cart.map(l=>({...l})),gst:B.gst,pay:B.pay}; S.cart=[]; S.view='status'; S.log.unshift({t:ago(),text:'Order No. 41 sent to the kitchen.'}); break; }
+    case 'more': S.view='menu'; break;
+    case 'paid': showToast('good','This is where UPI payment opens.'); break;
+    case 'stock': setStock(id,!S.stock[id]); return;
+    case 'known': S.known=id==='1'; break;
+    case 'reset': S.stock={}; S.log.unshift({t:ago(),text:'Everything restocked.'}); break;
+    default: return;
+  }
+  render();
+});
+function panel(){
+  const sw=(id,label,sub)=>`<div class="ctl"><div>${label}<small>${sub}</small></div><button class="tw red ${S.stock[id]?'on':''}" data-act="stock" data-id="${id}" role="switch" aria-checked="${!!S.stock[id]}" aria-label="${label} sold out"></button></div>`;
+  document.getElementById('panel').innerHTML=`
+  <div class="card"><h3>Guest</h3><p>Switch between a returning guest and a first visit.</p><div class="seg"><button class="${S.known?'on':''}" data-act="known" data-id="1">Returning: Arjun</button><button class="${S.known?'':'on'}" data-act="known" data-id="0">First visit</button></div></div>
+  <div class="card"><h3>Kitchen (simulated)</h3><p>Mark things sold out while the guest is ordering.</p>${sw('galouti','Galouti Kebab','Item')}${sw('seekh','Seekh Kebab','Item with choices')}${sw('rumali','Rumali roti','An item, and a choice inside Seekh Kebab')}${sw('khameeri','Khameeri roti','The other bread choice')}${sw('tukda','Shahi Tukda','Often suggested')}<button class="rst" data-act="reset">Restock everything</button></div>
+  <div class="card"><h3>Things to try</h3><ol class="try"><li><b>Add Galouti.</b> The button turns green, the dish flies to the cart bar.</li><li><b>Tap a dish.</b> Nutrition shows at once. Try Compare.</li><li><b>Tap Captain</b> (the face above the cart bar) and ask a question.</li><li><b>Open the order,</b> then sell out Galouti from the kitchen.</li><li><b>Add your usual,</b> then sell out Rumali roti.</li><li><b>Send to kitchen</b> to see the order status.</li></ol></div>
+  <div class="card"><h3>Live feed</h3><div style="font-size:var(--t-sm);color:var(--ink2);display:flex;flex-direction:column;gap:6px">${S.log.length?S.log.slice(0,5).map(l=>`<div><span class="num" style="color:var(--ink3)">${l.t}</span> ${l.text}</div>`).join(''):'<span style="color:var(--ink3)">No changes yet.</span>'}</div></div>`;
+}
+</script>
+<script src="brand.js"></script>
+<script>render();</script>
+</body>
+</html>

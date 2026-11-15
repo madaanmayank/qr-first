@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clean White v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Noto+Sans+Devanagari:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="v2.css">
+</head>
+<body>
+<header>
+  <div>
+    <h1>Clean White v2</h1>
+    <p>The brand is Qissa Kebab House: logo, cover, tagline, story and signature dish appear on every screen. One font (Inter) in four weights. White background only. Rounded shapes. Large item images. Bold buttons for the actions that matter, and a fixed colour for each kind of element. Item names are the same size and weight on every screen.</p>
+  </div>
+  <div class="sw">Button colour
+    <button class="on" style="--c:#B3261E" data-c="#B3261E" aria-label="Spice red"></button>
+    <button style="--c:#1F6FEB" data-c="#1F6FEB" aria-label="Blue"></button>
+    <button style="--c:#0E8A5F" data-c="#0E8A5F" aria-label="Green"></button>
+    <button style="--c:#111827" data-c="#111827" aria-label="Black"></button>
+  </div>
+</header>
+<main>
+
+<!-- 1. Menu -->
+<div>
+<div class="screen">
+  <div class="scroll">
+    <div data-brand-head data-table="Table 6"></div>
+    <div class="hello pad"><h2>Good evening, <em>Arjun</em></h2><p>Good to see you again. You were last here on Diwali weekend.</p></div>
+    <div class="usual amber">
+      <span class="ph" style="--h:14"></span>
+      <div><small>Your usual</small><div class="iname"><span class="vm nv"></span>Seekh Kebab</div><div class="d">Full, extra hot, with rumali roti</div></div>
+      <div class="row"><span class="iprice num">₹510</span><button class="cta md">Add again</button></div>
+    </div>
+    <div class="chips">
+      <button class="chip"><span class="vm"></span>Veg only</button>
+      <button class="chip tone violet"><svg viewBox="0 0 24 24"><rect x="5" y="7" width="11" height="14" rx="2"/><path d="M8 4h9.5A1.5 1.5 0 0119 5.5V17"/></svg>Play to order</button>
+    </div>
+    <div class="sec"><h3 class="h">Picked for you</h3><span class="tg violet">For you</span></div>
+    <div class="rail">
+      <div class="pc"><span class="ph" style="--h:20"></span><div class="iname"><span class="vm nv"></span>Galouti Kebab</div><div class="why">You liked the seekh. This is its softer cousin.</div><div class="row"><span class="iprice num">₹320</span><button class="soft"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add</button></div></div>
+      <div class="pc"><span class="ph" style="--h:40"></span><div class="iname"><span class="vm"></span>Shahi Tukda</div><div class="why">You skipped dessert last time.</div><div class="row"><span class="iprice num">₹140</span><button class="soft"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add</button></div></div>
+    </div>
+    <div data-brand-story></div>
+    <div class="tabs"><span class="on">Kebabs</span><span>Mains</span><span>Breads</span><span>Sweets</span></div>
+    <div class="sec" style="padding-bottom:0"><h3 class="h">Kebabs</h3><span class="ihi">4 items</span></div>
+    <div class="pad">
+      <div class="it">
+        <div><div class="iname"><span class="vm nv"></span>Seekh Kebab</div><div class="ihi">सीख कबाब</div><div class="idesc">Hand-minced mutton, charcoal grilled on the skewer.</div><div class="meta"><span class="iprice num">₹260</span><span class="tg brand">Our signature</span><span class="tg blue">Customisable</span></div></div>
+        <div class="side"><span class="ph" style="--h:14"></span><button class="cta md"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add</button></div>
+      </div>
+      <div class="it">
+        <div><div class="iname"><span class="vm nv"></span>Galouti Kebab</div><div class="ihi">गलौटी कबाब</div><div class="idesc">So soft it was made for a toothless nawab.</div><div class="meta"><span class="iprice num">₹320</span></div></div>
+        <div class="side"><span class="ph" style="--h:20"></span><button class="cta md"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add</button></div>
+      </div>
+      <div class="it">
+        <div><div class="iname"><span class="vm"></span>Paneer Tikka</div><div class="ihi">पनीर टिक्का</div><div class="idesc">Thick-cut paneer, mustard and curd.</div><div class="meta"><span class="iprice num">₹280</span></div></div>
+        <div class="side"><span class="ph" style="--h:36"></span><button class="cta md"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="bar"><button class="cta xl"><span>2 items <small class="num">· ₹770</small></span><span>View order</span></button></div>
+</div>
+<div class="cap"><b>Menu.</b> Personal welcome, large images, one bold Add per item.</div>
+</div>
+
+<!-- 2. Item -->
+<div>
+<div class="screen">
+  <div class="scroll">
+    <div class="ph hero" style="--h:14"><button class="ib x" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="pad">
+      <h2 class="ttl"><span class="vm nv"></span>Seekh Kebab</h2>
+      <div class="sub"><span class="ihi">सीख कबाब</span><span class="iprice num">₹260</span></div>
+      <div class="idesc" style="margin-top:8px">Hand-minced mutton, charcoal grilled on the skewer.</div>
+    </div>
+    <div class="like amber"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2"/></svg><span>Set <b>like last time</b>, Arjun.</span></div>
+    <div class="grp">
+      <div class="gh"><b>Portion</b><span class="tg green"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Done</span></div>
+      <div class="opt"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>Half, 2 pieces</span><span></span></div>
+      <div class="opt on"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>Full, 4 pieces</span><span class="num">+ ₹220</span></div>
+    </div>
+    <div class="grp">
+      <div class="gh"><b>Bread</b><span class="tg blue">Up to 2</span></div>
+      <div class="opt sq on"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>Rumali roti</span><span class="num">+ ₹30</span></div>
+      <div class="opt sq"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>Khameeri roti</span><span class="num">+ ₹40</span></div>
+    </div>
+    <div class="grp" style="padding-bottom:18px">
+      <div class="gh"><b>Spice level</b><span class="tg green"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Done</span></div>
+      <div class="opt"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>Regular</span><span></span></div>
+      <div class="opt on"><i><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i><span>Extra hot</span><span></span></div>
+    </div>
+  </div>
+  <div class="foot">
+    <div class="qty"><span><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></span>1<span><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></div>
+    <button class="cta xl"><span>Add to order</span><span class="num">₹510</span></button>
+  </div>
+</div>
+<div class="cap"><b>Item.</b> The dish leads. Last time's choices are already set.</div>
+</div>
+
+<!-- 3. Cart -->
+<div>
+<div class="screen">
+  <div class="scroll">
+    <div class="ct"><h2>Your order</h2><span>Table 6</span></div>
+    <div class="pad">
+      <div class="ln"><span class="ph" style="--h:14"></span><div><div class="iname"><span class="vm nv"></span>Seekh Kebab</div><div class="ch">Full, rumali roti, extra hot</div><div class="row"><div class="stp"><span><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></span>1<span><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></div><span class="iprice num">₹510</span></div></div></div>
+      <div class="ln"><span class="ph" style="--h:10"></span><div><div class="iname"><span class="vm"></span>Dal Makhani</div><div class="ch">दाल मखनी</div><div class="row"><div class="stp"><span><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></span>1<span><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span></div><span class="iprice num">₹260</span></div></div></div>
+    </div>
+    <div class="sug violet"><span class="ph" style="--h:40"></span><div><small>For you</small><div class="iname"><span class="vm"></span>Shahi Tukda</div><div class="w">You skipped dessert last time.</div></div><button class="soft"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>₹140</button></div>
+    <div class="kn">Add a note for the kitchen</div>
+    <div class="bill">
+      <div><span>Item total</span><span class="num">₹770</span></div>
+      <div><span>CGST 2.5%</span><span class="num">₹19.25</span></div>
+      <div><span>SGST 2.5%</span><span class="num">₹19.25</span></div>
+      <div><span>Round off</span><span class="num">₹0.50</span></div>
+      <div class="tot"><span>To pay</span><span class="num">₹809</span></div>
+    </div>
+    <div class="bfoot"><span class="av"></span><div><b>Cooked fresh in Old Delhi</b><span>Thank you for eating with us. Imran</span></div></div>
+    <div style="height:16px"></div>
+  </div>
+  <div class="bar"><p class="pay">You pay at the end of your meal.</p><button class="cta xl"><span>Send to kitchen</span><span class="num">₹809</span></button></div>
+</div>
+<div class="cap"><b>Order.</b> One clear action, the bill in plain lines.</div>
+</div>
+
+</main>
+<script>
+document.querySelectorAll('.sw button').forEach(b => b.addEventListener('click', () => {
+  document.documentElement.style.setProperty('--p', b.dataset.c);
+  document.querySelectorAll('.sw button').forEach(x => x.classList.toggle('on', x === b));
+}));
+</script>
+<script src="brand.js"></script>
+</body>
+</html>
