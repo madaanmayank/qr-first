@@ -288,7 +288,7 @@ Each uses the event envelope in [03-domain-model.md](03-domain-model.md) section
 ## 1i. After an order (15 Nov 2026)
 
 - **Add-on window:** for 5 minutes after a round is sent, the success page shows "Missed something? Add it now and it goes with this order" with a running timer and a few quick dishes. Anything sent inside the window joins the same round ("Added to your order"); after it, a new round starts.
-- **Sending from the success page:** once the guest adds dishes there, the next-round card turns into the brand colour with the count and total, and the bottom bar becomes Review and "Send N dishes" (Pay bill steps back). A dish with a sold-out problem sends the guest to the cart first.
+- **Sending from the success page:** once the guest adds dishes there, the bottom bar becomes one "Send N dishes" button (Pay bill steps back). It never sends on one tap: a bottom drawer lists each dish with its choices, quantity (still editable) and price, the amount it adds to the bill, and whether it goes with the current order (time left shown) or starts a new round. Only "Confirm and send" sends; "Not yet" keeps the dishes. A dish with a sold-out problem sends the guest to the cart first.
 - **Add animation:** every add flies from the photo nearest the tapped button, wherever it is; it lands in the cart bar when that is visible, otherwise in the tapped button.
 
 - The success page points to the waiter right away: a card with Call waiter, Water, Cutlery and The bill.
