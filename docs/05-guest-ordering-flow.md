@@ -293,7 +293,8 @@ Each uses the event envelope in [03-domain-model.md](03-domain-model.md) section
 - **Suggestions are calm and stable (founder, 15 Nov).** A suggestion list is worked out once per screen visit (cart pairing) or per round (meal track, "Still room for more?") and never grows or reshuffles while the guest adds from it: an added dish stays in place with a green tick. Lists stay short (two for pairing and the meal track, three for the add-on window), the suggested course stays the same until the round is sent, and one dish never appears in two suggestion lists at once.
 
 - The success page points to the waiter right away: a card with Call waiter, Water, Cutlery and The bill.
-- If the guest goes back to the menu within 10 minutes of ordering, a three-step tour shows once: the waiter button, table games and ordering more. It can be skipped.
+- If the guest goes back to the menu within 10 minutes of ordering, a two-step tour shows once: the waiter button and table games. It can be skipped.
 - Table games (a short food quiz and a spin to pick who chooses dessert) sit beside Play to order, and a "Your food is on its way" card leads to them after an order.
 - After payment, each dish gets a thumbs up or down, with reason chips on a thumbs down. Guests who shared a number are asked the same on WhatsApp.
+- "Your meal" sits on the menu after the first category, never at the top (founder: a good-to-have), and has no tour step.
 - "Your meal" is a course track: one node per course (a photo when served, a pulsing ring for the next course), a progress bar and one clear next step.
