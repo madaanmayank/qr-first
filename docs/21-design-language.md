@@ -228,7 +228,7 @@ These override the starting tokens in section 9 and the three first directions, 
 - **Suggestions** shimmer once when they appear. A suggestion row always shows a third dish half cut off, which nudges once, so guests see there is more.
 - **Colour sits on elements, not backgrounds.** Chips, tiles and cards stay white or light grey; colour goes on icons and text. Suggested questions are two slowly drifting rows of plain chips with coloured text, which pause when touched.
 - **No lonely words.** A heading or short line never leaves one or two words alone on its last line: short text balances its lines, body text avoids a single last word, and copy is shortened where that reads better.
-- **Categories are clearly separated:** a soft 8px grey band between categories, and a roomier header with the count beside the name.
+- **Categories read as chapters, not cuts:** generous space above each category, the name with its count on the same line, and a fine rule under the header that starts in the brand colour and fades out. No grey bands across the page (founder: they look like the page has been cut).
 - **Class names are unique.** A new style never reuses a class name that already exists (two clashes, `g2` and `gm`, broke the menu grid on 15 Nov).
 
 ## 14. Screen hierarchy (UX first)
