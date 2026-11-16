@@ -46,6 +46,13 @@ This is the only character allowed in the interface. See the rule in [AGENTS.md]
 
 ## 3b. The button and chat, updated (15 Nov 2026, evening)
 
+- **Updated 16 Nov 2026 (founder):**
+  - The six buttons are Tissues, Waiter, Water, Cutlery, Bill and Concern (Tissues replaced Order). Once the conversation starts they stay pinned as a compact strip under the header, so every action is always one tap away.
+  - The conversation starts with the guest's mood: "What are you in the mood for right now?" (Something light, Very hungry, Something spicy, Comfort food, Vegetarian, Something sweet), then the kind of dish (Kebabs, Curries, Biryani, Breads and sides, Drinks, Surprise me), then three picks. Refine chips (Milder, Spicier, Veg only, Under ₹300, Something else) narrow the picks as the guest goes, and "Help me choose" restarts it any time.
+  - Context: the opening line uses the guest's last visit ("Last time you loved the Seekh Kebab") and, after a round, what the table has had; picks skip dishes already ordered or in the cart and lean to the next course.
+  - The guest can type anything. The waiter reads the intent (a request, a concern, an allergen question, a mood, a kind of dish, a dish name) and answers or acts; requests keep the guest's own words. Picks show as round plates with a + on the edge, never as tiles.
+  - The prototype reads intent with simple on-device rules so it runs without a key. The product uses the AI model in [18-ai-integration.md](18-ai-integration.md) with the same tools and the honesty rules in section 9.
+
 - **The journey starts with the waiter (founder, 15 Nov).** After the entry screen, the waiter chat opens once per visit over the menu, with the same contents as always: the greeting and the six tiles (Order, Waiter, Water, Cutlery, Bill, Concern). Closing it shows the usual menu. The restaurant can switch the start to the menu instead. The tutorial adds only a tip; it never changes the chat's options.
 - **The chat tutorial is one tip under the six tiles:** "Use any of these buttons to do what you need: order, call the waiter, ask for water, cutlery or the bill, or raise a concern." It shows the first time the chat opens and disappears after the first tap. There is no separate bell button.
 - **The pill stays quiet.** Its label tours Ask me, Water?, Call waiter and Cutlery five times in the first minute or so, then the pill rests as his face with a blink. It speaks only at real moments (a greeting, a request confirmed, food on its way). No random greetings.

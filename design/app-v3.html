@@ -1951,6 +1951,26 @@ p,.ddesc,.d,.why,.m,.nlab,.banner div{text-wrap:pretty}
 .ads{display:flex;justify-content:space-between;align-items:baseline;padding:14px 0 0;font-size:14px;color:var(--ink2)}
 .ads b{font-size:20px;font-weight:600;color:var(--ink)}
 @media (prefers-reduced-motion:reduce){.adv,.adk,.adk path,.adr{animation:none}.adk path{stroke-dashoffset:0}}
+
+/* chat: picks as round plates (no tiles), buttons always within reach, a real input */
+.crow{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;margin:10px -4px 2px;padding:6px 4px 4px}
+.crow::-webkit-scrollbar{display:none}
+.crow .m2p{width:86px}
+.crow .m2i{width:78px;height:78px;animation:none}
+.crow .m2n{display:flex;align-items:flex-start;gap:4px;justify-content:center;font-family:"Plus Jakarta Sans",system-ui,sans-serif}
+.crow .m2n .vm{margin-top:2px}
+.crow .m2c{font-family:"Plus Jakarta Sans",system-ui,sans-serif}
+.aic2{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px;padding:8px 10px;border-bottom:1px solid var(--line);background:#fff}
+.aic2 button{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;padding:0;font-size:10px;font-weight:600;color:var(--ink2)}
+.aic2 i{width:32px;height:32px;border-radius:11px;display:grid;place-items:center;background:#F4F4F6;color:var(--c)}
+.aic2 svg{width:16px;height:16px}
+.aic2 button:active i{transform:scale(.9)}
+.inp2{display:flex;align-items:center;gap:8px;margin:4px 16px 16px;height:48px;padding:0 6px 0 14px;border-radius:16px;border:1.5px solid #DDE1E7;background:#fff}
+.inp2:focus-within{border-color:#8B5CF6}
+.inp2 input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:14px;color:var(--ink)}
+.inp2 button{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#7C3AED;color:#fff;padding:0}
+.inp2 button svg{width:16px;height:16px}
+.msgs .m .mopts{flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -2300,9 +2320,60 @@ function compare(){
   return `<div class="ov"><div class="scrim" data-act="closecmp"></div><div class="sh tall${D.f.ordering?' hasf':''}"><div class="grab"></div><div class="cmp-h"><h2>Side by <b>side</b></h2><button class="ib" data-act="closecmp" aria-label="Close">${I.x}</button></div><div class="shs"><div class="verd ${D.f.captain?'':'nc'}">${D.f.captain?cap('happy'):''}<div><small>${D.f.captain?'Captain':'In short'}</small>${verdict(a,b)}</div></div><div class="cols">${col(a,'a')}${col(b,'b')}</div><div class="facts">${f('Kcal · about',a.k?r10(a.k):'Varies',b.k?r10(b.k):'Varies',a.k,b.k)}${f('Protein · about',a.pr?a.pr+' g':'Varies',b.pr?b.pr+' g':'Varies',a.pr,b.pr)}${f('Spice',a.sp||'None',b.sp||'None')}${f('Course',CN[a.c],CN[b.c])}${f('Diet',a.veg?'Veg':'Non-veg',b.veg?'Veg':'Non-veg')}</div><div class="nutn" style="margin-bottom:14px"><span class="tg grey">AI estimate</span>Numbers are per serving.</div></div>${D.f.ordering?`<div class="cfoot">${btn(a)}${btn(b)}</div>`:''}</div></div>`;
 }
 /* Captain's answers come only from the menu data above. */
+/* ===== the waiter's conversation: mood first, then the kind of dish, then picks that refine ===== */
+const MOODS=[['light','Something light'],['hungry','Very hungry'],['spicy','Something spicy'],['comfort','Comfort food'],['veg','Vegetarian'],['sweet','Something sweet']];
+const TYPES=[['kebabs','Kebabs'],['curries','Curries'],['biryani','Biryani'],['breads','Breads and sides'],['drinks','Drinks'],['any','Surprise me']];
+const REFINE=[['milder','Milder'],['spicier','Spicier'],['vegonly','Veg only'],['cheap','Under ₹300'],['other','Something else']];
+const PLAB=Object.fromEntries([...MOODS.map(([k,t])=>['m:'+k,t]),...TYPES.map(([k,t])=>['t:'+k,t]),...REFINE.map(([k,t])=>['r:'+k,t]),['r:reset','Start again']]);
+const doneIds=()=>new Set([...sentLines(),...S.cart].map(l=>l.item));
+function nextCourseKey(){ const P=plan()||[], has=k=>[...sentLines(),...S.cart].some(l=>!l.combo&&it(l.item).c===k); const n=P.find(x=>!has(x.key)); return n?n.key:null; }
+function rec(P){ const done=doneIds(); let L=ITEMS.filter(i=>i.c!=='combo'&&!out(i.id)&&!done.has(i.id));
+  const tp={kebabs:i=>i.c==='starter',curries:i=>i.c==='main',biryani:i=>i.c==='rice',breads:i=>i.c==='bread'||i.c==='side',drinks:i=>i.c==='drink'}[P.type];
+  const md={light:i=>i.k&&i.k<360,hungry:i=>['main','rice'].includes(i.c),spicy:i=>i.sp==='Hot'||i.sp==='Medium',comfort:i=>['main','rice'].includes(i.c)&&i.sp!=='Hot',veg:i=>i.veg,sweet:i=>i.c==='dessert'||i.c==='drink'}[P.mood];
+  if(tp) L=L.filter(tp); else if(!P.mood||P.mood==='veg'){ const nc=(sentLines().length||S.cart.length)?nextCourseKey():null; if(nc){ const f=L.filter(i=>i.c===nc); if(f.length) L=f; } }
+  if(md){ const f=L.filter(md); if(f.length) L=f; }
+  if(P.veg||P.mood==='veg'||S.veg) L=L.filter(i=>i.veg);
+  if(P.cheap) L=L.filter(i=>i.p<=300);
+  if(P.spice==='mild') L=L.filter(i=>i.sp!=='Hot'); if(P.spice==='hot') L=L.filter(i=>i.sp==='Hot'||i.sp==='Medium');
+  if(P.skip) L=L.filter(i=>!P.skip.includes(i.id));
+  return L.sort((a,b)=>(b.sig?1:0)-(a.sig?1:0)).slice(0,3).map(i=>i.id); }
+function moodAsk(){ const R2=S.rounds||[], had=[...new Set(sentLines().map(l=>it(l.item).n))].slice(0,2);
+  const lead=R2.length?`You have had ${had.join(' and ')} so far. `:K()?'Last time you loved the Seekh Kebab. ':'';
+  return {mood:'hi',text:`${lead}What are you in the mood for right now?`,opts:MOODS.map(([k,t])=>['m:'+k,t])}; }
+function recAnswer(P,lead){ const ids=rec(P); if(!ids.length) return {mood:'sorry',text:'Nothing on the menu fits all of that right now. Shall we loosen it a little?',opts:[['r:reset','Start again'],['r:other','Something else']]};
+  return {mood:'happy',text:lead||'Here is what I would pick for you.',items:ids,opts:REFINE.map(([k,t])=>['r:'+k,t])}; }
+function chatTurn(id){ const c=S.chat; c.prefs=c.prefs||{}; const P=c.prefs;
+  if(id==='choose'||id==='order') return moodAsk();
+  if(id.startsWith('m:')){ P.mood=id.slice(2); if(P.mood==='sweet') return recAnswer(P,'Something sweet it is.'); return {mood:'explain',text:'Lovely. And what kind of dishes would you like?',opts:TYPES.map(([k,t])=>['t:'+k,t])}; }
+  if(id.startsWith('t:')){ P.type=id.slice(2)==='any'?null:id.slice(2); P.skip=[]; return recAnswer(P,'These should hit the spot.'); }
+  if(id.startsWith('r:')){ const r=id.slice(2); const last=[...c.msgs].reverse().find(m=>m.a&&m.a.items); if(r==='reset'){ c.prefs={}; return moodAsk(); } if(r==='milder') P.spice='mild'; if(r==='spicier') P.spice='hot'; if(r==='vegonly') P.veg=true; if(r==='cheap') P.cheap=true; if(r==='other') P.skip=[...(P.skip||[]),...((last&&last.a.items)||[])];
+    return recAnswer(P,{milder:'Milder ones, then.',spicier:'Turning up the heat.',vegonly:'Only vegetarian now.',cheap:'All under ₹300.',other:'A few different ones.'}[r]); }
+  return answer(id); }
+/* typed questions are read for intent: a request, a concern, a mood, a kind of dish, a dish name or an allergen question */
+function understand(txt){ const t=' '+txt.toLowerCase()+' ', has=(...w)=>w.some(x=>t.includes(x));
+  if(has('gluten','nut','allerg','lactose','dairy free','egg free','vegan')) return {q:'gluten'};
+  if(has('water','paani','pani')) return {act:'water'}; if(has('tissue','napkin')) return {act:'tissues'}; if(has('spoon','fork','cutlery','knife','plate')) return {act:'cutlery'};
+  if(has(' bill','check please','pay ','payment')) return {act:'bill'};
+  if(has('cold','late','slow','wrong','hair','not good','bad ','complain','waiting')) return {q:'concern'};
+  if(has('waiter','someone','manager','help me',' call')) return {act:'help'};
+  if(has('last time','usual','my order','ordered')) return {q:'usual'};
+  const dish=ITEMS.find(i=>t.includes(i.n.toLowerCase())||t.includes(' '+i.id+' ')||(i.n.split(' ')[0].length>3&&t.includes(i.n.split(' ')[0].toLowerCase())));
+  const P=S.chat.prefs=S.chat.prefs||{}; let set=false;
+  if(has('light','healthy','diet','low cal')){ P.mood='light'; set=true; } if(has('hungry','starving','filling','big ')){ P.mood='hungry'; set=true; }
+  if(has('less spic','mild','not spicy','no spice')){ P.spice='mild'; set=true; } else if(has('spicy','hot ','teekha')){ P.spice='hot'; set=true; }
+  if(has('sweet','dessert','meetha')){ P.mood='sweet'; set=true; } if(has(' veg ','vegetarian','no meat')){ P.veg=true; set=true; } if(has('protein','gym')) return {q:'protein'};
+  if(has('kebab','tikka','starter','tandoor')){ P.type='kebabs'; set=true; } if(has('curry','gravy',' main')){ P.type='curries'; set=true; } if(has('biryani','rice')){ P.type='biryani'; set=true; }
+  if(has('naan','roti','bread','paratha')){ P.type='breads'; set=true; } if(has('drink','lassi','chai',' tea','soda','sharbat')){ P.type='drinks'; set=true; }
+  if(has('cheap','budget','under 300','under ₹300')){ P.cheap=true; set=true; }
+  if(set&&!dish) return {rec:true}; if(dish) return {dish:dish.id};
+  return {fallback:true}; }
+function dishAnswer(id){ const i=it(id); return {mood:'explain',text:`${i.n}: ${i.d}${i.sp?` ${i.sp} spice.`:''}${i.k?` About ${r10(i.k)} kcal.`:''}`,items:out(id)?[]:[id],opts:[['r:other','Show me similar'],['choose','Help me choose']]}; }
+function sendTyped(){ const inp=document.getElementById('cin'); if(!inp||!S.chat) return; const txt=inp.value.trim(); if(!txt) return; S._bellSeen=true; const u=understand(txt); S.chat.msgs.push({q:txt.replace(/[<>&]/g,'')});
+  if(u.act){ const n=S.chat.msgs.length; const b=document.createElement('button'); b.dataset.act='callfor'; b.dataset.id=u.act; document.body.appendChild(b); b.click(); b.remove(); if(S.chat&&S.chat.msgs[n]&&S.chat.msgs[n].q){ S.chat.msgs.splice(n,1); render(); } return; }
+  S.chat.msgs.push({typing:true}); render(); setTimeout(()=>{ if(!S.chat) return; const m=S.chat.msgs, ix=m.findIndex(x=>x.typing); const a=u.q?chatTurn(u.q):u.rec?recAnswer(S.chat.prefs,'Got it. How about these?'):u.dish?dishAnswer(u.dish):{mood:'think',text:'I can help you choose a dish, answer a question about the menu, bring water, cutlery, tissues or the bill, or pass a concern to the manager.',opts:[['choose','Help me choose'],['popular','What is popular?'],['concern','Something is not right']]}; if(ix>=0) m[ix]={a}; render(); },650); }
 function billAsk(){ return {mood:'explain',text:`Shall I bring the bill to Table 6?${S.sent?' It is '+rs(S.sent.pay)+' so far.':''} You can still order more after.`,billask:true}; }
 function confirmView(){ return `<div class="ov"><div class="scrim" data-act="nobill"></div><div class="sh cfm"><div class="grab"></div><div class="cfi">${GI.bill}</div><b>Bring the bill to Table 6?</b><p>${S.sent?'It is <span class="num">'+rs(S.sent.pay)+'</span> so far. ':''}You can still order more after.</p><div class="two"><button class="sf" data-act="nobill">Not yet</button><button class="cta" data-act="callfor" data-id="bill" data-ok="1">Yes, bring it</button></div></div></div>`; }
-const QS=[['popular','What is popular?'],['hungry','I am very hungry'],['light','Something light'],['protein','High protein'],['veg','Best vegetarian'],['spicy','Is the seekh spicy?'],['pair','What goes with nihari?']];
+const QS=[['choose','Help me choose'],['popular','What is popular?'],['hungry','I am very hungry'],['light','Something light'],['protein','High protein'],['veg','Best vegetarian'],['spicy','Is the seekh spicy?'],['pair','What goes with nihari?']];
 const QL={order:'I would like to order',menu:'A question about the menu',request:'I need something',concern:'Something is not right',kebabs:'Kebabs',sweet:'Something sweet',versus:'Seekh or galouti?',gluten:'Is the seekh gluten free?',protein:'High protein, vegetarian',...Object.fromEntries(QS)};
 const CONCERNS=[['cold','Food is cold'],['wait','Waiting too long'],['wrong','Wrong dish'],['other','Something else']];
 function answer(q){
@@ -2327,13 +2398,15 @@ function answer(q){
 }
 function chat(){
   const c=S.chat, last=c.msgs[c.msgs.length-1], mood=last&&last.a?last.a.mood:'hi';
-  const mi=id=>{const i=it(id);return `<div class="mc" data-act="open" data-id="${i.id}">${ph(i.h)}<div class="mcn">${vm(i.veg)}<span>${i.n}</span></div><div class="mcf"><span class="num">${rs(i.p)}</span>${addBtn(i,true)}</div></div>`;};
+  const mi=id=>{const i=it(id);return `<div class="m2p" data-act="open" data-id="${i.id}"><div class="m2i">${ph(i.h)}${qtyOf(i.id)?`<i class="m2ok">${I.tick}</i>`:`<button class="m2a" data-act="add" data-id="${i.id}" aria-label="Add ${i.n}">${I.plus}</button>`}</div><span class="m2n">${vm(i.veg)} ${i.n}</span><span class="m2c num">${rs(i.p)}</span></div>`;};
   const btns=(list,act)=>`<div class="mopts">${list.map(([k,t])=>`<button data-act="${act}" data-id="${k}">${t}</button>`).join('')}</div>`;
-  const body=m=>`${m.a.text}${(m.a.items||[]).length?`<div class="mcs">${m.a.items.map(mi).join('')}</div>`:''}${m.a.opts?btns(m.a.opts,'q'):''}${m.a.usual&&!out('seekh')?`<div class="cnf"><button class="gp1" data-act="usual">Add my usual</button></div>`:''}${m.a.billask&&m===c.msgs[c.msgs.length-1]?`<div class="cnf"><button class="sf" data-act="nobill">Not yet</button><button class="gp1" data-act="callfor" data-id="bill" data-ok="1">Yes, bring the bill</button></div>`:''}${m.a.req?btns([['water','Water'],['bill','The bill'],['cutlery','Cutlery'],['help','Some help']],'callfor'):''}${m.a.concern?btns(CONCERNS,'concern'):''}${m.a.cmp?`<br><button class="mlink" data-act="cmpopen" data-a="${m.a.cmp[0]}" data-b="${m.a.cmp[1]}">${I.cmp}See them side by side</button>`:''}${m.a.call?`<br><button class="mlink" data-act="callfor" data-id="help">${I.bell}Call someone</button>`:''}`;
+  const body=m=>`${m.a.text}${(m.a.items||[]).length?`<div class="crow">${m.a.items.map(mi).join('')}</div>`:''}${m.a.opts?btns(m.a.opts,'q'):''}${m.a.usual&&!out('seekh')?`<div class="cnf"><button class="gp1" data-act="usual">Add my usual</button></div>`:''}${m.a.billask&&m===c.msgs[c.msgs.length-1]?`<div class="cnf"><button class="sf" data-act="nobill">Not yet</button><button class="gp1" data-act="callfor" data-id="bill" data-ok="1">Yes, bring the bill</button></div>`:''}${m.a.req?btns([['water','Water'],['bill','The bill'],['cutlery','Cutlery'],['help','Some help']],'callfor'):''}${m.a.concern?btns(CONCERNS,'concern'):''}${m.a.cmp?`<br><button class="mlink" data-act="cmpopen" data-a="${m.a.cmp[0]}" data-b="${m.a.cmp[1]}">${I.cmp}See them side by side</button>`:''}${m.a.call?`<br><button class="mlink" data-act="callfor" data-id="help">${I.bell}Call someone</button>`:''}`;
   const msgs=c.msgs.map(m=>m.q?`<div class="m me">${m.q}</div>`:m.typing?`<div class="m typ"><i></i><i></i><i></i></div>`:`<div class="m">${body(m)}</div>`).join('');
-  const T=[['q','order','Order',GI.spark,'#7C3AED'],['callfor','help','Waiter',GI.bell,'#DB2777'],['callfor','water','Water',GI.glass,'#0284C7'],['callfor','cutlery','Cutlery',GI.cut,'#0F766E'],['callfor','bill','Bill',GI.bill,'#B45309'],['q','concern','Concern',GI.alert,'#BE123C']];
-  const intro=c.msgs.length?'':`<div class="aic">${T.map(([a,k,t,ic,col])=>`<button style="--c:${col}" data-act="${a}" data-id="${k}"><i>${ic}</i><span>${t}</span></button>`).join('')}</div>`+(!S._bellSeen?`<div class="tiletip">Use any of these buttons to do what you need: order, call the waiter, ask for water, cutlery or the bill, or raise a concern.</div>`:'');
-  return `<div class="ov"><div class="scrim" data-act="closechat"></div><div class="sh tall asheet"><div class="grab"></div><div class="ch-h">${cap(mood)}<div style="flex:1"><b>Your waiter</b><span>Ask, order or call me</span></div><button class="ib" data-act="closechat" aria-label="Close">${I.x}</button></div><div class="shs" id="msgs"><div class="msgs"><div class="m">${K()?'Good evening, Arjun.':'Good evening.'} ${c.about?`Asking about the ${it(c.about).n}? `:''}How can I help?</div>${intro}${msgs}</div></div><div class="sugs sg2">${[0,1].map(r=>{ const row=QS.filter((_,n)=>n%2===r), b=(dup)=>row.map(([k,t],n)=>`<button class="gx${(n*2+r)%4}" data-act="q" data-id="${k}" ${dup?'aria-hidden="true" tabindex="-1"':''}>${t}</button>`).join(''); return `<div class="sgr"><div class="sgt ${r?'rev':''}">${b(false)}${b(true)}</div></div>`; }).join('')}</div><div class="inp">Type or speak to your waiter</div></div></div>`;
+  const T=[['callfor','tissues','Tissues',GI.tissue,'#7C3AED'],['callfor','help','Waiter',GI.bell,'#DB2777'],['callfor','water','Water',GI.glass,'#0284C7'],['callfor','cutlery','Cutlery',GI.cut,'#0F766E'],['callfor','bill','Bill',GI.bill,'#B45309'],['q','concern','Concern',GI.alert,'#BE123C']];
+  const intro=c.msgs.length?'':`<div class="aic">${T.map(([a,k,t,ic,col])=>`<button style="--c:${col}" data-act="${a}" data-id="${k}"><i>${ic}</i><span>${t}</span></button>`).join('')}</div>`+(!S._bellSeen?`<div class="tiletip">Use any of these buttons for what you need: tissues, the waiter, water, cutlery, the bill, or a concern. Or just tell me what you feel like eating.</div>`:'');
+  const strip=c.msgs.length?`<div class="aic2">${T.map(([a,k,t,ic,col])=>`<button style="--c:${col}" data-act="${a}" data-id="${k}" aria-label="${t}"><i>${ic}</i><span>${t}</span></button>`).join('')}</div>`:'';
+  const greet=c.about?`Asking about the ${it(c.about).n}? How can I help?`:c.intro?moodAsk().text:'How can I help?';
+  return `<div class="ov"><div class="scrim" data-act="closechat"></div><div class="sh tall asheet"><div class="grab"></div><div class="ch-h">${cap(mood)}<div style="flex:1"><b>Your waiter</b><span>Ask, order or call me</span></div><button class="ib" data-act="closechat" aria-label="Close">${I.x}</button></div>${strip}<div class="shs" id="msgs"><div class="msgs"><div class="m">${K()?'Good evening, Arjun.':'Good evening.'} ${greet}${c.intro&&!c.msgs.length?btns(MOODS.map(([k,t])=>['m:'+k,t]),'q'):''}</div>${intro}${msgs}</div></div><div class="sugs sg2">${[0,1].map(r=>{ const row=QS.filter((_,n)=>n%2===r), b=(dup)=>row.map(([k,t],n)=>`<button class="gx${(n*2+r)%4}" data-act="q" data-id="${k}" ${dup?'aria-hidden="true" tabindex="-1"':''}>${t}</button>`).join(''); return `<div class="sgr"><div class="sgt ${r?'rev':''}">${b(false)}${b(true)}</div></div>`; }).join('')}</div><div class="inp2"><input id="cin" placeholder="Tell me what you feel like, or ask anything" autocomplete="off" maxlength="120"><button data-act="csend" aria-label="Send">${GI.send}</button></div></div></div>`;
 }
 function lineHtml(l){
   const i=it(l.item), is=issue(l); let ch='';
@@ -2527,6 +2600,7 @@ function setStock(key,val){
   render();
 }
 document.addEventListener('input',e=>{ if(e.target&&e.target.id==='kgen') S.kgen=e.target.value; });
+document.addEventListener('keydown',e=>{ if(e.key==='Enter'&&e.target&&e.target.id==='cin'){ e.preventDefault(); sendTyped(); } });
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]'); if(!b||b.disabled) return; const a=b.dataset.act, id=b.dataset.id, k=b.dataset.k;
   if(S.chat&&a!=='chat') S._bellSeen=true;
@@ -2568,7 +2642,8 @@ document.addEventListener('click',e=>{
     case 'closecmp': S.cmp=null; break;
     case 'chat': S.chat=S.chat||{msgs:[],about:null}; break;
     case 'ask': S.sheet=null; S.chat={msgs:[],about:id}; break;
-    case 'q': { const ql=QS.find(x=>x[0]===id); S.chat.msgs.push({q:QL[id]||(ql&&ql[1])||id},{typing:true}); render(); setTimeout(()=>{ if(!S.chat) return; const m=S.chat.msgs, ix=m.findIndex(x=>x.typing); if(ix>=0) m[ix]={a:answer(id)}; render(); },650); return; }
+    case 'q': { const ql=QS.find(x=>x[0]===id); S.chat.msgs.push({q:PLAB[id]||QL[id]||(ql&&ql[1])||id},{typing:true}); render(); setTimeout(()=>{ if(!S.chat) return; const m=S.chat.msgs, ix=m.findIndex(x=>x.typing); if(ix>=0) m[ix]={a:chatTurn(id)}; render(); },650); return; }
+    case 'csend': { sendTyped(); return; }
     case 'concern': { const t=(CONCERNS.find(x=>x[0]===id)||[])[1]; S.chat.msgs.push({q:t},{a:{mood:'ok',text:'Thank you for telling us. The manager has been alerted and is coming to Table 6.'}}); S.log.unshift({t:ago(),text:`Concern at Table 6: ${t}.`}); break; }
     case 'callstaff': showToast('good','Someone from the team is on the way.'); S.log.unshift({t:ago(),text:'Guest at Table 6 asked for a team member (allergen question).'}); break;
     case 'closechat': S.chat=null; break;
@@ -2587,7 +2662,7 @@ document.addEventListener('click',e=>{
     case 'buzz': S.buzz=true; break;
     case 'closebuzz': S.buzz=false; break;
     case 'buzzask': S.buzz=false; S.chat={msgs:[],about:null}; break;
-    case 'callfor': { const nm={water:'Water',bill:'The bill',cutlery:'Cutlery',help:'Some help'}[id];
+    case 'callfor': { const nm={water:'Water',bill:'The bill',cutlery:'Cutlery',help:'Some help',tissues:'Tissues'}[id];
       /* the bill is never requested on one tap: the guest confirms first */
       if(id==='bill'&&!b.dataset.ok){ if(S.chat){ S.chat.msgs.push({q:'The bill'},{a:billAsk()}); break; } S.buzz=false; S.confirm='bill'; break; }
       if(id==='bill'){ S.confirm=null; if(S.chat){ S.chat.msgs.push({q:'Yes, bring the bill'},{a:{mood:'serve',text:'Done. Someone is bringing the bill to Table 6.'}}); S.log.unshift({t:ago(),text:'Table 6 asked for the bill.'}); break; } }
@@ -2715,7 +2790,7 @@ function qrSvg(text,size,logo){ if(typeof qrcode!=='function') return ''; const 
 
 /* ===== big pass 15 Nov: icons ===== */
 const gi=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
-const GI={bell:gi('<path d="M6 16V11a6 6 0 0112 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 004 0"/>'),glass:gi('<path d="M7 3h10l-1.2 16.2a2 2 0 01-2 1.8h-3.6a2 2 0 01-2-1.8z"/><path d="M7.6 9h8.8"/>'),cut:gi('<path d="M7 3v8a2 2 0 002 2v8M5 3v6M9 3v6M16.5 3c-1.7 1-2.5 3-2.5 6s1 4 2.5 4v8"/>'),ask:gi('<path d="M4 5h16v11H9l-5 4z"/><path d="M10 9.4a2 2 0 113 1.7c-.6.4-1 .8-1 1.6M12 14.4v.1"/>'),spark:gi('<path d="M12 3.5l1.9 5 5 1.9-5 1.9-1.9 5-1.9-5-5-1.9 5-1.9z"/>'),alert:gi('<path d="M12 3.5l9 16h-18z"/><path d="M12 10v4.2M12 17.2v.1"/>'),bill:gi('<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'),dice:gi('<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9h.01M15 15h.01M15 9h.01M9 15h.01" stroke-width="3"/>'),users:gi('<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5"/><circle cx="17" cy="9" r="2.6"/><path d="M16 14.2c2.4.1 4 1.7 4.5 4.3"/>'),up:gi('<path d="M7 11v9H4v-9zM7 11l4-7c1.4 0 2.2 1 2 2.4L12.5 10H19a2 2 0 012 2.3l-1.2 6A2 2 0 0117.8 20H7"/>'),wa:gi('<path d="M4 20l1.3-4A8 8 0 1112 20a8 8 0 01-4-1.1z"/><path d="M9.2 9.2c.2 2.9 2.7 5.4 5.6 5.6l.9-1.5-1.9-1-.8.8a4 4 0 01-2.1-2.1l.8-.8-1-1.9z"/>'),share:gi('<circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.2 10.9l6.6-3.8M8.2 13.1l6.6 3.8"/>'),x:gi('<path d="M6 6l12 12M18 6L6 18"/>'),heart:gi('<path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/>')};
+const GI={tissue:gi('<path d="M5 10h14v9a1 1 0 01-1 1H6a1 1 0 01-1-1z"/><path d="M9 10c0-3 1.4-5 3-6 1.6 1 3 3 3 6"/>'),send:gi('<path d="M5 12h13M13 6l6 6-6 6"/>'),bell:gi('<path d="M6 16V11a6 6 0 0112 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 004 0"/>'),glass:gi('<path d="M7 3h10l-1.2 16.2a2 2 0 01-2 1.8h-3.6a2 2 0 01-2-1.8z"/><path d="M7.6 9h8.8"/>'),cut:gi('<path d="M7 3v8a2 2 0 002 2v8M5 3v6M9 3v6M16.5 3c-1.7 1-2.5 3-2.5 6s1 4 2.5 4v8"/>'),ask:gi('<path d="M4 5h16v11H9l-5 4z"/><path d="M10 9.4a2 2 0 113 1.7c-.6.4-1 .8-1 1.6M12 14.4v.1"/>'),spark:gi('<path d="M12 3.5l1.9 5 5 1.9-5 1.9-1.9 5-1.9-5-5-1.9 5-1.9z"/>'),alert:gi('<path d="M12 3.5l9 16h-18z"/><path d="M12 10v4.2M12 17.2v.1"/>'),bill:gi('<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>'),dice:gi('<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9h.01M15 15h.01M15 9h.01M9 15h.01" stroke-width="3"/>'),users:gi('<circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5"/><circle cx="17" cy="9" r="2.6"/><path d="M16 14.2c2.4.1 4 1.7 4.5 4.3"/>'),up:gi('<path d="M7 11v9H4v-9zM7 11l4-7c1.4 0 2.2 1 2 2.4L12.5 10H19a2 2 0 012 2.3l-1.2 6A2 2 0 0117.8 20H7"/>'),wa:gi('<path d="M4 20l1.3-4A8 8 0 1112 20a8 8 0 01-4-1.1z"/><path d="M9.2 9.2c.2 2.9 2.7 5.4 5.6 5.6l.9-1.5-1.9-1-.8.8a4 4 0 01-2.1-2.1l.8-.8-1-1.9z"/>'),share:gi('<circle cx="6" cy="12" r="2.5"/><circle cx="17" cy="6" r="2.5"/><circle cx="17" cy="18" r="2.5"/><path d="M8.2 10.9l6.6-3.8M8.2 13.1l6.6 3.8"/>'),x:gi('<path d="M6 6l12 12M18 6L6 18"/>'),heart:gi('<path d="M12 20s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 10c0 5.6-7 10-7 10z"/>')};
 const fi=p=>`<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
 const FOOD=[fi('<path d="M8 32L32 8"/><rect x="10" y="21" width="8" height="8" rx="3"/><rect x="16" y="15" width="8" height="8" rx="3"/><rect x="22" y="9" width="8" height="8" rx="3"/>'),fi('<path d="M6 20h28a14 14 0 01-28 0z"/><path d="M14 14c0-2 2-2 2-4M20 14c0-2 2-2 2-4M26 14c0-2 2-2 2-4"/>'),fi('<circle cx="20" cy="20" r="13"/><circle cx="15" cy="16" r="1.4"/><circle cx="24" cy="23" r="1.6"/><circle cx="23" cy="14" r="1"/><circle cx="15" cy="25" r="1"/>'),fi('<path d="M9 16h18v7a8 8 0 01-8 8h-2a8 8 0 01-8-8z"/><path d="M27 18h2a3 3 0 010 6h-2"/><path d="M15 11c0-2 2-2 2-4M21 11c0-2 2-2 2-4"/>'),fi('<path d="M20 5c2 6 9 9 9 17a9 9 0 01-18 0c0-4 2-6 4-8 0 3 1 5 3 5 0-5-1-9 2-14z"/>')];
 
