@@ -1984,6 +1984,22 @@ p,.ddesc,.d,.why,.m,.nlab,.banner div{text-wrap:pretty}
 .vmb .vm{width:11px;height:11px;border-radius:3px}
 .msgs .m:has(.crow) .mopts{margin-top:8px;flex-wrap:nowrap;overflow-x:auto}
 .msgs .mopts button,.msgs .m .mopts button:nth-child(n){height:30px;padding:0 12px;font-size:12px}
+
+/* waiter reactions beside his replies */
+.mrow{display:flex;align-items:flex-end;gap:8px;max-width:100%}
+.mrow>.m{min-width:0}
+.mrow>.m:has(.crow){flex:1}
+.mface{width:34px;height:34px;flex:none;border-radius:50%;object-fit:cover;object-position:50% 12%;background:#fff;box-shadow:0 0 0 1px rgba(15,18,34,.08)}
+.mface.new{animation:wreact .55s cubic-bezier(.3,1.4,.5,1)}
+@keyframes wreact{0%{transform:scale(.6) rotate(-10deg)}60%{transform:scale(1.08) rotate(4deg)}100%{transform:none}}
+.cnf .sf{white-space:nowrap;padding:0 16px}
+@media (prefers-reduced-motion:reduce){.mface.new{animation:none}}
+
+/* bill confirmation in the chat: two equal-height buttons on one line */
+.msgs .cnf{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:nowrap}
+.msgs .cnf .sf,.msgs .cnf .gp1{height:40px;border-radius:99px;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;line-height:1}
+.msgs .cnf .sf{flex:none;padding:0 16px;background:#fff;border:1px solid var(--line);color:var(--ink)}
+.msgs .cnf .gp1{flex:1;min-width:0;padding:0 14px;box-shadow:none}
 </style>
 </head>
 <body>
@@ -2386,7 +2402,7 @@ function dishAnswer(id){ const i=it(id); return {mood:'explain',text:`${i.n}: ${
 function sendTyped(){ const inp=document.getElementById('cin'); if(!inp||!S.chat) return; const txt=inp.value.trim(); if(!txt) return; S._bellSeen=true; const u=understand(txt); S.chat.msgs.push({q:txt.replace(/[<>&]/g,'')});
   if(u.act){ const n=S.chat.msgs.length; const b=document.createElement('button'); b.dataset.act='callfor'; b.dataset.id=u.act; document.body.appendChild(b); b.click(); b.remove(); if(S.chat&&S.chat.msgs[n]&&S.chat.msgs[n].q){ S.chat.msgs.splice(n,1); render(); } return; }
   S.chat.msgs.push({typing:true}); render(); setTimeout(()=>{ if(!S.chat) return; const m=S.chat.msgs, ix=m.findIndex(x=>x.typing); const a=u.q?chatTurn(u.q):u.rec?recAnswer(S.chat.prefs,'Got it. How about these?'):u.dish?dishAnswer(u.dish):{mood:'think',text:'I can help you choose a dish, answer a question about the menu, bring water, cutlery, tissues or the bill, or pass a concern to the manager.',opts:[['choose','Help me choose'],['popular','What is popular?'],['concern','Something is not right']]}; if(ix>=0) m[ix]={a}; render(); },650); }
-function billAsk(){ return {mood:'explain',text:`Shall I bring the bill to Table 6?${S.sent?' It is '+rs(S.sent.pay)+' so far.':''} You can still order more after.`,billask:true}; }
+function billAsk(){ return {mood:'ok',text:`Shall I bring the bill to Table 6?${S.sent?' It is '+rs(S.sent.pay)+' so far.':''} You can still order more after.`,billask:true}; }
 function confirmView(){ return `<div class="ov"><div class="scrim" data-act="nobill"></div><div class="sh cfm"><div class="grab"></div><div class="cfi">${GI.bill}</div><b>Bring the bill to Table 6?</b><p>${S.sent?'It is <span class="num">'+rs(S.sent.pay)+'</span> so far. ':''}You can still order more after.</p><div class="two"><button class="sf" data-act="nobill">Not yet</button><button class="cta" data-act="callfor" data-id="bill" data-ok="1">Yes, bring it</button></div></div></div>`; }
 const QS=[['choose','Help me choose'],['popular','What is popular?'],['hungry','I am very hungry'],['light','Something light'],['protein','High protein'],['veg','Best vegetarian'],['spicy','Is the seekh spicy?'],['pair','What goes with nihari?']];
 const QL={order:'I would like to order',menu:'A question about the menu',request:'I need something',concern:'Something is not right',kebabs:'Kebabs',sweet:'Something sweet',versus:'Seekh or galouti?',gluten:'Is the seekh gluten free?',protein:'High protein, vegetarian',...Object.fromEntries(QS)};
@@ -2416,7 +2432,11 @@ function chat(){
   const mi=id=>{const i=it(id);return `<div class="m2p" data-act="open" data-id="${i.id}"><div class="m2i">${ph(i.h)}${qtyOf(i.id)?`<i class="m2ok">${I.tick}</i>`:`<button class="m2a" data-act="add" data-id="${i.id}" aria-label="Add ${i.n}">${I.plus}</button>`}</div><span class="m2n1">${i.n}</span><span class="m2c num">${rs(i.p)}</span><span class="vmb">${vm(i.veg)}</span></div>`;};
   const btns=(list,act)=>`<div class="mopts">${list.map(([k,t])=>`<button data-act="${act}" data-id="${k}">${t}</button>`).join('')}</div>`;
   const body=m=>`${m.a.text}${(m.a.items||[]).length?`<div class="crow">${m.a.items.map(mi).join('')}</div>`:''}${m.a.opts&&m===c.msgs[c.msgs.length-1]?btns(m.a.opts,'q'):''}${m.a.usual&&!out('seekh')?`<div class="cnf"><button class="gp1" data-act="usual">Add my usual</button></div>`:''}${m.a.billask&&m===c.msgs[c.msgs.length-1]?`<div class="cnf"><button class="sf" data-act="nobill">Not yet</button><button class="gp1" data-act="callfor" data-id="bill" data-ok="1">Yes, bring the bill</button></div>`:''}${m.a.req?btns([['water','Water'],['bill','The bill'],['cutlery','Cutlery'],['help','Some help']],'callfor'):''}${m.a.concern?btns(CONCERNS,'concern'):''}${m.a.cmp?`<br><button class="mlink" data-act="cmpopen" data-a="${m.a.cmp[0]}" data-b="${m.a.cmp[1]}">${I.cmp}See them side by side</button>`:''}${m.a.call?`<br><button class="mlink" data-act="callfor" data-id="help">${I.bell}Call someone</button>`:''}`;
-  const msgs=c.msgs.map(m=>m.q?`<div class="m me">${m.q}</div>`:m.typing?`<div class="m typ"><i></i><i></i><i></i></div>`:`<div class="m">${body(m)}</div>`).join('');
+  /* every reply carries the waiter's face with a matching expression; the newest one reacts */
+  const lastA=[...c.msgs].reverse().find(m=>m.a), face=(m,md)=>`<img class="mface${m===lastA?' new':''}" src="${wsrc(md)}" alt="">`;
+  /* his face shows only where a reaction means something: a request done, the bill, a concern, something sold out, an allergen question */
+  const REACT=['serve','ok','sorry','worry'];
+  const msgs=c.msgs.map(m=>m.q?`<div class="m me">${m.q}</div>`:m.typing?`<div class="m typ"><i></i><i></i><i></i></div>`:REACT.includes(m.a.mood)?`<div class="mrow">${face(m,m.a.mood)}<div class="m">${body(m)}</div></div>`:`<div class="m">${body(m)}</div>`).join('');
   const T=[['callfor','tissues','Tissues',GI.tissue,'#7C3AED'],['callfor','help','Waiter',GI.bell,'#DB2777'],['callfor','water','Water',GI.glass,'#0284C7'],['callfor','cutlery','Cutlery',GI.cut,'#0F766E'],['callfor','bill','Bill',GI.bill,'#B45309'],['q','concern','Concern',GI.alert,'#BE123C']];
   const intro=c.msgs.length?'':`<div class="aic">${T.map(([a,k,t,ic,col])=>`<button style="--c:${col}" data-act="${a}" data-id="${k}"><i>${ic}</i><span>${t}</span></button>`).join('')}</div>`+(!S._bellSeen?`<div class="tiletip">Use any of these buttons for what you need: tissues, the waiter, water, cutlery, the bill, or a concern. Or just tell me what you feel like eating.</div>`:'');
   const strip=c.msgs.length?`<div class="aic2">${T.map(([a,k,t,ic,col])=>`<button style="--c:${col}" data-act="${a}" data-id="${k}" aria-label="${t}"><i>${ic}</i><span>${t}</span></button>`).join('')}</div>`:'';
