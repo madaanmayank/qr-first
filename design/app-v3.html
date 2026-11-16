@@ -1971,6 +1971,19 @@ p,.ddesc,.d,.why,.m,.nlab,.banner div{text-wrap:pretty}
 .inp2 button{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#7C3AED;color:#fff;padding:0}
 .inp2 button svg{width:16px;height:16px}
 .msgs .m .mopts{flex-wrap:wrap}
+
+/* chat picks: plates sit on the page, not in a bubble; one-line names; veg mark on the photo */
+.msgs .m:has(.crow){background:transparent;padding:0;box-shadow:none;max-width:100%;width:100%}
+.msgs .m:has(.crow)>.crow{margin:10px 0 4px}
+.crow{gap:10px;padding:4px 2px 6px}
+.crow .m2p{position:relative;width:92px}
+.crow .m2i{width:84px;height:84px}
+.m2n1{margin-top:8px;max-width:92px;font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crow .m2c{font-size:12px}
+.vmb{position:absolute;left:6px;top:2px;width:18px;height:18px;border-radius:6px;background:#fff;display:grid;place-items:center;box-shadow:0 1px 4px rgba(16,24,40,.18)}
+.vmb .vm{width:11px;height:11px;border-radius:3px}
+.msgs .m:has(.crow) .mopts{margin-top:8px;flex-wrap:nowrap;overflow-x:auto}
+.msgs .mopts button,.msgs .m .mopts button:nth-child(n){height:30px;padding:0 12px;font-size:12px}
 </style>
 </head>
 <body>
@@ -2341,7 +2354,9 @@ function moodAsk(){ const R2=S.rounds||[], had=[...new Set(sentLines().map(l=>it
   const lead=R2.length?`You have had ${had.join(' and ')} so far. `:K()?'Last time you loved the Seekh Kebab. ':'';
   return {mood:'hi',text:`${lead}What are you in the mood for right now?`,opts:MOODS.map(([k,t])=>['m:'+k,t])}; }
 function recAnswer(P,lead){ const ids=rec(P); if(!ids.length) return {mood:'sorry',text:'Nothing on the menu fits all of that right now. Shall we loosen it a little?',opts:[['r:reset','Start again'],['r:other','Something else']]};
-  return {mood:'happy',text:lead||'Here is what I would pick for you.',items:ids,opts:REFINE.map(([k,t])=>['r:'+k,t])}; }
+  const left=REFINE.filter(([k])=>!(k==='milder'&&P.spice==='mild')&&!(k==='spicier'&&P.spice==='hot')&&!(k==='vegonly'&&(P.veg||P.mood==='veg'))&&!(k==='cheap'&&P.cheap));
+  const opts=[...left.filter(([k])=>k!=='other').slice(0,2),['other','Something else']].map(([k,t])=>['r:'+k,t]);
+  return {mood:'happy',text:lead||'Here is what I would pick for you.',items:ids,opts}; }
 function chatTurn(id){ const c=S.chat; c.prefs=c.prefs||{}; const P=c.prefs;
   if(id==='choose'||id==='order') return moodAsk();
   if(id.startsWith('m:')){ P.mood=id.slice(2); if(P.mood==='sweet') return recAnswer(P,'Something sweet it is.'); return {mood:'explain',text:'Lovely. And what kind of dishes would you like?',opts:TYPES.map(([k,t])=>['t:'+k,t])}; }
@@ -2398,15 +2413,15 @@ function answer(q){
 }
 function chat(){
   const c=S.chat, last=c.msgs[c.msgs.length-1], mood=last&&last.a?last.a.mood:'hi';
-  const mi=id=>{const i=it(id);return `<div class="m2p" data-act="open" data-id="${i.id}"><div class="m2i">${ph(i.h)}${qtyOf(i.id)?`<i class="m2ok">${I.tick}</i>`:`<button class="m2a" data-act="add" data-id="${i.id}" aria-label="Add ${i.n}">${I.plus}</button>`}</div><span class="m2n">${vm(i.veg)} ${i.n}</span><span class="m2c num">${rs(i.p)}</span></div>`;};
+  const mi=id=>{const i=it(id);return `<div class="m2p" data-act="open" data-id="${i.id}"><div class="m2i">${ph(i.h)}${qtyOf(i.id)?`<i class="m2ok">${I.tick}</i>`:`<button class="m2a" data-act="add" data-id="${i.id}" aria-label="Add ${i.n}">${I.plus}</button>`}</div><span class="m2n1">${i.n}</span><span class="m2c num">${rs(i.p)}</span><span class="vmb">${vm(i.veg)}</span></div>`;};
   const btns=(list,act)=>`<div class="mopts">${list.map(([k,t])=>`<button data-act="${act}" data-id="${k}">${t}</button>`).join('')}</div>`;
-  const body=m=>`${m.a.text}${(m.a.items||[]).length?`<div class="crow">${m.a.items.map(mi).join('')}</div>`:''}${m.a.opts?btns(m.a.opts,'q'):''}${m.a.usual&&!out('seekh')?`<div class="cnf"><button class="gp1" data-act="usual">Add my usual</button></div>`:''}${m.a.billask&&m===c.msgs[c.msgs.length-1]?`<div class="cnf"><button class="sf" data-act="nobill">Not yet</button><button class="gp1" data-act="callfor" data-id="bill" data-ok="1">Yes, bring the bill</button></div>`:''}${m.a.req?btns([['water','Water'],['bill','The bill'],['cutlery','Cutlery'],['help','Some help']],'callfor'):''}${m.a.concern?btns(CONCERNS,'concern'):''}${m.a.cmp?`<br><button class="mlink" data-act="cmpopen" data-a="${m.a.cmp[0]}" data-b="${m.a.cmp[1]}">${I.cmp}See them side by side</button>`:''}${m.a.call?`<br><button class="mlink" data-act="callfor" data-id="help">${I.bell}Call someone</button>`:''}`;
+  const body=m=>`${m.a.text}${(m.a.items||[]).length?`<div class="crow">${m.a.items.map(mi).join('')}</div>`:''}${m.a.opts&&m===c.msgs[c.msgs.length-1]?btns(m.a.opts,'q'):''}${m.a.usual&&!out('seekh')?`<div class="cnf"><button class="gp1" data-act="usual">Add my usual</button></div>`:''}${m.a.billask&&m===c.msgs[c.msgs.length-1]?`<div class="cnf"><button class="sf" data-act="nobill">Not yet</button><button class="gp1" data-act="callfor" data-id="bill" data-ok="1">Yes, bring the bill</button></div>`:''}${m.a.req?btns([['water','Water'],['bill','The bill'],['cutlery','Cutlery'],['help','Some help']],'callfor'):''}${m.a.concern?btns(CONCERNS,'concern'):''}${m.a.cmp?`<br><button class="mlink" data-act="cmpopen" data-a="${m.a.cmp[0]}" data-b="${m.a.cmp[1]}">${I.cmp}See them side by side</button>`:''}${m.a.call?`<br><button class="mlink" data-act="callfor" data-id="help">${I.bell}Call someone</button>`:''}`;
   const msgs=c.msgs.map(m=>m.q?`<div class="m me">${m.q}</div>`:m.typing?`<div class="m typ"><i></i><i></i><i></i></div>`:`<div class="m">${body(m)}</div>`).join('');
   const T=[['callfor','tissues','Tissues',GI.tissue,'#7C3AED'],['callfor','help','Waiter',GI.bell,'#DB2777'],['callfor','water','Water',GI.glass,'#0284C7'],['callfor','cutlery','Cutlery',GI.cut,'#0F766E'],['callfor','bill','Bill',GI.bill,'#B45309'],['q','concern','Concern',GI.alert,'#BE123C']];
   const intro=c.msgs.length?'':`<div class="aic">${T.map(([a,k,t,ic,col])=>`<button style="--c:${col}" data-act="${a}" data-id="${k}"><i>${ic}</i><span>${t}</span></button>`).join('')}</div>`+(!S._bellSeen?`<div class="tiletip">Use any of these buttons for what you need: tissues, the waiter, water, cutlery, the bill, or a concern. Or just tell me what you feel like eating.</div>`:'');
   const strip=c.msgs.length?`<div class="aic2">${T.map(([a,k,t,ic,col])=>`<button style="--c:${col}" data-act="${a}" data-id="${k}" aria-label="${t}"><i>${ic}</i><span>${t}</span></button>`).join('')}</div>`:'';
   const greet=c.about?`Asking about the ${it(c.about).n}? How can I help?`:c.intro?moodAsk().text:'How can I help?';
-  return `<div class="ov"><div class="scrim" data-act="closechat"></div><div class="sh tall asheet"><div class="grab"></div><div class="ch-h">${cap(mood)}<div style="flex:1"><b>Your waiter</b><span>Ask, order or call me</span></div><button class="ib" data-act="closechat" aria-label="Close">${I.x}</button></div>${strip}<div class="shs" id="msgs"><div class="msgs"><div class="m">${K()?'Good evening, Arjun.':'Good evening.'} ${greet}${c.intro&&!c.msgs.length?btns(MOODS.map(([k,t])=>['m:'+k,t]),'q'):''}</div>${intro}${msgs}</div></div><div class="sugs sg2">${[0,1].map(r=>{ const row=QS.filter((_,n)=>n%2===r), b=(dup)=>row.map(([k,t],n)=>`<button class="gx${(n*2+r)%4}" data-act="q" data-id="${k}" ${dup?'aria-hidden="true" tabindex="-1"':''}>${t}</button>`).join(''); return `<div class="sgr"><div class="sgt ${r?'rev':''}">${b(false)}${b(true)}</div></div>`; }).join('')}</div><div class="inp2"><input id="cin" placeholder="Tell me what you feel like, or ask anything" autocomplete="off" maxlength="120"><button data-act="csend" aria-label="Send">${GI.send}</button></div></div></div>`;
+  return `<div class="ov"><div class="scrim" data-act="closechat"></div><div class="sh tall asheet"><div class="grab"></div><div class="ch-h">${cap(mood)}<div style="flex:1"><b>Your waiter</b><span>Ask, order or call me</span></div><button class="ib" data-act="closechat" aria-label="Close">${I.x}</button></div>${strip}<div class="shs" id="msgs"><div class="msgs"><div class="m">${K()?'Good evening, Arjun.':'Good evening.'} ${greet}${c.intro&&!c.msgs.length?btns(MOODS.map(([k,t])=>['m:'+k,t]),'q'):''}</div>${intro}${msgs}</div></div>${c.msgs.length?'':`<div class="sugs sg2">${[0,1].map(r=>{ const row=QS.filter((_,n)=>n%2===r), b=(dup)=>row.map(([k,t],n)=>`<button class="gx${(n*2+r)%4}" data-act="q" data-id="${k}" ${dup?'aria-hidden="true" tabindex="-1"':''}>${t}</button>`).join(''); return `<div class="sgr"><div class="sgt ${r?'rev':''}">${b(false)}${b(true)}</div></div>`; }).join('')}</div>`}<div class="inp2"><input id="cin" placeholder="Tell me what you feel like, or ask anything" autocomplete="off" maxlength="120"><button data-act="csend" aria-label="Send">${GI.send}</button></div></div></div>`;
 }
 function lineHtml(l){
   const i=it(l.item), is=issue(l); let ch='';
