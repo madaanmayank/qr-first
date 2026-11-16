@@ -41,6 +41,9 @@ This folder holds the base files for the project. Every agent and every person w
 | 06 | [POS and kitchen](docs/06-pos-and-kitchen.md) | Staff app, kitchen tickets, printing and offline behaviour |
 | 26 | [Waiter character](docs/26-waiter-character.md) | The designed character guests can ask: what it knows, does, how it speaks, its rules |
 | 27 | [Return suite](docs/27-return-suite.md) | One product for merchants: WhatsApp messages, offers, slow-hour filling, occasions and groups, visit stamps |
+| 28 | [Product suite](docs/28-product-suite.md) | How QR, Waiter, Feedback, Return suite and Staff tools fit, the build order, packs, and other directions |
+| 29 | [Feedback](docs/29-feedback.md) | Concerns, dish feedback and visit ratings in the QR app and on WhatsApp, routing and recovery |
+| 30 | [Prototype learnings](docs/30-prototype-learnings.md) | What 60 rounds of founder review taught us: rules, mistakes and their guards, patterns that worked |
 | 08 | [Growth and insights](docs/08-growth-and-insights.md) | Diner and guest identity, consent, rewards, content, recommendations, analytics |
 | 25 | [Configuration and commands](docs/25-configuration-and-commands.md) | Settings, feature switches and content; every change as a command that a person, the assistant or an AI agent can run |
 | 10 | [Capability map](docs/10-capability-map.md) | Every incumbent capability and how this product covers it |

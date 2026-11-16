@@ -250,6 +250,8 @@ This is the home screen after the first round. It replaces separate order succes
 
 ## 9. Feedback
 
+The home file for feedback is now [29-feedback.md](29-feedback.md). The lines below are kept for history.
+
 - One mechanism: a 1 to 5 rating with optional tags and comment, attached to the tab. See lesson C4.
 - Ratings of 1 to 3 ask "What went wrong?" and alert the store. They are never sent to a public review site.
 - Ratings of 4 to 5 offer the public review link when set.

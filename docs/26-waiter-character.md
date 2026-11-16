@@ -63,6 +63,12 @@ This is the only character allowed in the interface. See the rule in [AGENTS.md]
 - Greetings and replies ("Hi Arjun, welcome back.", "On my way. Water for Table 6.") show in the label, not as a figure popping over the menu. The full figure appears only on the order success page and in the chat header.
 - The chat opens with icon tiles (Order, Waiter, Water, Cutlery, Bill, Concern), not text blocks. Answers come back as dish cards with photos and Add, after a short typing indicator. Suggested questions are one horizontal row of gradient chips, including mood prompts ("I am very hungry", "High protein").
 
+## 3c. The staff side
+
+- Every request (waiter, water, tissues, cutlery, the bill) and every concern lands in one queue in the staff app, with the table and the time.
+- A staff member taps "On it". The guest's chat shows it. Unanswered after 3 minutes, it moves to the manager.
+- The owner sees median time to answer per shift. This is the waiter product's main number (file 28).
+
 ## 4. What it knows
 
 - The menu snapshot: names, descriptions, courses, tags, spice, nutrition estimates, house notes.

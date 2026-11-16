@@ -75,3 +75,13 @@ One name per concept. Use these words in code, UI copy, analytics and documents.
 
 - Guest-facing words may be friendlier than code names. Example: the UI says "Your order" for a tab and "Choose your size" for an option group name.
 - Whatever word is chosen for the UI is used on every screen and in every language catalogue.
+| **Add-on window** | The 5 minutes after a round is sent in which more dishes join the same round. | Grace period, upsell timer |
+| **Concern** | A problem a guest raises during the meal. Goes to the manager. | Complaint, ticket |
+| **Request** | Something a guest asks staff to bring: waiter, water, tissues, cutlery, the bill. | Call, ping |
+| **Dish feedback** | A thumbs up or down on one dish from a guest who ordered it. | Item rating, review |
+| **Visit rating** | The 1 to 5 rating of a whole visit. | NPS, score |
+| **Win-back** | Messages to a guest who is late for their own visit rhythm. | Churn campaign, reactivation |
+| **Campaign** | One message to one audience with one goal, approved by the owner. | Blast, broadcast |
+| **Holdout** | Guests who fit an audience and get no message, so the effect can be measured. | Control group |
+| **Table order** | One shared order that everyone at a table adds to. | Group cart, party order |
+| **Waiter pill** | The small bar with the waiter's face that opens the waiter. | Chat bubble, FAB |

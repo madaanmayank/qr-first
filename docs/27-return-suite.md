@@ -45,6 +45,42 @@ Rules:
 - **After:** a thank-you, and the date is kept for next year.
 - **Groups:** large tables are tagged so the owner can invite them back for the next occasion.
 
+## 4a. Win-back (16 Nov 2026)
+
+- **Who:** a guest whose gap since the last visit is longer than their own usual gap. A weekly regular is late after 2 weeks; a monthly guest after 7.
+- **The ladder,** one step at a time, each only if the last got no visit:
+    1. A warm note with their usual dish and no offer.
+    2. Two weeks later, a small offer the owner chose, valid for 10 days.
+    3. A month later, one last message. Then silence for 90 days.
+- **Stops at once** when the guest visits, opts out, or has an open low rating (file 29).
+- **Measured** against a holdout of late guests who get nothing.
+
+## 4b. Loyalty
+
+- **v1 is visit stamps:** one stamp per paid visit by a known guest; the owner sets how many and the reward.
+- The guest sees progress on the order success page and on the next scan ("2 more visits to a free dessert").
+- A reward is applied as a discount line by the server when the guest taps it.
+- **Later:** spend-based points and two tiers for regulars, only if stamps prove too blunt (decision D28).
+- No expiry tricks: a reward stays valid for 90 days after it is earned and the guest is told once before it lapses.
+
+## 4c. Campaigns
+
+A campaign is one message to one audience with one goal.
+
+| Type | Trigger | Audience | Offer |
+| --- | --- | --- | --- |
+| Thank-you | First paid visit | That guest | None |
+| Win-back | Late for their rhythm | Late guests | From step 2 |
+| Slow hours | Empty slot found | Guests likely to come then | Slot-only |
+| Occasion | A week before the date | That guest | Owner's choice |
+| News | Owner starts it | Regulars, or guests who ordered a related dish | Optional |
+
+- **Three steps for the owner:** pick the goal, check the suggested audience and message, approve. The assistant drafts; the owner always approves.
+- **Priority when a guest fits several:** recovery, then occasion, then win-back, then slow hours, then news. One promotional message a week.
+- **Every campaign shows before sending:** audience size, cost of messages, cost of the offer at the cap, expected visits.
+- **Every campaign reports after:** sent, read, visits, revenue, cost, against its holdout.
+- **WhatsApp mechanics** (approved templates, opt-in proof, opt-out in every message, sender quality) follow file 15 and are verified before launch. Costs are decision D26.
+
 ## 5. How it connects to the rest
 
 | Feeds the suite | The suite feeds |
@@ -86,5 +122,7 @@ Rules:
 - Whether birthdays may be asked for without a full date of birth (recommended: day and month only).
 
 ## Changes
+
+- 16 Nov 2026: added win-back, loyalty and campaigns. Feedback moved to its own home, file 29.
 
 - 14 Nov 2026: file created. The founder chose this suite as one product in the offer, led by slow-hour filling, with occasions and groups. Pre-ordering moved to later. Tipping kept as a minor part.

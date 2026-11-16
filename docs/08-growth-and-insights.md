@@ -67,6 +67,8 @@ One simple scheme, off until the owner turns it on from a Home card.
 
 ## 5. Feedback and reviews
 
+See [29-feedback.md](29-feedback.md), the home file.
+
 - One mechanism, defined in [05-guest-ordering-flow.md](05-guest-ordering-flow.md) section 9.
 - Low ratings alert the store at once, with the tab, the items and the comment.
 - High ratings are offered the public review link.

@@ -45,6 +45,11 @@ Read [docs/00-master-plan.md](docs/00-master-plan.md) first, then this file, bef
 22. **Long text never breaks a layout.** Dish names, choice names, descriptions and store names are truncated with an ellipsis by fixed line limits. Prices never wrap.
 23. **Part of the meal, not a checkout.** Every guest screen must feel like part of the dine-in experience, not only a transaction. Judge each screen by docs/21 section 1: does it make the meal feel better, or only faster?
 24. **UX first, then functionality.** Before building a screen, write the guest's question for that moment and order the content by it, using docs/21 section 14. A feature that does not answer that question goes lower, behind a tap, or away.
+25. **Confirm before commitment.** Asking for the bill and sending more dishes after an order always show a confirmation with the list and the amount. Nothing that costs the guest money or staff a trip happens on one tap.
+26. **Suggestions are short and stable.** Two or three, fixed while the guest adds from them, with a true reason, and never the same dish in two lists.
+27. **A tutorial adds only a tip.** It never changes the screen it explains, and it is declared by the feature, so it changes with it.
+28. **Feedback protects the guest and the store.** Low ratings go to the manager, never to a public site; an unhappy guest gets recovery, never a promotion. See docs/29.
+29. **One message cap.** At most one promotional message a week per guest per restaurant, across every product, only with consent. See docs/27.
 
 ## 3. How to work
 

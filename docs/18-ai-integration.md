@@ -143,6 +143,15 @@ The meal journey in [05-guest-ordering-flow.md](05-guest-ordering-flow.md) secti
 
 **Live behaviour:** stages fill from what the table has sent and what is in the cart. The next empty, non-optional stage glows. Its suggestions come from the recommendation service and always respect stock, diet and what the table already has.
 
+### Waiter conversation (16 Nov 2026)
+
+- **Flow:** mood, then kind of dish, then three picks, then refinement. Defined in file 26 section 3b.
+- **Model input:** the menu snapshot, live stock, the cart, rounds sent this visit, the guest's last order and saved tastes (with consent), and the running preferences of this chat.
+- **Tools only:** `recommend(prefs)`, `explain(dish)`, `compare(a, b)`, `request(kind)`, `raiseConcern(reason, text)`, `askBill()` (always confirms), `addToCart(dish)` (always a tap).
+- **Routing first:** every typed message is classed as request, concern, allergen question, taste, dish question or other, before any text is written. Requests and concerns skip the model's reply and go to staff.
+- **Evaluation set:** 200 typed messages in English, Hindi and mixed, with the expected class and tool. Release gate: 95 percent correct class, 100 percent on allergen and concern.
+- The prototype uses keyword rules for the same classes; they are the baseline the model must beat.
+
 ## 4. Feature build template
 
 Every AI feature is specified with these fields before it is built.
