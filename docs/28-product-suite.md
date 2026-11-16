@@ -93,6 +93,25 @@ Ranked by fit with what exists. None is built before the loop above runs in 10 s
 | **Voice ordering in Hindi and English** | The waiter already takes free text | Noise in restaurants |
 | **Slow-hour dynamic menu** | Slot data from the return suite | Price trust |
 
+## 6a. Directions flagged as doubtful
+
+Planner's honest view. Each is built as the founder asked; the flag says what to watch and what would change the call.
+
+| # | Direction | Why it may be wrong | What to do |
+| --- | --- | --- | --- |
+| F1 | **The waiter opens by itself on every scan** | It covers the menu before the guest asked, which breaks rule 10 (one unrequested overlay) and file 26 section 3 ("never opens by itself"). Regulars who know what they want pay a tap every visit | Open it on a guest's first visit to that restaurant only; afterwards the pill. Test both on 5 stores: orders per scan and time to first add |
+| F2 | **Five products at once** | The first 100 stores buy one clear thing. Selling QR, waiter, feedback, loyalty and campaigns together slows the sale and the build | Lead with Start (file 28 section 5). Do not build steps 7 to 9 until steps 1 to 3 hold in 10 stores |
+| F3 | **Table games and play to order** | They cost build time and bring no number an owner pays for. They can read as a toy in a serious restaurant | Keep as switches, off by default for fine dining; drop if under 5 percent of tables use them in pilots |
+| F4 | **A drawn human waiter for every restaurant** | One face cannot suit a dhaba, a cafe and a fine-dining room. The art is generated concept work: rights and consistency across new poses are not secured, and true animation needs a vector rig | Commission an original rigged character with two or three looks; let a store hide the face and keep the buttons |
+| F5 | **The 5-minute add-on window joins the same round** | The kitchen may already have fired the ticket; late dishes then arrive as a surprise | Kitchen sees them as an add-on ticket; the window closes early once the first dish is marked ready (decision D29) |
+| F6 | **Free UPI** | UPI has no merchant fee, yet the aggregator, settlement and support cost us on every bill | Free up to a monthly volume; confirm unit cost before promising it in sales material |
+| F7 | **AI nutrition numbers on every dish** | A wrong calorie or sugar figure is a trust and legal risk in India | Off until the owner confirms the numbers (decision D24) |
+| F8 | **Dish feedback driving menu decisions** | Ten thumbs is a small sample; owners may drop a good dish | Show counts, a 4-week trend, and no advice below 30 responses |
+| F9 | **WhatsApp as the only channel** | Costs and template rules can change, and one bad campaign hurts the sender's quality for every store | Keep the cap strict, add SMS as a fallback for receipts, hold a per-store sender where volume allows |
+| F10 | **Typed AI chat as the main way to order** | Typing at a table is slow; most guests will tap. The cost of a model call per message adds up | Keep buttons and chips first; send only free text to the model |
+
+**Conflict to resolve:** file 26 section 3 still says the waiter "never opens by itself". F1 decides which line stands.
+
 ## 7. Rules for the suite
 
 - One consent, per restaurant. One promotional message a week at most, across every product.
