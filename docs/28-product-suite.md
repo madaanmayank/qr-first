@@ -110,7 +110,7 @@ Planner's honest view. Each is built as the founder asked; the flag says what to
 | F9 | **WhatsApp as the only channel** | Costs and template rules can change, and one bad campaign hurts the sender's quality for every store | Keep the cap strict, add SMS as a fallback for receipts, hold a per-store sender where volume allows |
 | F10 | **Typed AI chat as the main way to order** | Typing at a table is slow; most guests will tap. The cost of a model call per message adds up | Keep buttons and chips first; send only free text to the model |
 
-**Conflict to resolve:** file 26 section 3 still says the waiter "never opens by itself". F1 decides which line stands.
+**F1 decided 17 Nov 2026:** first visit only. File 26 is updated; the pilot test in F1 still runs.
 
 ## 7. Rules for the suite
 

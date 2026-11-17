@@ -2840,7 +2840,8 @@ function runSplash(){ const lines=['Setting your table','Firing up the tandoor',
   const tf=setInterval(()=>{ const fs=document.querySelectorAll('.spl-f'); if(!fs.length) return; fs[fi2].classList.remove('on'); fi2=(fi2+1)%fs.length; fs[fi2].classList.add('on'); },1050);
   const tl=setInterval(()=>{ li++; if(li<lines.length) sayWords(document.getElementById('splsay'),lines[li]); },1150);
   setTimeout(()=>{ clearInterval(tf); clearInterval(tl); const sp=document.getElementById('spl'); if(sp) sp.classList.add('out');
-    setTimeout(()=>{ S.splash=false; S.loading=true; render(); setTimeout(()=>{ S.loading=false; S._enter=true; render(); S._enter=false; setTimeout(()=>{ if((S.startWith||'waiter')==='waiter'&&!S._intro){ S._intro=true; S.chat={msgs:[],about:null,intro:true}; render(); } else peek(K()?'Hi Arjun, welcome back.':'Hi, I am your waiter.','hi'); },700); },650); },380); },4300); }
+    setTimeout(()=>{ S.splash=false; S.loading=true; render(); setTimeout(()=>{ S.loading=false; S._enter=true; render(); S._enter=false; setTimeout(()=>{ /* the waiter opens by itself only on a guest's first visit to this restaurant; a returning guest gets the pill and a greeting */
+      if((S.startWith||'waiter')==='waiter'&&!S._intro&&!K()){ S._intro=true; S.chat={msgs:[],about:null,intro:true}; render(); } else peek(K()?'Hi Arjun, welcome back.':'Hi, I am your waiter.','hi'); },700); },650); },380); },4300); }
 
 /* ===== E. waiter button: his face is always there, he blinks, and small icons say what he can do ===== */
 ['face','face-blink'].forEach(n=>{ const i=new Image(); i.src='img/waiter2/'+n+'.png'; });
