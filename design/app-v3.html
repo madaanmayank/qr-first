@@ -2057,6 +2057,50 @@ p,.ddesc,.d,.why,.m,.nlab,.banner div{text-wrap:pretty}
 .dock{display:flex;flex-direction:column;justify-content:flex-end}
 .wtr2.hid{opacity:0;pointer-events:none;transform:translateY(8px)}
 @media (prefers-reduced-motion:reduce){.mpc.in{animation:none}}
+
+/* menu pairing: a light section in the page, white like the page, no card */
+.mpi{grid-column:1/-1;margin:2px 0 6px;padding:10px 4px 6px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.mpi.in{animation:mpopen .4s cubic-bezier(.2,.8,.2,1)}
+@keyframes mpopen{from{opacity:0;max-height:0;padding-top:0;padding-bottom:0;margin-bottom:0}to{max-height:260px}}
+.mpi .pws{color:var(--ink3)}
+.mpi .pws svg{color:var(--c,#7C3AED)}
+.mpi .pwx{color:var(--ink3)}
+.mpi .pwr{padding:8px 0}
+.mpi .pwr+.pwr{border-top:1px solid var(--line)}
+.mpi .pwp .ph{box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--c)}
+.mpi .pwt b{color:var(--ink)}
+.mpi .pwt span{color:var(--ink2)}
+.mpi .pwa{background:var(--c);color:#fff}
+.mpi .pwk{background:#16A34A;color:#fff}
+.mpi::after{display:none}
+@media (prefers-reduced-motion:reduce){.mpi.in{animation:none}}
+
+/* kitchen notes: one quiet line until opened */
+.knc{display:flex;align-items:center;gap:8px;margin:14px 16px 0;width:calc(100% - 32px);height:46px;padding:0 14px;border-radius:14px;border:1px dashed var(--line);background:#fff;font-size:14px;font-weight:600;color:var(--ink2);text-align:left}
+.knc svg{width:15px;height:15px;stroke-width:2.4;color:var(--ink3)}
+.knsh{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.knsh .knh{margin:0}
+.knsh button{height:30px;padding:0 12px;border-radius:99px;border:1px solid var(--line);background:#fff;font-size:12px;font-weight:600;color:var(--ink2)}
+.kns-s{padding:12px 14px}
+.kns-s .knsh{margin-bottom:4px}
+.kns-s .kdn{padding:8px 0;border-bottom:0}
+
+/* suggested dish: a stepper once added, so several can be added */
+.pwq{flex:none;display:flex;align-items:center;gap:2px;height:34px;padding:0 3px;border-radius:99px;background:color-mix(in srgb,var(--c) 18%,transparent)}
+.pwq button{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;padding:0;background:transparent;color:var(--c)}
+.pwq button svg{width:14px;height:14px;stroke-width:2.6}
+.pwq button:active{transform:scale(.88)}
+.pwq b{min-width:16px;text-align:center;font-size:14px;font-weight:600;color:#fff}
+.mpi .pwq b{color:var(--ink)}
+
+/* a soft arrival: the section opens, then its rows settle in one after another; it keeps going across redraws */
+.mpi.in{animation:mpopen .62s cubic-bezier(.22,1,.36,1) both;animation-delay:var(--el,0s)}
+@keyframes mpopen{from{opacity:0;max-height:0;padding-top:0;padding-bottom:0;margin-bottom:0;transform:translateY(-8px)}50%{opacity:.7}to{opacity:1;max-height:280px;transform:none}}
+.mpi.in .pwh{animation:mprow .5s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(.12s + var(--el,0s))}
+.mpi.in .pwr:nth-child(2){animation:mprow .55s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(.22s + var(--el,0s))}
+.mpi.in .pwr:nth-child(3){animation:mprow .55s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(.34s + var(--el,0s))}
+@keyframes mprow{from{opacity:0;transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){.mpi.in,.mpi.in .pwh,.mpi.in .pwr{animation:none}}
 </style>
 </head>
 <body>
@@ -2276,7 +2320,7 @@ function dock(){
   const ids=[...new Set(S.cart.map(l=>l.item))], more=ids.length-3, t=total();
   const th=ids.slice(0,3).map(id=>ph(it(id).h)).join('')+(more>0?`<span class="more num">+${more}</span>`:'');
   const bar=ord&&n?`<div class="cbar ${w?'warn':''} ${S.bump?'bump':''}" data-act="${req?'signin':'cart'}" role="button" tabindex="0"><span class="l"><span class="th">${th}</span><span class="tx"><b class="num ${t>=10000?'lg':''}">${rs(t)}</b>${w?`<small>${b>1?b+' dishes need':'A dish needs'} a look</small>`:S.group?`<small class="grp"><span class="avs">${av('me','s')}${av('riya','s')}${av('kabir','s')}</span>Table order</small>`:''}</span></span><span class="vo">${lab}${I.arrow}</span></div>`:'';
-  return `<div class="dock">${waiter()}${pairCard()}${bar}</div>`;
+  return `<div class="dock">${waiter()}${bar}</div>`;
 }
 const WMSG=()=>{ const n=K()?', Arjun':''; const m=['Hi'+n+'. I am right here if you need me.','Tap me to call a waiter or ask about a dish.','Need water or the bill? Just tap.']; if(count()) m.push('Your table is looking good.'); return m[Math.floor(Math.random()*m.length)]; };
 function waiterSvg(mood,seq){ return `<img class="wsvg wimg" src="img/waiter2/${WIMG[mood]||'welcome'}.png" ${seq?`data-seq="${seq}"`:''} alt="" aria-hidden="true">`; }
@@ -2287,7 +2331,7 @@ Object.keys(WIMG).forEach(m=>{ const i=new Image(); i.src=wsrc(m); });
 function wswap(im,m){ if(!im) return; const go=()=>{ im.src=wsrc(m); if(!RM()) im.animate([{transform:'scale(1,.9) translateY(3%)'},{transform:'scale(.97,1.04) translateY(-2%)',offset:.55},{transform:'none'}],{duration:340,easing:'cubic-bezier(.2,.8,.2,1)',composite:'add'}); }; go(); }
 setInterval(()=>{ if(document.hidden) return; document.querySelectorAll('#phone img[data-seq]').forEach(im=>{ const L=im.dataset.seq.split(','), n=((+im.dataset.i||0)+1)%L.length; im.dataset.i=n; wswap(im,L[n]); }); },2600);
 function waiter(){ if(S.view!=='menu'||S.sheet||S.combo||S.play||S.chat||S.search||S.splash||S.loading) return '';
-  return `<div class="wtr2 ${count()&&D.f.ordering?'up':''} ${S._wrest?'mini':''} ${S.mpair?'hid':''}" id="wtr"><button class="wpill"${tip('home',1,'Call me any time','Water, cutlery, the bill or a question. I am one tap away.')} data-act="chat" aria-label="Your waiter: ask, order, call the waiter, water or cutlery"><span class="wpf"><img id="asfi" src="img/waiter2/face.png" alt=""></span><span class="wpl"><span id="wlab">${wlh(wlN)}</span></span></button></div>`; }
+  return `<div class="wtr2 ${count()&&D.f.ordering?'up':''} ${S._wrest?'mini':''}" id="wtr"><button class="wpill"${tip('home',1,'Call me any time','Water, cutlery, the bill or a question. I am one tap away.')} data-act="chat" aria-label="Your waiter: ask, order, call the waiter, water or cutlery"><span class="wpf"><img id="asfi" src="img/waiter2/face.png" alt=""></span><span class="wpl"><span id="wlab">${wlh(wlN)}</span></span></button></div>`; }
 function buzzSheet(){ const R=[['water','Water'],['bill','The bill'],['cutlery','Cutlery'],['help','Some help']];
   return `<div class="ov"><div class="scrim" data-act="closebuzz"></div><div class="sh bz"><div class="grab"></div><div class="bzh">${D.f.captain?waiterSvg('hi'):''}<div><b>How can we help${K()?', Arjun':''}?</b><span>Table 6</span></div></div><div class="bzt"><div class="eb mut">Call a waiter for</div><div class="bzr">${R.map(([k,n])=>`<button data-act="callfor" data-id="${k}">${n}</button>`).join('')}</div></div>${D.f.captain?`<button class="bza" data-act="buzzask">${cap()}<span><b>Ask waiter</b><small>What goes with my order? Is this spicy?</small></span>${I.arrow}</button>`:''}</div></div>`; }
 function peek(text){ const w=document.getElementById('wtr'), l=document.getElementById('wlab'); if(!w||!l) return; wsay(l,text||WMSG()); w.classList.add('say'); w.classList.remove('mini'); clearTimeout(S._pk); S._pk=setTimeout(()=>{ const w2=document.getElementById('wtr'), l2=document.getElementById('wlab'); if(w2){ w2.classList.remove('say'); if(S._wrest) w2.classList.add('mini'); } if(l2) wsay(l2,wlh(wlN),true); },3600); }
@@ -2344,7 +2388,7 @@ function menu(){
   if(D.f.suggestions&&picks.length) h+=`<div class="sh3"><div><div class="eb" style="color:#6D28D9">${K()?'For you':'Popular here'}</div><h3>${K()?'Picked for you':'Start with these'}</h3></div></div><div class="rail">${picks.map(x=>`<div class="dk" data-act="open" data-id="${x.i.id}" data-src="${x.i.id}-pick"><span class="dimg ph" style="--h:${x.i.h}"></span><div class="dtx"><div class="eb">${x.w}</div><div class="dn">${vm(x.i.veg)}<span>${x.i.n}</span></div><div class="dp num">${rs(x.i.p)}</div></div>${dAdd(x.i)}</div>`).join('')}</div>`;
   const cs=COURSES.filter(([c])=>vis().some(i=>i.c===c));
   /* "Your meal" is a good-to-have: it sits after the first category, never at the top */
-  const secs=cs.map(([c,n],ix)=>{ const its=vis().filter(i=>i.c===c); return (ix===1?roundStrip():'')+ `<div class="sh3 sec3" id="c-${c}"><h3>${n}</h3><span class="cnt num">${String(its.length).padStart(2,'0')} ${its.length>1?'items':'item'}</span></div>`+(S.layout==='grid'?`<div class="grid g2">${its.map(row).join('')}</div>`:`<div class="lst">${its.map(lrow).join('')}</div>`); }).join('');
+  const secs=cs.map(([c,n],ix)=>{ const its=vis().filter(i=>i.c===c); return (ix===1?roundStrip():'')+ `<div class="sh3 sec3" id="c-${c}"><h3>${n}</h3><span class="cnt num">${String(its.length).padStart(2,'0')} ${its.length>1?'items':'item'}</span></div>`+(S.layout==='grid'?`<div class="grid g2">${rowsWithPair(its,true)}</div>`:`<div class="lst">${rowsWithPair(its,false)}</div>`); }).join('');
   const cb=cs.map(([c,n])=>`<button class="${S.tab===c?'on':''}" data-act="tab" data-id="${c}">${n}</button>`).join('');
   const rb=cs.map(([c,n])=>`<button class="${S.tab===c?'on':''}" data-act="tab" data-id="${c}">${ph(vis().find(i=>i.c===c).h)}<span>${n}</span></button>`).join('');
   if(S.layout==='rail') h+=`<div class="sr"><div class="rn"><div class="rni" id="rn"><button class="rsrch" data-act="search" aria-label="Search the menu"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg><span>Search</span></button>${rb}</div></div><div class="rc">${secs}</div></div>`;
@@ -2524,6 +2568,7 @@ function lineHtml(l){
 function bill(){ const sub=total(), gst=sub*0.05, raw=sub+gst, pay=Math.round(raw); return {sub,gst,ro:pay-raw,pay}; }
 /* ===== meal pairing: one quiet idea under the dish added last, worked out once per dish ===== */
 const PCOL={drink:'#2DD4BF',sweet:'#F472B6',bread:'#FBBF24',rice:'#FBBF24',starter:'#FB7185',main:'#FB7185',combo:'#A78BFA'};
+const PCOL_L={drink:'#0D9488',sweet:'#DB2777',bread:'#C2750A',rice:'#C2750A',starter:'#E11D48',main:'#E11D48',combo:'#7C3AED'};
 const lastHost=()=>[...S.cart].reverse().find(l=>!l.vp&&!issue(l)&&!l.combo);
 function pairPicks(l){ const i=it(l.item), all=[...sentLines(),...S.cart], cs=new Set(all.filter(x=>!x.combo).map(x=>it(x.item).c)); if(all.some(x=>x.combo)) cs.add('combo');
   const ok=id=>{const d=it(id); return d&&!out(id)&&!all.some(x=>x.item===id)&&(!S.veg||d.veg);};
@@ -2544,14 +2589,15 @@ function pairFor(l){ if(!D.f.pairing) return null; const h=lastHost(); if(!h||h.
   const key=l.k+'|'+(S.rounds||[]).length; if(!(key in S._pp)){ if((S._pn||0)>=3) S._pp[key]=null; else { const P=pairPicks(l); S._pp[key]=P.length?P:null; if(P.length) S._pn=(S._pn||0)+1; } }
   const P=(S._pp[key]||[]).filter(x=>!out(x.id)); return P.length?P:null; }
 const spark='<svg viewBox="0 0 24 24"><path d="M12 3.5l1.9 5 5 1.9-5 1.9-1.9 5-1.9-5-5-1.9 5-1.9z" fill="currentColor" stroke="none"/></svg>';
-function pairBody(l,P){ const kw=t=>t.replace(/\[\[(.+?)\]\]/g,'<em>$1</em>');
-  return P.map(p=>{ const d=it(p.id), done=S.cart.some(x=>x.item===p.id); return `<div class="pwr${p.swap?' pwswap':''}" style="--c:${PCOL[p.kind]}"><div class="pwp" data-act="open" data-id="${p.id}">${ph(d.h)}</div><div class="pwt" data-act="open" data-id="${p.id}"><b>${d.n}</b><span>${kw(p.line)}</span></div>${done?`<i class="pwk">${I.tick}</i>`:p.swap?`<button class="pwc" data-act="pairswap" data-k="${l.k}" data-id="${p.id}">${p.cta}<small>${p.pill}</small></button>`:`<button class="pwa" data-act="add" data-vp="1" data-id="${p.id}" aria-label="Add ${d.n}">${I.plus}</button>`}</div>`; }).join(''); }
+function pairBody(l,P,light){ const COL=light?PCOL_L:PCOL, kw=t=>t.replace(/\[\[(.+?)\]\]/g,'<em>$1</em>');
+  return P.map(p=>{ const d=it(p.id), done=S.cart.some(x=>x.item===p.id); return `<div class="pwr${p.swap?' pwswap':''}" style="--c:${COL[p.kind]}"><div class="pwp" data-act="open" data-id="${p.id}">${ph(d.h)}</div><div class="pwt" data-act="open" data-id="${p.id}"><b>${d.n}</b><span>${kw(p.line)}</span></div>${done&&!p.swap&&p.id!=='platter'?`<div class="pwq"><button class="mn" data-act="dec" data-id="${p.id}" aria-label="${qtyOf(p.id)===1?'Remove ':'One less '}${d.n}">${qtyOf(p.id)===1?BIN:I.minus}</button><b class="num">${qtyOf(p.id)}</b><button data-act="add" data-vp="1" data-id="${p.id}" aria-label="One more ${d.n}">${I.plus}</button></div>`:done?`<i class="pwk">${I.tick}</i>`:p.swap?`<button class="pwc" data-act="pairswap" data-k="${l.k}" data-id="${p.id}">${p.cta}<small>${p.pill}</small></button>`:`<button class="pwa" data-act="add" data-vp="1" data-id="${p.id}" aria-label="Add ${d.n}">${I.plus}</button>`}</div>`; }).join(''); }
 function pairRow(l){ const P=pairFor(l); if(!P) return '';
   return `<div class="pw"${tip('cart1',1,'An idea for this dish','A quiet suggestion that goes with it. Tap + to add it, or × to hide ideas.')}><div class="pwh"><span class="pws">${spark}Goes with it</span><button class="pwx" data-act="pairx" data-k="${l.k}" aria-label="Hide ideas for ${it(l.item).n}">${I.x}</button></div>${pairBody(l,P)}</div>`; }
-/* on the menu the same idea floats above the cart bar for a few seconds, so the grid never moves */
-function pairCard(){ if(!S.mpair||S.view!=='menu'||!D.f.pairing) return ''; const l=S.cart.find(x=>x.k===S.mpair.k), P=l&&pairFor(l); if(!P) return '';
-  return `<div class="mpc${S.mpair.fresh?' in':''}"><div class="pwh"><span class="pws">${spark}Goes with ${it(l.item).n}</span><button class="pwx" data-act="pairx" data-k="${l.k}" aria-label="Hide ideas">${I.x}</button></div>${pairBody(l,P)}</div>`; }
-function triggerMenuPair(){ if(!D.f.pairing||S.view!=='menu') return; const h=lastHost(); if(!h||!pairFor(h)) return; S.mpair={k:h.k,fresh:true}; clearTimeout(S._mpt); S._mpt=setTimeout(()=>{ S.mpair=null; render(); },9000); render(); }
+/* on the menu the idea is a light section in the page itself, under the row of the dish that was added */
+function menuPair(){ if(!S.mpair||!D.f.pairing) return null; const l=S.cart.find(x=>x.k===S.mpair.k); if(!l) return null; const P=pairFor(l); return P?{l,P}:null; }
+function pairInline(M){ const {l,P}=M, el=(Date.now()-(S.mpair.t||0))/1000; return `<div class="mpi${el<1?' in':''}" style="--el:${(-el).toFixed(2)}s"><div class="pwh"><span class="pws">${spark}Goes with ${it(l.item).n}</span><button class="pwx" data-act="pairx" data-k="${l.k}" aria-label="Hide ideas">${I.x}</button></div>${pairBody(l,P,true)}</div>`; }
+function rowsWithPair(its,grid){ const M=menuPair(), h=M?its.findIndex(i=>i.id===M.l.item):-1; if(h<0) return its.map(grid?row:lrow).join(''); const end=grid?Math.min(its.length-1,h%2===0?h+1:h):h; let out=''; its.forEach((i,ix)=>{ out+=(grid?row(i):lrow(i)); if(ix===end) out+=pairInline(M); }); return out; }
+function triggerMenuPair(){ if(!D.f.pairing||S.view!=='menu') return; const h=lastHost(); if(!h||!pairFor(h)) return; S.mpair={k:h.k,t:Date.now()}; render(); setTimeout(()=>{ const el=document.querySelector('.mpi'), sc=document.getElementById('sc'); if(!el||!sc) return; const r=el.getBoundingClientRect(), b=sc.getBoundingClientRect(); if(r.bottom>b.bottom-90) sc.scrollBy({top:r.bottom-(b.bottom-90)+12,behavior:RM()?'auto':'smooth'}); },160); }
 function undoToast(text){ S.toast={kind:'good',text,undo:true}; clearTimeout(S._t); S._t=setTimeout(()=>{ S.toast=null; render(); },5000); render(); }
 function gbar(left,right){ return `<div class="gbar"><div class="gl">${left}</div><div class="gbr">${right}</div></div>`; }
 const NCH={bread:['Extra butter','Well done','Less oil'],drink:['Less sugar','No ice','Extra ice'],dessert:['Less sugar','Served warm','Served cold'],side:['Less salt','No onion']};
@@ -2559,7 +2605,11 @@ const noteOf=l=>[...(l.notes||[]),l.ntext].filter(Boolean).join(' · ');
 /* one place for kitchen notes: a note for the table, and a note for any dish picked here; the dish rows stay clean */
 function kitchenNotes(){ const ok=S.cart.filter(l=>!issue(l)), ed=S.noteK&&ok.find(l=>l.k===S.noteK), noted=ok.filter(l=>noteOf(l)&&l!==ed);
   const editor=ed?(()=>{ const i=it(ed.item), ch=NCH[i.c]||['Less spicy','Extra spicy','No onion','No garlic']; return `<div class="ked"><div class="kedh">${ph(i.h)}<b>${i.n}</b></div><div class="kchips">${ch.map(t=>`<button class="${(ed.notes||[]).includes(t)?'on':''}" data-act="notechip" data-k="${ed.k}" data-id="${t}">${t}</button>`).join('')}</div><input id="ntext" maxlength="60" placeholder="Anything else for this dish" value="${(ed.ntext||'').replace(/"/g,'&quot;')}"><div class="kedf"><button class="sf" data-act="notecancel">Cancel</button><button class="gp1" data-act="notedone" data-k="${ed.k}">Save note</button></div></div>`; })():'';
-  return `<div class="kns"><b class="knh">Notes for the kitchen</b><input id="kgen" maxlength="80" placeholder="For the table, e.g. bring the starters first" value="${(S.kgen||'').replace(/"/g,'&quot;')}"><div class="knd"${tip('cart1',2,'A note for any dish','Pick a dish here to add a note like less spicy or no onion. It goes to the kitchen with that dish.')}${(S.rounds||[]).length?tip('cart2',2,'Notes still work','Pick a dish here to add a note before you send.'):''}><span class="eb mut">Note for a dish</span><div class="kdish">${ok.map(l=>{const i=it(l.item); return `<button class="${S.noteK===l.k?'on':''} ${noteOf(l)?'has':''}" data-act="note" data-k="${l.k}">${ph(i.h)}<span>${i.n}</span></button>`;}).join('')}</div></div>${editor}${noted.length?`<div class="kdl">${noted.map(l=>`<div class="kdn"><div><b>${it(l.item).n}</b><span>${noteOf(l)}</span></div><button data-act="note" data-k="${l.k}">Edit</button><button data-act="noteclear" data-k="${l.k}" aria-label="Remove note">${I.x}</button></div>`).join('')}</div>`:''}</div>`; }
+  const hasN=!!(S.kgen||noted.length||ed);
+  const TP=tip('cart1',2,'A note for any dish','Open this to add a note like less spicy or no onion. It goes to the kitchen with that dish.')+((S.rounds||[]).length?tip('cart2',2,'Notes still work','Open this to add a note before you send.'):'');
+  if(!S.knOpen&&!hasN) return `<button class="knc"${TP} data-act="knopen">${I.plus}<span>Add a note for the kitchen</span></button>`;
+  if(!S.knOpen) return `<div class="kns kns-s"${TP}><div class="knsh"><b>Notes for the kitchen</b><button data-act="knopen">Edit</button></div>${S.kgen?`<div class="kdn"><div><b>Table</b><span>${S.kgen.replace(/[<>&]/g,'')}</span></div></div>`:''}${noted.map(l=>`<div class="kdn"><div><b>${it(l.item).n}</b><span>${noteOf(l)}</span></div></div>`).join('')}</div>`;
+  return `<div class="kns"><div class="knsh"><b class="knh">Notes for the kitchen</b><button data-act="knclose">Done</button></div><input id="kgen" maxlength="80" placeholder="For the table, e.g. bring the starters first" value="${(S.kgen||'').replace(/"/g,'&quot;')}"><div class="knd"${TP}><span class="eb mut">Note for a dish</span><div class="kdish">${ok.map(l=>{const i=it(l.item); return `<button class="${S.noteK===l.k?'on':''} ${noteOf(l)?'has':''}" data-act="note" data-k="${l.k}">${ph(i.h)}<span>${i.n}</span></button>`;}).join('')}</div></div>${editor}${noted.length?`<div class="kdl">${noted.map(l=>`<div class="kdn"><div><b>${it(l.item).n}</b><span>${noteOf(l)}</span></div><button data-act="note" data-k="${l.k}">Edit</button><button data-act="noteclear" data-k="${l.k}" aria-label="Remove note">${I.x}</button></div>`).join('')}</div>`:''}</div>`; }
 function cartView(){
   const b=bad().length, B=bill(), lines=S.cart.slice().sort((x,y)=>(!!issue(y))-(!!issue(x)));
   const cap3=lines.length>3&&!S.cartAll&&!b, shown=cap3?lines.slice(0,3):lines.slice(); const hostL=lastHost(); if(cap3&&hostL&&!shown.includes(hostL)) shown[2]=hostL;
@@ -2721,7 +2771,7 @@ document.addEventListener('click',e=>{
   /* every add flies from the photo nearest to the tapped button, wherever it is on screen */
   if(['add','cmpadd','padd','usual','repeat','again','addsheet','caddsheet'].includes(a)){ S._btnR=b.getBoundingClientRect(); S._src=srcOf(b); }
   switch(a){
-    case 'add': { e.stopPropagation(); S._vp=!!b.dataset.vp; if(S._vp) S._undo=structuredClone(S.cart); const i=it(id); if(out(id)||!D.f.ordering) return; if(i.id==='platter'){ S.chat=null; S.cmp=null; S.search=null; S.sheet=null; S.combo={sel:{kebab:[],bread:null,sweet:null}}; break; } if(cust(i)){ S.chat=null; S.cmp=null; S.search=null; S.sheet={item:id,portion:null,bread:null,q:1}; break; } const had=qtyOf(id); addLine(id); if(S._vp){ undoToast('Added '+i.n); S._vp=false; } else if(!had) triggerMenuPair(); return; }
+    case 'add': { e.stopPropagation(); S._vp=!!b.dataset.vp; if(S._vp&&!qtyOf(id)) S._undo=structuredClone(S.cart); const i=it(id); if(out(id)||!D.f.ordering) return; if(i.id==='platter'){ S.chat=null; S.cmp=null; S.search=null; S.sheet=null; S.combo={sel:{kebab:[],bread:null,sweet:null}}; break; } if(cust(i)){ S.chat=null; S.cmp=null; S.search=null; S.sheet={item:id,portion:null,bread:null,q:1}; break; } const had=qtyOf(id); addLine(id); if(S._vp){ if(!had) undoToast('Added '+i.n); S._vp=false; } else if(!had) triggerMenuPair(); return; }
     case 'cpick': { const g=COMBO.find(x=>x.k===b.dataset.g), c=S.combo.sel; if(out(id)) return; if(g.n===1) c[g.k]=c[g.k]===id?null:id; else { const arr=c[g.k], ix=arr.indexOf(id); if(ix>=0) arr.splice(ix,1); else { if(arr.length>=g.n) arr.shift(); arr.push(id); } } break; }
     case 'caddsheet': { addLine('platter',null,null,'.sh .hero','sheet',structuredClone(S.combo.sel)); return; }
     case 'closecombo': S.combo=null; break;
@@ -2785,7 +2835,7 @@ document.addEventListener('click',e=>{
     case 'sqfill': S.search.q=id; S._sqf=true; break;
     case 'closesearch': S.search=null; break;
     case 'needchoice': { const g=!S.sheet.portion?'portion':'bread', el=document.querySelector('.sh .grp[data-g="'+g+'"]'), sc=document.getElementById('sshs'); if(el&&sc){ sc.scrollTo({top:sc.scrollTop+el.getBoundingClientRect().top-sc.getBoundingClientRect().top-12,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}); el.classList.remove('nudge'); void el.offsetWidth; el.classList.add('nudge'); } return; }
-    case 'cart': { S.view='cart'; S.chat=null; const set=(S.rounds||[]).length?'cart2':'cart1'; S.seen=S.seen||{}; if(count()&&!S.seen[set]){ S.seen[set]=true; S.tourSet=set; S.tour=0; render(); placeCoach(); return; } break; }
+    case 'cart': { S.mpair=null; S.view='cart'; S.chat=null; const set=(S.rounds||[]).length?'cart2':'cart1'; S.seen=S.seen||{}; if(count()&&!S.seen[set]){ S.seen[set]=true; S.tourSet=set; S.tour=0; render(); placeCoach(); return; } break; }
     case 'back': S.view='menu'; break;
     case 'ldec': { const l=S.cart.find(x=>x.k===k); l.q--; if(l.q<=0) S.cart=S.cart.filter(x=>x!==l); break; }
     case 'linc': S.cart.find(x=>x.k===k).q++; S.bump=true; break;
@@ -2798,7 +2848,7 @@ document.addEventListener('click',e=>{
     case 'addeddone': S.added=null; render(); { const ss=document.getElementById('ss'); if(ss) ss.scrollTo({top:0,behavior:RM()?'auto':'smooth'}); } return;
     case 'sendconfirm': { S.sendc=null; if(bad().length){ S.view='cart'; break; } S._addedFrom=S.cart.map(l=>({...l})); }
     // falls through: a confirmed send from the success page is the same as sending from the cart
-    case 'send': { S.cartAll=false; const B=bill(); S.rounds=S.rounds||[]; const lastR=S.rounds[S.rounds.length-1]; S.merged=!!(lastR&&Date.now()-lastR.at<MISS_MS); if(S.merged) lastR.lines.push(...S.cart.map(l=>({...l}))); else S.rounds.push({lines:S.cart.map(l=>({...l})),at:Date.now()}); const all=sentLines(), bs=all.reduce((a,l)=>a+unit(l)*l.q,0); S.sent={lines:all,gst:bs*.05,pay:Math.round(bs*1.05),round:S.rounds.length}; S._party=true; S.cart=[]; S.view='status'; S.paid=false; S.rate=0; S.log.unshift({t:ago(),text:S.merged?'More dishes added to Order No. 41.':'Order No. 41 sent to the kitchen.'}); if(S._addedFrom){ S.added={lines:S._addedFrom,merged:S.merged,round:S.rounds.length}; S._addedFrom=null; S._party=false; } break; }
+    case 'send': { S.cartAll=false; S.knOpen=false; const B=bill(); S.rounds=S.rounds||[]; const lastR=S.rounds[S.rounds.length-1]; S.merged=!!(lastR&&Date.now()-lastR.at<MISS_MS); if(S.merged) lastR.lines.push(...S.cart.map(l=>({...l}))); else S.rounds.push({lines:S.cart.map(l=>({...l})),at:Date.now()}); const all=sentLines(), bs=all.reduce((a,l)=>a+unit(l)*l.q,0); S.sent={lines:all,gst:bs*.05,pay:Math.round(bs*1.05),round:S.rounds.length}; S._party=true; S.cart=[]; S.view='status'; S.paid=false; S.rate=0; S.log.unshift({t:ago(),text:S.merged?'More dishes added to Order No. 41.':'Order No. 41 sent to the kitchen.'}); if(S._addedFrom){ S.added={lines:S._addedFrom,merged:S.merged,round:S.rounds.length}; S._addedFrom=null; S._party=false; } break; }
     case 'more': { S.view='menu'; S.paid=false; S.rate=0; const R2=S.rounds||[], last=R2[R2.length-1]; if(last&&Date.now()-last.at<600000&&!S.toured){ S.toured=true; S.tourSet='home'; S.tour=0; render(); const sc=document.getElementById('sc'); if(sc) sc.scrollTop=0; placeCoach(); return; } break; }
     case 'tournext': S.tour=S.tour<TT().length-1?S.tour+1:null; break;
     case 'tourskip': S.tour=null; break;
@@ -2810,6 +2860,8 @@ document.addEventListener('click',e=>{
     case 'undocart': if(S._undo){ S.cart=S._undo; S._undo=null; S._pp={}; } S.toast=null; break;
     case 'note': { const prev=S.noteK&&S.cart.find(x=>x.k===S.noteK), t=document.getElementById('ntext'); if(prev&&t) prev.ntext=t.value.trim(); S.noteK=k; break; }
     case 'notechip': { const l=S.cart.find(x=>x.k===k), t=document.getElementById('ntext'); if(t) l.ntext=t.value.trim(); l.notes=l.notes||[]; const ix=l.notes.indexOf(id); if(ix>=0) l.notes.splice(ix,1); else l.notes.push(id); break; }
+    case 'knopen': S.knOpen=true; break;
+    case 'knclose': { const t=document.getElementById('kgen'); if(t) S.kgen=t.value; S.knOpen=false; S.noteK=null; break; }
     case 'notecancel': S.noteK=null; break;
     case 'noteclear': { const l=S.cart.find(x=>x.k===k); if(l){ l.notes=[]; l.ntext=''; } if(S.noteK===k) S.noteK=null; break; }
     case 'notedone': { const l=S.cart.find(x=>x.k===k), t=document.getElementById('ntext'); if(l&&t) l.ntext=t.value.trim(); S.noteK=null; break; }

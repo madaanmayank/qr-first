@@ -297,6 +297,9 @@ One quiet idea that completes the meal, worked out from what the guest is buildi
 - **One line each,** in the waiter's voice, about the food, never opening with a price. One key word carries the course colour (drinks teal, sweets rose, breads and rice amber, starters and mains red, combos violet), also on the plate ring and the + button.
 - **Calm:** two dishes at most; fixed for that dish, and an added dish keeps its place with a tick; a dish added from a pairing never becomes the next host; a 5-second undo after adding; a × hides ideas for that dish; two hides stop ideas for that kind of dish; three pairings per visit.
 - **Never forced:** no pop-up, never touches the Send button, sold-out and non-veg dishes are skipped for vegetarians.
+- **On the menu (revised 17 Nov, founder):** not a pop-up. A light section in the page itself, white like the page with hairlines, opens under the row of the dish just added. It arrives softly: it opens over about 0.6 seconds and its rows settle in one after another. The animation carries on across redraws, so it never pops. It stays until dismissed, until another dish is added, or until the cart opens.
+- **Quantities:** once a suggested dish is added, its + becomes a small stepper in the course colour (− becomes a bin at 1), so several can be added. The list stays the same.
+- **Notes:** the kitchen notes section is one quiet "Add a note for the kitchen" line until opened; after saving, a short summary of the notes replaces it.
 - **The AI** writes and ranks from the same classes (file 18 section 3, pairing). The prototype uses on-device rules.
 
 ## 1j. A note on any dish (15 Nov 2026)
