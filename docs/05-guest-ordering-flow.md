@@ -287,6 +287,18 @@ Each uses the event envelope in [03-domain-model.md](03-domain-model.md) section
 - The cart bar shows the people at the table. Anyone can send the round ("Send for table"), and it goes to one tab.
 - Splitting the bill by person comes later (see the bill split in the payment files).
 
+## 1k. Meal pairing (17 Nov 2026, founder)
+
+One quiet idea that completes the meal, worked out from what the guest is building. Switch: `pairing`.
+
+- **Where:** on the cart page, a row inside the card of the dish added last; on the menu, a floating card above the cart bar for 9 seconds after a first add. The menu grid never moves. The waiter pill hides while the card is up.
+- **What it reads:** the cart, what was sent this visit, the dish's spice and diet, live stock.
+- **What it suggests:** a starter gets a drink (a lassi or chaas against heat, lime soda or chai otherwise), or the platter when two starters are in; a main gets a bread and rice, or the thali swap when dal or kadhai stands alone (shows what it adds to the bill); biryani gets raita; bread gets a main; a dessert gets one more sweet and a chai; a lone drink gets a starter.
+- **One line each,** in the waiter's voice, about the food, never opening with a price. One key word carries the course colour (drinks teal, sweets rose, breads and rice amber, starters and mains red, combos violet), also on the plate ring and the + button.
+- **Calm:** two dishes at most; fixed for that dish, and an added dish keeps its place with a tick; a dish added from a pairing never becomes the next host; a 5-second undo after adding; a × hides ideas for that dish; two hides stop ideas for that kind of dish; three pairings per visit.
+- **Never forced:** no pop-up, never touches the Send button, sold-out and non-veg dishes are skipped for vegetarians.
+- **The AI** writes and ranks from the same classes (file 18 section 3, pairing). The prototype uses on-device rules.
+
 ## 1j. A note on any dish (15 Nov 2026)
 
 - Special requests for a dish without options are added in the cart, never at add-to-cart, so adding stays one tap.

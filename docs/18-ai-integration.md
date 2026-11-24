@@ -152,6 +152,15 @@ The meal journey in [05-guest-ordering-flow.md](05-guest-ordering-flow.md) secti
 - **Evaluation set:** 200 typed messages in English, Hindi and mixed, with the expected class and tool. Release gate: 95 percent correct class, 100 percent on allergen and concern.
 - The prototype uses keyword rules for the same classes; they are the baseline the model must beat.
 
+### Meal pairing (17 Nov 2026)
+
+- **Input:** the cart, rounds sent, the last-added dish with its course, spice and diet, live stock, and any pairings the owner pinned.
+- **Output:** up to two dish ids with one line each (8 words at most), each tagged with a kind (drink, bread, rice, side, sweet, main, starter, combo).
+- **Checks before showing:** the dish exists, is in stock, is not already ordered, fits the diet, the line contains no price or health claim and names only facts from the menu data. A failed check falls back to the rule-based line.
+- **Cache:** per dish pair and language, so one model call serves many guests.
+- **Owner pins** win over the model. A pin says "Nihari goes with Rumali" and is content, not a setting.
+- **Evaluation:** 150 carts with the expected gap; the gate is 90 percent right gap and 100 percent valid dishes.
+
 ## 4. Feature build template
 
 Every AI feature is specified with these fields before it is built.
