@@ -2093,14 +2093,32 @@ p,.ddesc,.d,.why,.m,.nlab,.banner div{text-wrap:pretty}
 .pwq b{min-width:16px;text-align:center;font-size:14px;font-weight:600;color:#fff}
 .mpi .pwq b{color:var(--ink)}
 
-/* a soft arrival: the section opens, then its rows settle in one after another; it keeps going across redraws */
-.mpi.in{animation:mpopen .62s cubic-bezier(.22,1,.36,1) both;animation-delay:var(--el,0s)}
-@keyframes mpopen{from{opacity:0;max-height:0;padding-top:0;padding-bottom:0;margin-bottom:0;transform:translateY(-8px)}50%{opacity:.7}to{opacity:1;max-height:280px;transform:none}}
-.mpi.in .pwh{animation:mprow .5s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(.12s + var(--el,0s))}
-.mpi.in .pwr:nth-child(2){animation:mprow .55s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(.22s + var(--el,0s))}
-.mpi.in .pwr:nth-child(3){animation:mprow .55s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(.34s + var(--el,0s))}
-@keyframes mprow{from{opacity:0;transform:translateY(8px)}}
-@media (prefers-reduced-motion:reduce){.mpi.in,.mpi.in .pwh,.mpi.in .pwr{animation:none}}
+/* a soft arrival: it opens only after the dish has landed, slowly, with a shimmering finding state, then the picks settle in */
+.mpi.in{animation:mpopen .9s cubic-bezier(.22,1,.36,1) both;animation-delay:var(--el,0s)}
+@keyframes mpopen{from{opacity:0;max-height:0;padding-top:0;padding-bottom:0;margin-bottom:0;transform:translateY(-6px)}35%{opacity:.5}to{opacity:1;max-height:300px;transform:none}}
+.mpi.rin .pwr{animation:mprow .7s cubic-bezier(.22,1,.36,1) both}
+.mpi.rin .pwr:nth-child(2){animation-delay:var(--er,0s)}
+.mpi.rin .pwr:nth-child(3){animation-delay:calc(.14s + var(--er,0s))}
+@keyframes mprow{from{opacity:0;transform:translateY(6px)}}
+.pwsk{display:grid}
+.pwsr{display:flex;align-items:center;gap:10px;height:58px}
+.pwsc,.pwsl{display:block;background:linear-gradient(90deg,#EEF0F3 0%,#F7F8FA 40%,#EEF0F3 80%);background-size:200% 100%;animation:skm 1.4s linear infinite}
+.pwsc{width:42px;height:42px;border-radius:50%;flex:none}
+.pwsr>div{flex:1}
+.pwsl{height:11px;border-radius:6px}.pwsl.a{width:44%;margin-bottom:8px}.pwsl.b{width:72%}
+@media (prefers-reduced-motion:reduce){.mpi.in,.mpi.rin .pwr,.pwsc,.pwsl{animation:none}}
+
+/* the section points at its dish: the dish card is ringed in the course colour and a small notch under it leads into the section */
+/* the dish photo gets a soft ring in the course colour; the page never shifts underneath the guest */
+.gc.phl .gi .ph{box-shadow:0 0 0 3px #fff,0 0 0 5px color-mix(in srgb,var(--c) 60%,transparent);transition:box-shadow .5s ease}
+.li.phl .ph{box-shadow:0 0 0 3px #fff,0 0 0 5px color-mix(in srgb,var(--c) 60%,transparent)}
+#sc,#cs,#ss{overflow-anchor:none}
+.mpi{position:relative;margin-top:8px}
+.mtie{position:absolute;top:-6px;left:var(--col,38px);width:12px;height:12px;margin-left:-6px;background:#fff;border-top:2px solid color-mix(in srgb,var(--c) 55%,transparent);border-left:2px solid color-mix(in srgb,var(--c) 55%,transparent);transform:rotate(45deg)}
+.pwth{display:inline-grid;width:20px;height:20px;border-radius:50%;overflow:hidden;margin-right:2px}
+.pwth .ph{width:100%;height:100%;border-radius:50%}
+.mpi .pws svg{display:none}
+.dl .pw .pwth{display:none}
 </style>
 </head>
 <body>
@@ -2262,6 +2280,10 @@ const FEATS=[
 const FLAT=FEATS.flatMap(g=>g.items);
 const CHIPS=['Turn off guest login','Hide play to order','Make login required','Switch off Captain'];
 const S={layout:'grid',known:true,veg:false,stock:{},cart:[],view:'menu',sheet:null,combo:null,play:null,cmp:null,chat:null,flash:null,bump:false,toast:null,log:[],tab:'starter',tb:false,stuck:false,anim:null,lock:0,sent:null,signed:false,paid:false,rate:0};
+/* tutorials show once, then are remembered in this browser */
+function saveSeen(){ try{ localStorage.setItem('qrf_seen',JSON.stringify(S.seen||{})); }catch(e){} }
+try{ S.seen=JSON.parse(localStorage.getItem('qrf_seen')||'{}')||{}; }catch(e){ S.seen={}; }
+S._bellSeen=!!S.seen.chat; S.knOpen=true;
 const it=id=>ITEMS.find(i=>i.id===id), opt=(g,id)=>OPT[g].find(o=>o.id===id);
 const out=id=>!!S.stock[id], optOut=o=>out(o.stock), rs=n=>'₹'+Math.round(n).toLocaleString('en-IN');
 const cust=i=>i.custom&&D.f.choices;
@@ -2501,7 +2523,7 @@ function understand(txt){ const t=' '+txt.toLowerCase()+' ', has=(...w)=>w.some(
   if(set&&!dish) return {rec:true}; if(dish) return {dish:dish.id};
   return {fallback:true}; }
 function dishAnswer(id){ const i=it(id); return {mood:'explain',text:`${i.n}: ${i.d}${i.sp?` ${i.sp} spice.`:''}${i.k?` About ${r10(i.k)} kcal.`:''}`,items:out(id)?[]:[id],opts:[['r:other','Show me similar'],['choose','Help me choose']]}; }
-function sendTyped(){ const inp=document.getElementById('cin'); if(!inp||!S.chat) return; const txt=inp.value.trim(); if(!txt) return; S._bellSeen=true; const u=understand(txt); S.chat.msgs.push({q:txt.replace(/[<>&]/g,'')});
+function sendTyped(){ const inp=document.getElementById('cin'); if(!inp||!S.chat) return; const txt=inp.value.trim(); if(!txt) return; if(!S._bellSeen){ S._bellSeen=true; S.seen=S.seen||{}; S.seen.chat=1; saveSeen(); } const u=understand(txt); S.chat.msgs.push({q:txt.replace(/[<>&]/g,'')});
   if(u.act){ const n=S.chat.msgs.length; const b=document.createElement('button'); b.dataset.act='callfor'; b.dataset.id=u.act; document.body.appendChild(b); b.click(); b.remove(); if(S.chat&&S.chat.msgs[n]&&S.chat.msgs[n].q){ S.chat.msgs.splice(n,1); render(); } return; }
   S.chat.msgs.push({typing:true}); render(); setTimeout(()=>{ if(!S.chat) return; const m=S.chat.msgs, ix=m.findIndex(x=>x.typing); const a=u.q?chatTurn(u.q):u.rec?recAnswer(S.chat.prefs,'Got it. How about these?'):u.dish?dishAnswer(u.dish):{mood:'think',text:'I can help you choose a dish, answer a question about the menu, bring water, cutlery, tissues or the bill, or pass a concern to the manager.',opts:[['choose','Help me choose'],['popular','What is popular?'],['concern','Something is not right']]}; if(ix>=0) m[ix]={a}; render(); },650); }
 function billAsk(){ return {mood:'ok',text:`Shall I bring the bill to Table 6?${S.sent?' It is '+rs(S.sent.pay)+' so far.':''} You can still order more after.`,billask:true}; }
@@ -2586,7 +2608,7 @@ function pairPicks(l){ const i=it(l.item), all=[...sentLines(),...S.cart], cs=ne
   const seen=new Set(); return L.filter(x=>!seen.has(x.id)&&seen.add(x.id)).slice(0,2); }
 function pairFor(l){ if(!D.f.pairing) return null; const h=lastHost(); if(!h||h.k!==l.k) return null; const cls=it(l.item).c; S._pdis=S._pdis||{}; S._pdc=S._pdc||{}; S._pp=S._pp||{};
   if(S._pdis[l.k]||(S._pdc[cls]||0)>=2) return null;
-  const key=l.k+'|'+(S.rounds||[]).length; if(!(key in S._pp)){ if((S._pn||0)>=3) S._pp[key]=null; else { const P=pairPicks(l); S._pp[key]=P.length?P:null; if(P.length) S._pn=(S._pn||0)+1; } }
+  const key=l.k+'|'+(S.rounds||[]).length; if(!(key in S._pp)){ { const P=pairPicks(l); S._pp[key]=P.length?P:null; } }
   const P=(S._pp[key]||[]).filter(x=>!out(x.id)); return P.length?P:null; }
 const spark='<svg viewBox="0 0 24 24"><path d="M12 3.5l1.9 5 5 1.9-5 1.9-1.9 5-1.9-5-5-1.9 5-1.9z" fill="currentColor" stroke="none"/></svg>';
 function pairBody(l,P,light){ const COL=light?PCOL_L:PCOL, kw=t=>t.replace(/\[\[(.+?)\]\]/g,'<em>$1</em>');
@@ -2594,10 +2616,15 @@ function pairBody(l,P,light){ const COL=light?PCOL_L:PCOL, kw=t=>t.replace(/\[\[
 function pairRow(l){ const P=pairFor(l); if(!P) return '';
   return `<div class="pw"${tip('cart1',1,'An idea for this dish','A quiet suggestion that goes with it. Tap + to add it, or × to hide ideas.')}><div class="pwh"><span class="pws">${spark}Goes with it</span><button class="pwx" data-act="pairx" data-k="${l.k}" aria-label="Hide ideas for ${it(l.item).n}">${I.x}</button></div>${pairBody(l,P)}</div>`; }
 /* on the menu the idea is a light section in the page itself, under the row of the dish that was added */
-function menuPair(){ if(!S.mpair||!D.f.pairing) return null; const l=S.cart.find(x=>x.k===S.mpair.k); if(!l) return null; const P=pairFor(l); return P?{l,P}:null; }
-function pairInline(M){ const {l,P}=M, el=(Date.now()-(S.mpair.t||0))/1000; return `<div class="mpi${el<1?' in':''}" style="--el:${(-el).toFixed(2)}s"><div class="pwh"><span class="pws">${spark}Goes with ${it(l.item).n}</span><button class="pwx" data-act="pairx" data-k="${l.k}" aria-label="Hide ideas">${I.x}</button></div>${pairBody(l,P,true)}</div>`; }
-function rowsWithPair(its,grid){ const M=menuPair(), h=M?its.findIndex(i=>i.id===M.l.item):-1; if(h<0) return its.map(grid?row:lrow).join(''); const end=grid?Math.min(its.length-1,h%2===0?h+1:h):h; let out=''; its.forEach((i,ix)=>{ out+=(grid?row(i):lrow(i)); if(ix===end) out+=pairInline(M); }); return out; }
-function triggerMenuPair(){ if(!D.f.pairing||S.view!=='menu') return; const h=lastHost(); if(!h||!pairFor(h)) return; S.mpair={k:h.k,t:Date.now()}; render(); setTimeout(()=>{ const el=document.querySelector('.mpi'), sc=document.getElementById('sc'); if(!el||!sc) return; const r=el.getBoundingClientRect(), b=sc.getBoundingClientRect(); if(r.bottom>b.bottom-90) sc.scrollBy({top:r.bottom-(b.bottom-90)+12,behavior:RM()?'auto':'smooth'}); },160); }
+function menuPair(){ if(!S.mpair||!D.f.pairing) return null; const now=Date.now(); if(now<S.mpair.t0) return null; const l=S.cart.find(x=>x.k===S.mpair.k); if(!l) return null; const P=pairFor(l); return P?{l,P,load:now<S.mpair.ready}:null; }
+function pairInline(M){ const {l,P}=M, now=Date.now(), m=S.mpair, e0=(now-m.t0)/1000, er=(now-m.ready)/1000, hdr=t=>`<div class="pwh"><span class="pws"><span class="pwth">${ph(it(l.item).h)}</span>${t}</span><button class="pwx" data-act="pairx" data-k="${l.k}" aria-label="Hide ideas">${I.x}</button></div>`;
+  const cls=`mpi${e0<1.3?' in':''}${er>=0&&er<1?' rin':''}`, st=`--el:${(-e0).toFixed(2)}s;--er:${(-Math.max(er,0)).toFixed(2)}s`;
+  /* the prototype waits a moment here, as the AI call would; the product shows the picks when the response arrives */
+  if(M.load) return `<div class="${cls}" style="${st};--col:${M.col||'38px'}"><i class="mtie" style="--c:${PCOL_L[P[0].kind]}"></i>${hdr('Finding a match for '+it(l.item).n)}<div class="pwsk">${[0,1].map(()=>'<div class="pwsr"><i class="pwsc"></i><div><i class="pwsl a"></i><i class="pwsl b"></i></div></div>').join('')}</div></div>`;
+  return `<div class="${cls}" style="${st};--col:${M.col||'38px'}"><i class="mtie" style="--c:${PCOL_L[P[0].kind]}"></i>${hdr('Goes with '+it(l.item).n)}${pairBody(l,P,true)}</div>`; }
+function rowsWithPair(its,grid){ const M=menuPair(), h=M?its.findIndex(i=>i.id===M.l.item):-1; if(h<0) return its.map(grid?row:lrow).join(''); const end=grid?Math.min(its.length-1,h%2===0?h+1:h):h; M.col=grid?(h%2===0?'25%':'75%'):'38px'; const c=PCOL_L[M.P[0].kind]; let out=''; its.forEach((i,ix)=>{ let html=grid?row(i):lrow(i); if(ix===h) html=html.replace(/^<div class="(gc|li) /,`<div style="--c:${c}" class="$1 phl `); out+=html; if(ix===end) out+=pairInline(M); }); return out; }
+function triggerMenuPair(){ if(!D.f.pairing||S.view!=='menu') return; const h=lastHost(); if(!h||!pairFor(h)) return; const now=Date.now(); S.mpair={k:h.k,t0:now+450,ready:now+450+850}; const again=()=>{ if(S.mpair&&S.mpair.k===h.k) render(); }; setTimeout(again,460); setTimeout(again,1310);
+}
 function undoToast(text){ S.toast={kind:'good',text,undo:true}; clearTimeout(S._t); S._t=setTimeout(()=>{ S.toast=null; render(); },5000); render(); }
 function gbar(left,right){ return `<div class="gbar"><div class="gl">${left}</div><div class="gbr">${right}</div></div>`; }
 const NCH={bread:['Extra butter','Well done','Less oil'],drink:['Less sugar','No ice','Extra ice'],dessert:['Less sugar','Served warm','Served cold'],side:['Less salt','No onion']};
@@ -2767,7 +2794,7 @@ document.addEventListener('input',e=>{ if(e.target&&e.target.id==='kgen') S.kgen
 document.addEventListener('keydown',e=>{ if(e.key==='Enter'&&e.target&&e.target.id==='cin'){ e.preventDefault(); sendTyped(); } });
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]'); if(!b||b.disabled) return; const a=b.dataset.act, id=b.dataset.id, k=b.dataset.k;
-  if(S.chat&&a!=='chat') S._bellSeen=true;
+  if(S.chat&&a!=='chat'&&!S._bellSeen){ S._bellSeen=true; S.seen=S.seen||{}; S.seen.chat=1; saveSeen(); }
   /* every add flies from the photo nearest to the tapped button, wherever it is on screen */
   if(['add','cmpadd','padd','usual','repeat','again','addsheet','caddsheet'].includes(a)){ S._btnR=b.getBoundingClientRect(); S._src=srcOf(b); }
   switch(a){
@@ -2835,7 +2862,7 @@ document.addEventListener('click',e=>{
     case 'sqfill': S.search.q=id; S._sqf=true; break;
     case 'closesearch': S.search=null; break;
     case 'needchoice': { const g=!S.sheet.portion?'portion':'bread', el=document.querySelector('.sh .grp[data-g="'+g+'"]'), sc=document.getElementById('sshs'); if(el&&sc){ sc.scrollTo({top:sc.scrollTop+el.getBoundingClientRect().top-sc.getBoundingClientRect().top-12,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}); el.classList.remove('nudge'); void el.offsetWidth; el.classList.add('nudge'); } return; }
-    case 'cart': { S.mpair=null; S.view='cart'; S.chat=null; const set=(S.rounds||[]).length?'cart2':'cart1'; S.seen=S.seen||{}; if(count()&&!S.seen[set]){ S.seen[set]=true; S.tourSet=set; S.tour=0; render(); placeCoach(); return; } break; }
+    case 'cart': { S.mpair=null; S.view='cart'; S.chat=null; const set=(S.rounds||[]).length?'cart2':'cart1'; S.seen=S.seen||{}; if(count()&&!S.seen[set]){ S.seen[set]=true; saveSeen(); S.tourSet=set; S.tour=0; render(); placeCoach(); return; } break; }
     case 'back': S.view='menu'; break;
     case 'ldec': { const l=S.cart.find(x=>x.k===k); l.q--; if(l.q<=0) S.cart=S.cart.filter(x=>x!==l); break; }
     case 'linc': S.cart.find(x=>x.k===k).q++; S.bump=true; break;
@@ -2848,8 +2875,8 @@ document.addEventListener('click',e=>{
     case 'addeddone': S.added=null; render(); { const ss=document.getElementById('ss'); if(ss) ss.scrollTo({top:0,behavior:RM()?'auto':'smooth'}); } return;
     case 'sendconfirm': { S.sendc=null; if(bad().length){ S.view='cart'; break; } S._addedFrom=S.cart.map(l=>({...l})); }
     // falls through: a confirmed send from the success page is the same as sending from the cart
-    case 'send': { S.cartAll=false; S.knOpen=false; const B=bill(); S.rounds=S.rounds||[]; const lastR=S.rounds[S.rounds.length-1]; S.merged=!!(lastR&&Date.now()-lastR.at<MISS_MS); if(S.merged) lastR.lines.push(...S.cart.map(l=>({...l}))); else S.rounds.push({lines:S.cart.map(l=>({...l})),at:Date.now()}); const all=sentLines(), bs=all.reduce((a,l)=>a+unit(l)*l.q,0); S.sent={lines:all,gst:bs*.05,pay:Math.round(bs*1.05),round:S.rounds.length}; S._party=true; S.cart=[]; S.view='status'; S.paid=false; S.rate=0; S.log.unshift({t:ago(),text:S.merged?'More dishes added to Order No. 41.':'Order No. 41 sent to the kitchen.'}); if(S._addedFrom){ S.added={lines:S._addedFrom,merged:S.merged,round:S.rounds.length}; S._addedFrom=null; S._party=false; } break; }
-    case 'more': { S.view='menu'; S.paid=false; S.rate=0; const R2=S.rounds||[], last=R2[R2.length-1]; if(last&&Date.now()-last.at<600000&&!S.toured){ S.toured=true; S.tourSet='home'; S.tour=0; render(); const sc=document.getElementById('sc'); if(sc) sc.scrollTop=0; placeCoach(); return; } break; }
+    case 'send': { S.cartAll=false; const B=bill(); S.rounds=S.rounds||[]; const lastR=S.rounds[S.rounds.length-1]; S.merged=!!(lastR&&Date.now()-lastR.at<MISS_MS); if(S.merged) lastR.lines.push(...S.cart.map(l=>({...l}))); else S.rounds.push({lines:S.cart.map(l=>({...l})),at:Date.now()}); const all=sentLines(), bs=all.reduce((a,l)=>a+unit(l)*l.q,0); S.sent={lines:all,gst:bs*.05,pay:Math.round(bs*1.05),round:S.rounds.length}; S._party=true; S.cart=[]; S.view='status'; S.paid=false; S.rate=0; S.log.unshift({t:ago(),text:S.merged?'More dishes added to Order No. 41.':'Order No. 41 sent to the kitchen.'}); if(S._addedFrom){ S.added={lines:S._addedFrom,merged:S.merged,round:S.rounds.length}; S._addedFrom=null; S._party=false; } break; }
+    case 'more': { S.view='menu'; S.paid=false; S.rate=0; const R2=S.rounds||[], last=R2[R2.length-1]; if(last&&Date.now()-last.at<600000&&!(S.seen&&S.seen.home)){ S.seen=S.seen||{}; S.seen.home=1; saveSeen(); S.tourSet='home'; S.tour=0; render(); const sc=document.getElementById('sc'); if(sc) sc.scrollTop=0; placeCoach(); return; } break; }
     case 'tournext': S.tour=S.tour<TT().length-1?S.tour+1:null; break;
     case 'tourskip': S.tour=null; break;
     case 'tourdemo': S.tourSet='home'; S.tour=0; S.view='menu'; S.sheet=null; S.chat=null; render(); { const sc=document.getElementById('sc'); if(sc) sc.scrollTop=0; } placeCoach(); return;
@@ -2876,7 +2903,7 @@ document.addEventListener('click',e=>{
     case 'group': setGroup(id==='1'); S.invite=false; break;
     case 'sharelink': showToast('good','Table link copied. Anyone at Table 6 can join.'); break;
     case 'startw': S.startWith=id; break;
-    case 'replay': S._intro=false; S._wrest=false; wlTicks=0; S.splash=true; S.view='menu'; S.sheet=null; S.chat=null; render(); runSplash(); return;
+    case 'replay': S.seen={}; saveSeen(); S._bellSeen=false; S._intro=false; S._wrest=false; wlTicks=0; S.splash=true; S.view='menu'; S.sheet=null; S.chat=null; render(); runSplash(); return;
     case 'repeat': { const R=S.rounds[S.rounds.length-1], l=R.lines[+id]; S._src=b.closest('.rc1')?.querySelector('.ph')||null; S._btnR=b.getBoundingClientRect(); addLine(l.item,l.portion,l.bread,null,null,l.combo); return; }
     case 'paid': S.paid=true; showToast('good','This is where UPI payment opens.'); break;
     case 'stock': setStock(id,!S.stock[id]); return;

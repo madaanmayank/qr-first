@@ -300,6 +300,11 @@ One quiet idea that completes the meal, worked out from what the guest is buildi
 - **On the menu (revised 17 Nov, founder):** not a pop-up. A light section in the page itself, white like the page with hairlines, opens under the row of the dish just added. It arrives softly: it opens over about 0.6 seconds and its rows settle in one after another. The animation carries on across redraws, so it never pops. It stays until dismissed, until another dish is added, or until the cart opens.
 - **Quantities:** once a suggested dish is added, its + becomes a small stepper in the course colour (− becomes a bin at 1), so several can be added. The list stays the same.
 - **Notes:** the kitchen notes section is one quiet "Add a note for the kitchen" line until opened; after saving, a short summary of the notes replaces it.
+- **The logic, in full (17 Nov):**
+    1. A pairing is offered for the dish added last, only when the meal has a real gap for it (a starter with no drink, a main with no bread, and so on). A complete meal gets nothing.
+    2. It is worked out once for that dish and kept, so adding from it never changes the list. Adding another dish moves it to that dish; leaving the menu for the cart, or removing the dish, clears it.
+    3. The only things that hide ideas are the guest's own × (and two of those stop ideas for that kind of dish) and an empty result. There is no limit on how many dishes get a pairing in a visit.
+    4. On the menu the section is tied to its dish by a ring on the dish photo, a notch under that column and the dish's name and photo in the header. The menu never scrolls by itself.
 - **The AI** writes and ranks from the same classes (file 18 section 3, pairing). The prototype uses on-device rules.
 
 ## 1j. A note on any dish (15 Nov 2026)
