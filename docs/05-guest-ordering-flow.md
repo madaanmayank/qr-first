@@ -287,6 +287,12 @@ Each uses the event envelope in [03-domain-model.md](03-domain-model.md) section
 - The cart bar shows the people at the table. Anyone can send the round ("Send for table"), and it goes to one tab.
 - Splitting the bill by person comes later (see the bill split in the payment files).
 
+## 1m. Nutrition on a combo (17 Nov 2026)
+
+- The combo builder carries the same nutrition card as a dish page, under the description: calories, protein and sugar for the whole combo, plus "about N kcal each for two".
+- It is the sum of the parts chosen so far (a customisable dish counts as its default half portion) and changes the moment a kebab, bread or sweet is swapped. Until every step is chosen it says "what you have chosen so far".
+- Sugar appears when the combo contains a sweet or drink. All figures are "about" and labelled "AI estimate", like a dish (file 29 rules on nutrition apply).
+
 ## 1l. A required choice that was missed (17 Nov 2026)
 
 - The main button on the item page and the combo builder is never dead. While a required choice is missing it stays tappable, amber, and says what is missing ("Choose bread", "Choose 1 more kebab").

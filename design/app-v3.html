@@ -2696,6 +2696,11 @@ function statusView(){
 }
 
 /* ===== combo sheet ===== */
+const ncell=(ic,v,u,l)=>`<div class="nc">${ic}<b class="num">${v}<small>${u}</small></b><span>${l}</span></div>`;
+/* a combo's nutrition is the sum of the parts chosen so far (a custom dish counts as its default half portion), and moves as the choice changes */
+function comboNut(sel){ const ids=[...sel.kebab,sel.bread,sel.sweet].filter(Boolean), parts=ids.map(it).filter(i=>i&&i.k); if(!parts.length) return '';
+  const f=i=>cust(i)?.5:1, k=parts.reduce((a,i)=>a+i.k*f(i),0), pr=parts.reduce((a,i)=>a+i.pr*f(i),0), sg=parts.reduce((a,i)=>a+(i.sg||0),0), all=COMBO.every(g=>g.n===1?!!sel[g.k]:sel[g.k].length===g.n);
+  return `<div class="ncard"><div class="ncells">${ncell(FI.cal,r10(k),'kcal','Calories')}${ncell(FI.pro,Math.round(pr),'g','Protein')}${sg?ncell(FI.sug,Math.round(sg),'g','Sugar'):''}</div><div class="nlab">About ${r10(k/2)} kcal each for two · ${all?'whole platter':'what you have chosen so far'} · AI estimate</div></div>`; }
 function comboSheet(){
   const i=it('platter'), sel=S.combo.sel;
   const cnt=g=>g.n===1?(sel[g.k]?1:0):sel[g.k].length, done=g=>cnt(g)===g.n, has=(g,id)=>g.n===1?sel[g.k]===id:sel[g.k].includes(id);
@@ -2705,7 +2710,7 @@ function comboSheet(){
   const grp=g=>{ const err=S.cerr===g.k&&!done(g); return `<div class="grp${err?' err':''}" data-g="${g.k}"><div class="gh"><b>${g.t}</b>${done(g)?`<span class="tg green">${I.tick}${g.n>1?g.n+' of '+g.n:'Done'}</span>`:`<span class="need">${g.n>1?cnt(g)+' of '+g.n:'Choose 1'}</span>`}</div>${err?`<div class="gerr">${I.warn}${g.n>1?'Choose '+(g.n-cnt(g))+' more to continue':'Choose one to continue'}</div>`:''}`+g.opts.map(o=>{const dis=out(o.id), on=has(g,o.id);
     return `<button class="opt lnk ${g.n>1?'sq':''} ${on?'on':''} ${dis?'dis':''}" ${dis?'disabled':''} data-act="cpick" data-g="${g.k}" data-id="${o.id}"><i>${I.tick}</i>${ph(hue(o.id))}<span>${NAME[o.id]}</span><span class="num">${dis?'<b class="so">Sold out</b>':(o.d?'+ '+rs(o.d):'')}</span></button>`;}).join('')+'</div>'; };
   const cta=flash?`<button class="cta xl go"><span>${I.tick} Added</span><span class="num">${rs(price)}</span></button>`:miss?`<button class="cta xl warn" data-act="cneed"><span>${missTxt}</span><span class="num">${rs(price)}</span></button>`:`<button class="cta xl" data-act="caddsheet"><span>Add combo</span><span class="num">${rs(price)}</span></button>`;
-  return `<div class="ov"><div class="scrim" data-act="closecombo"></div><div class="sh dk2 tall hasf"><div class="shs" id="cshs"><div class="dtop"><button class="bk" data-act="closecombo" aria-label="Back">${I.back}</button>${ph(i.h,'plate hero')}</div><div class="dbody"><div class="eb">Combo · For two</div><h2 class="dname"><span>${i.n}</span></h2><div class="dprice num">${rs(price)}</div><div class="ddesc">${i.d}</div><div class="prog">${COMBO.map(g=>`<i class="${done(g)?'on':''}"></i>`).join('')}</div><div class="prog-t"><b>${nd} of 3 steps done.</b> ${nd===3?'Ready to add.':nd===2?'One more to go.':'Pick from what is available today.'}</div>${COMBO.map(grp).join('')}<div style="height:16px"></div></div></div><div class="foot one">${cta}</div></div></div>`;
+  return `<div class="ov"><div class="scrim" data-act="closecombo"></div><div class="sh dk2 tall hasf"><div class="shs" id="cshs"><div class="dtop"><button class="bk" data-act="closecombo" aria-label="Back">${I.back}</button>${ph(i.h,'plate hero')}</div><div class="dbody"><div class="eb">Combo · For two</div><h2 class="dname"><span>${i.n}</span></h2><div class="dprice num">${rs(price)}</div><div class="ddesc">${i.d}</div>${comboNut(sel)}<div class="prog">${COMBO.map(g=>`<i class="${done(g)?'on':''}"></i>`).join('')}</div><div class="prog-t"><b>${nd} of 3 steps done.</b> ${nd===3?'Ready to add.':nd===2?'One more to go.':'Pick from what is available today.'}</div>${COMBO.map(grp).join('')}<div style="height:16px"></div></div></div><div class="foot one">${cta}</div></div></div>`;
 }
 /* ===== play to order ===== */
 const pdeck=()=>DECK.filter(id=>!S.play.done.includes(id)&&!out(id)&&(!S.veg||it(id).veg));
