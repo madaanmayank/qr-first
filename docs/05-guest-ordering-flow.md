@@ -290,8 +290,8 @@ Each uses the event envelope in [03-domain-model.md](03-domain-model.md) section
 ## 1l. A required choice that was missed (17 Nov 2026)
 
 - The main button on the item page and the combo builder is never dead. While a required choice is missing it stays tappable, amber, and says what is missing ("Choose bread", "Choose 1 more kebab").
-- Tapping it takes the guest to the first group that is incomplete (smoothly, with a small shake), marks that group in red with the reason ("Choose 1 more to continue", "Choose one to continue") and turns its badge red.
-- The red state clears as soon as that group is complete or the sheet is closed. Nothing is added until every group is done, and the guest is never left guessing why.
+- Tapping it takes the guest to the first group that is incomplete (smoothly, with a small shake) and adds one quiet line under its title with the reason ("Choose 1 more to continue", "Choose one to continue"). The page stays white: no tint, no red; only the badge softens to amber and the line carries a small amber icon.
+- The cue clears as soon as that group is complete or the sheet is closed. Nothing is added until every group is done, and the guest is never left guessing why.
 
 ## 1k. Meal pairing (17 Nov 2026, founder)
 

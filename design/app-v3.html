@@ -2129,16 +2129,20 @@ p,.ddesc,.d,.why,.m,.nlab,.banner div{text-wrap:pretty}
 .pwsc,.pwsl{animation:none;background:#F1F2F5}
 @media (prefers-reduced-motion:reduce){.mpi.ld .mshine::after,.mpi.rin .mshine::after{animation:none;opacity:0}}
 
-/* a required choice that was missed: the group says so, in red, and the page takes the guest to it */
-.grp.err{padding:8px 10px 10px;margin:8px -10px 0;border-radius:20px;background:#FFF5F6;box-shadow:inset 0 0 0 1.5px #FDA4AF}
-.grp.err .gh b{color:#BE123C}
-.grp.err .need{background:#FFE4E6;color:#BE123C}
-.gerr{display:flex;align-items:center;gap:6px;margin:-2px 0 8px;font-size:12px;font-weight:600;color:#BE123C}
-.gerr svg{width:14px;height:14px;stroke-width:2.2}
+/* a required choice that was missed: a calm cue, not an alarm. Same white page; a soft amber badge and one quiet line */
+.grp.err{padding:0;margin:0;background:transparent;box-shadow:none;border-radius:0}
+.grp.err .need{background:#FFEFD0;color:#9A5B00}
+.gerr{display:flex;align-items:center;gap:6px;margin:-4px 0 10px;font-size:12px;font-weight:500;color:#8A5A12}
+.gerr svg{width:13px;height:13px;stroke-width:2;color:#D98A00}
 /* combo rows: the photo fits inside its row */
 .opt.lnk,.opt.lnk.sq{height:60px;min-height:60px}
 .opt.lnk .ph{width:44px;height:44px}
 .opt.lnk{grid-template-columns:20px 44px minmax(0,1fr) auto;gap:10px}
+
+/* airy choices: a selected row stays white with a fine dark outline; the check carries the brand colour, nothing is tinted */
+.opt.on,.opt.lnk.on{background:#fff;border-color:var(--ink);box-shadow:none}
+.opt.on i{background:var(--p);border-color:var(--p)}
+.opt{border-color:#E6E8EC}
 </style>
 </head>
 <body>
@@ -2643,7 +2647,7 @@ function pairInline(M){ const {l,P}=M, now=Date.now(), m=S.mpair, e0=(now-m.t0)/
   if(M.load) return `<div class="${cls}" style="${st};--col:${M.col||'38px'}"><i class="mshine"></i><i class="mtie"></i>${hdr('Finding a match for '+it(l.item).n)}<div class="pwsk">${[0,1].map(()=>'<div class="pwsr"><i class="pwsc"></i><div><i class="pwsl a"></i><i class="pwsl b"></i></div></div>').join('')}</div></div>`;
   return `<div class="${cls}" style="${st};--col:${M.col||'38px'}"><i class="mshine"></i><i class="mtie"></i>${hdr('Goes with '+it(l.item).n)}${pairBody(l,P,true)}</div>`; }
 function rowsWithPair(its,grid){ const M=menuPair(), h=M?its.findIndex(i=>i.id===M.l.item):-1; if(h<0) return its.map(grid?row:lrow).join(''); const end=grid?Math.min(its.length-1,h%2===0?h+1:h):h; M.col=grid?(h%2===0?'25%':'75%'):'38px'; const c=PCOL_L[M.P[0].kind]; let out=''; its.forEach((i,ix)=>{ let html=grid?row(i):lrow(i); if(ix===h) html=html.replace(/^<div class="(gc|li) /,`<div style="--c:${c}" class="$1 phl `); out+=html; if(ix===end) out+=pairInline(M); }); return out; }
-function triggerMenuPair(){ if(!D.f.pairing||S.view!=='menu') return; const h=lastHost(); if(!h||!pairFor(h)) return; const now=Date.now(); S.mpair={k:h.k,t0:now+450,ready:now+450+850}; const again=()=>{ if(S.mpair&&S.mpair.k===h.k) render(); }; setTimeout(again,460); setTimeout(again,1310);
+function triggerMenuPair(wait=450,load=850){ if(!D.f.pairing||S.view!=='menu') return; const h=lastHost(); if(!h||!pairFor(h)) return; const now=Date.now(); S.mpair={k:h.k,t0:now+wait,ready:now+wait+load}; const again=()=>{ if(S.mpair&&S.mpair.k===h.k) render(); }; setTimeout(again,wait+10); setTimeout(again,wait+load+10);
 }
 function undoToast(text){ S.toast={kind:'good',text,undo:true}; clearTimeout(S._t); S._t=setTimeout(()=>{ S.toast=null; render(); },5000); render(); }
 function gbar(left,right){ return `<div class="gbar"><div class="gl">${left}</div><div class="gbr">${right}</div></div>`; }
@@ -2843,7 +2847,7 @@ document.addEventListener('click',e=>{
     case 'open': S.search=null; if(id==='platter'){ if(!D.f.ordering||out(id)) return; S.combo={sel:{kebab:[],bread:null,sweet:null}}; break; } S.sheet={item:id,portion:null,bread:null}; break;
     case 'pick': S.sheet[b.dataset.g]=id; break;
     case 'closesheet': S.sheet=null; S.serr=null; break;
-    case 'addsheet': { if(Date.now()-(S.navT||0)<700) return; const s=S.sheet; addLine(s.item,s.portion,s.bread,'.sh .hero','sheet',null,s.q||1); setTimeout(triggerMenuPair,900); return; }
+    case 'addsheet': { if(Date.now()-(S.navT||0)<700) return; const s=S.sheet; addLine(s.item,s.portion,s.bread,'.sh .hero','sheet',null,s.q||1); setTimeout(()=>triggerMenuPair(0,550),850); return; }
     case 'sqty': { const s=S.sheet; s.q=Math.max(1,Math.min(20,(s.q||1)+(+id))); break; }
     case 'sqset': S.sheet.q=+id; break;
     case 'cmp': { const a0=it(id), o=ITEMS.find(x=>x.c===a0.c&&x.id!==id&&(!S.veg||x.veg))||ITEMS.find(x=>x.id!==id); S.sheet=null; S.cmp={a:id,b:o.id}; break; }
