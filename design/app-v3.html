@@ -2110,8 +2110,6 @@ p,.ddesc,.d,.why,.m,.nlab,.banner div{text-wrap:pretty}
 
 /* the section points at its dish: the dish card is ringed in the course colour and a small notch under it leads into the section */
 /* the dish photo gets a soft ring in the course colour; the page never shifts underneath the guest */
-.gc.phl .gi .ph{box-shadow:0 0 0 3px #fff,0 0 0 5px color-mix(in srgb,var(--c) 60%,transparent);transition:box-shadow .5s ease}
-.li.phl .ph{box-shadow:0 0 0 3px #fff,0 0 0 5px color-mix(in srgb,var(--c) 60%,transparent)}
 #sc,#cs,#ss{overflow-anchor:none}
 .mpi{position:relative;margin-top:8px}
 .mtie{position:absolute;top:-6px;left:var(--col,38px);width:12px;height:12px;margin-left:-6px;background:#fff;border-top:2px solid color-mix(in srgb,var(--c) 55%,transparent);border-left:2px solid color-mix(in srgb,var(--c) 55%,transparent);transform:rotate(45deg)}
@@ -2119,6 +2117,17 @@ p,.ddesc,.d,.why,.m,.nlab,.banner div{text-wrap:pretty}
 .pwth .ph{width:100%;height:100%;border-radius:50%}
 .mpi .pws svg{display:none}
 .dl .pw .pwth{display:none}
+
+/* the loader's shine: a thin line whose soft band sweeps along it. It runs while a match is found, sweeps once as picks settle, then rests */
+.mpi{border-top:0}
+.mshine{position:absolute;left:0;right:0;top:-1px;height:2px;overflow:hidden;background:color-mix(in srgb,var(--c) 55%,#fff);border-radius:2px}
+.mshine::after{content:"";position:absolute;inset:0;transform:translateX(-100%);opacity:0;background:linear-gradient(90deg,transparent 0%,color-mix(in srgb,var(--c) 40%,#fff) 26%,color-mix(in srgb,var(--c) 15%,#fff) 50%,color-mix(in srgb,var(--c) 40%,#fff) 74%,transparent 100%)}
+.mpi.ld .mshine::after{opacity:1;animation:mrun 1.5s cubic-bezier(.45,0,.55,1) infinite}
+.mpi.rin:not(.ld) .mshine::after{opacity:1;animation:mrun 1.3s cubic-bezier(.45,0,.55,1) both;animation-delay:var(--er,0s)}
+@keyframes mrun{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.mtie{border-color:transparent;border-top:2px solid color-mix(in srgb,var(--c) 55%,#fff);border-left:2px solid color-mix(in srgb,var(--c) 55%,#fff)}
+.pwsc,.pwsl{animation:none;background:#F1F2F5}
+@media (prefers-reduced-motion:reduce){.mpi.ld .mshine::after,.mpi.rin .mshine::after{animation:none;opacity:0}}
 </style>
 </head>
 <body>
@@ -2618,10 +2627,10 @@ function pairRow(l){ const P=pairFor(l); if(!P) return '';
 /* on the menu the idea is a light section in the page itself, under the row of the dish that was added */
 function menuPair(){ if(!S.mpair||!D.f.pairing) return null; const now=Date.now(); if(now<S.mpair.t0) return null; const l=S.cart.find(x=>x.k===S.mpair.k); if(!l) return null; const P=pairFor(l); return P?{l,P,load:now<S.mpair.ready}:null; }
 function pairInline(M){ const {l,P}=M, now=Date.now(), m=S.mpair, e0=(now-m.t0)/1000, er=(now-m.ready)/1000, hdr=t=>`<div class="pwh"><span class="pws"><span class="pwth">${ph(it(l.item).h)}</span>${t}</span><button class="pwx" data-act="pairx" data-k="${l.k}" aria-label="Hide ideas">${I.x}</button></div>`;
-  const cls=`mpi${e0<1.3?' in':''}${er>=0&&er<1?' rin':''}`, st=`--el:${(-e0).toFixed(2)}s;--er:${(-Math.max(er,0)).toFixed(2)}s`;
+  const cls=`mpi${e0<1.3?' in':''}${er>=0&&er<1.4?' rin':''}${M.load?' ld':''}`, st=`--el:${(-e0).toFixed(2)}s;--er:${(-Math.max(er,0)).toFixed(2)}s;--c:${PCOL_L[P[0].kind]}`;
   /* the prototype waits a moment here, as the AI call would; the product shows the picks when the response arrives */
-  if(M.load) return `<div class="${cls}" style="${st};--col:${M.col||'38px'}"><i class="mtie" style="--c:${PCOL_L[P[0].kind]}"></i>${hdr('Finding a match for '+it(l.item).n)}<div class="pwsk">${[0,1].map(()=>'<div class="pwsr"><i class="pwsc"></i><div><i class="pwsl a"></i><i class="pwsl b"></i></div></div>').join('')}</div></div>`;
-  return `<div class="${cls}" style="${st};--col:${M.col||'38px'}"><i class="mtie" style="--c:${PCOL_L[P[0].kind]}"></i>${hdr('Goes with '+it(l.item).n)}${pairBody(l,P,true)}</div>`; }
+  if(M.load) return `<div class="${cls}" style="${st};--col:${M.col||'38px'}"><i class="mshine"></i><i class="mtie"></i>${hdr('Finding a match for '+it(l.item).n)}<div class="pwsk">${[0,1].map(()=>'<div class="pwsr"><i class="pwsc"></i><div><i class="pwsl a"></i><i class="pwsl b"></i></div></div>').join('')}</div></div>`;
+  return `<div class="${cls}" style="${st};--col:${M.col||'38px'}"><i class="mshine"></i><i class="mtie"></i>${hdr('Goes with '+it(l.item).n)}${pairBody(l,P,true)}</div>`; }
 function rowsWithPair(its,grid){ const M=menuPair(), h=M?its.findIndex(i=>i.id===M.l.item):-1; if(h<0) return its.map(grid?row:lrow).join(''); const end=grid?Math.min(its.length-1,h%2===0?h+1:h):h; M.col=grid?(h%2===0?'25%':'75%'):'38px'; const c=PCOL_L[M.P[0].kind]; let out=''; its.forEach((i,ix)=>{ let html=grid?row(i):lrow(i); if(ix===h) html=html.replace(/^<div class="(gc|li) /,`<div style="--c:${c}" class="$1 phl `); out+=html; if(ix===end) out+=pairInline(M); }); return out; }
 function triggerMenuPair(){ if(!D.f.pairing||S.view!=='menu') return; const h=lastHost(); if(!h||!pairFor(h)) return; const now=Date.now(); S.mpair={k:h.k,t0:now+450,ready:now+450+850}; const again=()=>{ if(S.mpair&&S.mpair.k===h.k) render(); }; setTimeout(again,460); setTimeout(again,1310);
 }

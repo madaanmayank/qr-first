@@ -304,7 +304,7 @@ One quiet idea that completes the meal, worked out from what the guest is buildi
     1. A pairing is offered for the dish added last, only when the meal has a real gap for it (a starter with no drink, a main with no bread, and so on). A complete meal gets nothing.
     2. It is worked out once for that dish and kept, so adding from it never changes the list. Adding another dish moves it to that dish; leaving the menu for the cart, or removing the dish, clears it.
     3. The only things that hide ideas are the guest's own × (and two of those stop ideas for that kind of dish) and an empty result. There is no limit on how many dishes get a pairing in a visit.
-    4. On the menu the section is tied to its dish by a ring on the dish photo, a notch under that column and the dish's name and photo in the header. The menu never scrolls by itself.
+    4. On the menu the section is tied to its dish by a notch under that column and the dish's name and photo in the header. There is no box or ring around the dish. The section's whole top line, and the notch, are in the course colour, and a soft band of light sweeps along that line, as on the VIBE loader: continuously while a match is found, once as the picks settle, then still. The menu never scrolls by itself.
 - **The AI** writes and ranks from the same classes (file 18 section 3, pairing). The prototype uses on-device rules.
 
 ## 1j. A note on any dish (15 Nov 2026)
